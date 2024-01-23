@@ -12,6 +12,10 @@
 
 #include "minishell.h"
 
+//  Cette fonction semble parcourir une liste chaînée de structures de données (t_list) 
+//  et examine une chaîne de caractères input. Elle cherche des opérateurs de contrôle (comme "||" ou "&&") 
+//  dans la chaîne input et met à jour la structure de données correspondante dans la liste avec ces opérateurs de contrôle s'ils sont présents.
+
 static void	set_control_op(t_list **lst, char *input)
 {
 	t_list	*tmp;
