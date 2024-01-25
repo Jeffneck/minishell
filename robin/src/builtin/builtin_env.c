@@ -14,7 +14,7 @@
 
 static void	print_env_error(char c)
 {
-	ft_putstr_fd("pwd: unrecognized option -- \'", 2);
+	ft_putstr_fd("pwd: unrecognized option -- \'", 2); //H : pourquoi pwd dans le message
 	ft_putchar_fd(c, 2);
 	ft_putendl_fd("\'", 2);
 }

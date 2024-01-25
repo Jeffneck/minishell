@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static uint8_t	is_nflag(char *arg)
+static uint8_t	is_nflag(char *arg) //hugo : ça serait pas plus simple d'utiliser strcmp ?
 {
 	if (*arg != '-' || *arg == '\0')
 		return (0);
@@ -33,7 +33,7 @@ int	builtin_echo(char **exec_args, int exit, int fd)
 
 	save_fd = 0;
 	nflag = 0;
-	while (*exec_args && is_nflag(*exec_args))
+	while (*exec_args && is_nflag(*exec_args)) // hugo : mettre strcmp ici
 	{
 		nflag = 1;
 		exec_args++;

@@ -1,0 +1,1 @@
+creer un printf_fd pour faciliter la gestion des erreurs
