@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_putchar2_endl.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2024/01/12 13:47:56 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/15 18:56:49 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+void	ft_putchar2_endl(char **char2)
 {
-	static t_list	*collector[10];
+	size_t	i;
 
-	return (&collector[id]);
+	i = 0;
+	while (char2[i])
+	{
+		ft_putstr_fd(char2[i], 1);
+		write(1, "\n", 1);
+		i++;
+	}
 }

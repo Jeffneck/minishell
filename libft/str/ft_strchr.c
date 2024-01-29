@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:33:11 by hanglade          #+#    #+#             */
+/*   Updated: 2023/11/09 14:33:11 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+char	*ft_strchr(const char *s, int c)
 {
-	static t_list	*collector[10];
+	const char	*current;
 
-	return (&collector[id]);
+	current = s;
+	while (*current != '\0')
+	{
+		if (*current == (unsigned char)c)
+			return ((char *)current);
+		current++;
+	}
+	if (*current == (unsigned char)c)
+		return ((char *)current);
+	return (NULL);
 }

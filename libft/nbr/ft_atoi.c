@@ -1,21 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:19:50 by hanglade          #+#    #+#             */
+/*   Updated: 2023/11/09 14:19:50 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+int	ft_atoi(const char *nptr)
 {
-	static t_list	*collector[10];
+	int			i;
+	long long	nbr;
+	int			sign;
 
-	return (&collector[id]);
+	i = 0;
+	nbr = 0;
+	sign = 1;
+	while (nptr[i] == ' ' || (nptr[i] >= 9 && (nptr[i] <= 13)))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
+	{
+		if (nptr[i] == '-')
+			sign = -sign;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		nbr = nbr * 10 + nptr[i] - 48;
+		i++;
+	}
+	return ((int)(nbr * sign));
 }

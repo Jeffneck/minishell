@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_putstr_pf.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/10 10:47:35 by gemartel          #+#    #+#             */
+/*   Updated: 2023/12/07 15:16:03 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+void	ft_putstr_pf(char *s, size_t *count_char)
 {
-	static t_list	*collector[10];
+	size_t	i;
 
-	return (&collector[id]);
+	if (!s)
+		s = "(null)";
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar_pf(s[i], count_char);
+		i++;
+	}
 }

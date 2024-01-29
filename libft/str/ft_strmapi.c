@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:34:04 by hanglade          #+#    #+#             */
+/*   Updated: 2023/11/09 14:34:04 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	static t_list	*collector[10];
+	char	*ptr;
+	size_t	i;
+	size_t	len;
 
-	return (&collector[id]);
+	len = ft_strlen(s);
+	i = 0;
+	ptr = ft_calloc(len + 1, 1);
+	if (ptr == NULL)
+		return (NULL);
+	while (s[i])
+	{
+		ptr[i] = f(i, s[i]);
+		i++;
+	}
+	return (ptr);
 }

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cberganz <cberganz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 04:04:52 by cberganz          #+#    #+#             */
-/*   Updated: 2022/03/25 16:20:35 by cberganz         ###   ########.fr       */
+/*   Updated: 2024/01/26 10:10:22 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*get_env(char *var, char **envp[])
+char	*get_env(char *var, char **envp[]) // hugo pourquoi 3* envp ?
 {
 	size_t	size;
 	int		line;

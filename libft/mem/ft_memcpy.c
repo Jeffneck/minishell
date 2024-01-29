@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:32:20 by hanglade          #+#    #+#             */
+/*   Updated: 2023/11/09 14:32:20 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+void	*ft_memcpy(void *dest, const void *src,	size_t n)
 {
-	static t_list	*collector[10];
+	unsigned char			*destination;
+	const unsigned char		*source;
+	size_t					n_bytes;
 
-	return (&collector[id]);
+	if (dest == NULL && src == NULL)
+		return (NULL);
+	destination = (unsigned char *)dest;
+	source = (const unsigned char *)src;
+	n_bytes = 0;
+	while (n_bytes < n)
+	{
+		destination[n_bytes] = source[n_bytes];
+		n_bytes++;
+	}
+	return (dest);
 }

@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:21:47 by hanglade          #+#    #+#             */
+/*   Updated: 2023/11/09 14:21:47 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-	static t_list	*collector[10];
+	void	*ptr;
 
-	return (&collector[id]);
+	if (nmemb == 0 || size == 0)
+		return (malloc(0));
+	if (size != 0 && nmemb > (size_t)(-1) / size)
+	{
+		return (NULL);
+	}
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	return ((void *)ft_memset(ptr, 0, nmemb * size));
 }

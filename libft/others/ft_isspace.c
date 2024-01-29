@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/12/08 13:20:57 by gemartel          #+#    #+#             */
+/*   Updated: 2024/01/15 19:00:44 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-
-t_list	**garbage(int id)
+int	ft_isspace(char c)
 {
-	static t_list	*collector[10];
-
-	return (&collector[id]);
+	if (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\r' || c == '\f' || c == '\v')
+		return (1);
+	return (0);
 }

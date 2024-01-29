@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/12/07 10:26:40 by gemartel          #+#    #+#             */
+/*   Updated: 2023/12/07 16:42:12 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+char	*ft_strcat(char *dest, const char *src)
 {
-	static t_list	*collector[10];
+	int	i;
+	int	len;
 
-	return (&collector[id]);
+	i = 0;
+	len = ft_strlen(dest);
+	while (src[i])
+	{
+		dest[len + i] = src[i];
+		i++;
+	}
+	dest[len + i] = '\0';
+	return (dest);
 }

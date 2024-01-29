@@ -1,21 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/26 16:35:17 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+t_list	*ft_lstnew_gc(void *content, int id_gc)
 {
-	static t_list	*collector[10];
+	t_list	*elem;
 
-	return (&collector[id]);
+	elem = mem;
+	if (elem == NULL)
+		return (NULL);
+	elem->content = content;
+	elem->next = NULL;
+	return (elem);
 }

@@ -1,21 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   garbage_ptr.c                                      :+:      :+:    :+:   */
+/*   ft_atol.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/18 14:24:13 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/26 17:26:01 by hanglade         ###   ########.fr       */
+/*   Created: 2023/12/08 13:19:21 by gemartel          #+#    #+#             */
+/*   Updated: 2024/01/15 19:01:12 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
-
-t_list	**garbage(int id)
+long	ft_atol(const char *s)
 {
-	static t_list	*collector[10];
+	long	result;
+	int		sign;
+	int		i;
 
-	return (&collector[id]);
+	result = 0;
+	sign = 1;
+	i = 0;
+	while (ft_isspace(s[i]))
+		i++;
+	if (s[i] == '-' || s[i] == '+')
+	{
+		if (s[i] == '-')
+			sign = -1;
+		i++;
+	}
+	while (ft_isdigit(s[i]))
+	{
+		result = result * 10 + (s[i] - '0');
+		i++;
+	}
+	return (result * sign);
 }
