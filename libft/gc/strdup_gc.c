@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
+/*   strdup_gc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:08 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:33:21 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/29 14:47:36 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_list	*ft_lstnew_gc(void *content, int id_gc)
+char	*strdup_gc(const char *str, int id_gc)
 {
-	t_list	*elem;
+	char	*result;
+	size_t	length;
 
-	elem = (t_list *) malloc_gc(sizeof(t_list), id_gc);
-	if (elem == NULL)
+	length = ft_strlen(str);
+	result = (char *)malloc_gc((length + 1) * sizeof(char), id_gc);
+	if (!result)
 		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	length = 0;
+	while (str[length] != '\0')
+	{
+		result[length] = str[length];
+		length++;
+	}
+	result[length] = '\0';
+	return (result);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbicanic <rbicanic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 01:30:55 by cberganz          #+#    #+#             */
-/*   Updated: 2022/03/24 16:09:43 by rbicanic         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:12:20 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	builtin_echo(char **exec_args, int exit, int fd)
 	}
 	while (*exec_args && *(exec_args + 1))
 	{
+		ft_putstr_fd("1", fd);//test
 		ft_putstr_fd(*exec_args, fd);
 		if (*(exec_args + 1))
 			ft_putstr_fd(" ", fd);

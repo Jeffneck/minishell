@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
+/*   strjoin_gc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:08 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/09 14:33:34 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/29 14:49:56 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_list	*ft_lstnew_gc(void *content, int id_gc)
+char	*strjoin_gc(char const *s1, char const *s2, int id_gc)
 {
-	t_list	*elem;
+	char	*dest;
 
-	elem = (t_list *) malloc_gc(sizeof(t_list), id_gc);
-	if (elem == NULL)
+	if (!s1 || !s2)
 		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	dest = (char *)malloc_gc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char), id_gc);
+	if (!dest)
+		return (NULL);
+	dest[0] = '\0';
+	ft_strcat(dest, s1);
+	ft_strcat(dest, s2);
+	return (dest);
 }

@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
+/*   ft_putchar_pf.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:08 by hanglade         ###   ########.fr       */
+/*   Created: 2023/11/10 10:45:18 by gemartel          #+#    #+#             */
+/*   Updated: 2023/12/07 15:15:39 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_list	*ft_lstnew_gc(void *content, int id_gc)
+void	ft_putchar_pf(char c, size_t *count_char)
 {
-	t_list	*elem;
-
-	elem = (t_list *) malloc_gc(sizeof(t_list), id_gc);
-	if (elem == NULL)
-		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	write(1, &c, 1);
+	(*count_char)++;
 }

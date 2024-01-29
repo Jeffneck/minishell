@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
+/*   malloc_gc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:08 by hanglade         ###   ########.fr       */
+/*   Created: 2024/01/29 14:25:00 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/29 14:44:03 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_list	*ft_lstnew_gc(void *content, int id_gc)
+void	*malloc_gc(size_t size, int id_gc)
 {
-	t_list	*elem;
+	void	*ptr;
 
-	elem = (t_list *) malloc_gc(sizeof(t_list), id_gc);
-	if (elem == NULL)
+	ptr = malloc(size);
+	if (!ptr)
 		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	if ((!add_to_garbage(ptr, id_gc)))
+		return(free(ptr), NULL);
+	return (ptr);
 }

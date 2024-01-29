@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:35:30 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/24 15:26:34 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/01/29 15:14:56 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,5 +121,26 @@ void	ft_puthexa_upper(unsigned int nbr, size_t *count_char);
 void	ft_puthexa_lower(unsigned int nbr, size_t *count_char);
 void	ft_putnbr_unsigned(unsigned int nbr, size_t *count_char);
 int		ft_printf(const char *str, ...);
+
+/**garbage_collector**/
+
+# define GARBAGE_SIZE 10
+
+t_list	**garbage_ptr(int id);
+void	*add_to_garbage(void *ptr, int id_gc);
+void	*malloc_gc(size_t size, int id_gc);
+void	*calloc_gc(size_t nmemb, size_t size, int id_gc);
+void	clear_garbage(int id_gc, void (*del)(void*));
+void	del_one_garbage(void *ptr_to_free, int id_gc);
+t_list	*lstmap_gc(t_list *lst, void *(*f)(void *), void (*del)(void *),
+	int id_gc);
+t_list	*lstnew_gc(void *content, int id_gc);
+void	*realloc_gc(void *ptr, size_t prev_size, size_t new_size, int id_gc);
+char	**split_gc(char const *s, char c, int id_gc);
+char	*strdup_gc(const char *str, int id_gc);
+char	*strjoin_gc(char const *s1, char const *s2, int id_gc);
+char	*strtrim_gc(char const *s1, char const *set, int id_gc);
+char	*substr_gc(char const *s, unsigned int start, size_t len, int id_gc);
+char	*strmapi_gc(char const *s, char (*f)(unsigned int, char), int id_gc);
 
 #endif

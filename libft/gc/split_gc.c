@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split.c                                         :+:      :+:    :+:   */
+/*   split_gc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:33:01 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 11:56:03 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/01/29 13:47:58 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-static void	free_subs(char	**strs, size_t nb_subs)
+static void	free_subs(char	**strs, size_t nb_subs, int id_gc)
 {
 	size_t	i;
 
 	i = 0;
 	while (i < nb_subs)
 	{
-		free(strs[i]);
+		del_one_garbage(strs,id_gc);
 		strs[i] = NULL;
 		i++;
 	}
@@ -44,7 +44,7 @@ static int	count_subchain(char *s, char c)
 	return (count);
 }
 
-static char	*create_subchain(char *s, char c)
+static char	*create_subchain(char *s, char c, int id_gc)
 {
 	size_t	i;
 	size_t	len;
@@ -55,7 +55,7 @@ static char	*create_subchain(char *s, char c)
 	str = NULL;
 	while (s[len] && s[len] != c)
 		len++;
-	str = (char *)malloc((len + 1) * sizeof(char));
+	str = (char *)malloc_gc((len + 1) * sizeof(char), id_gc);
 	if (!str)
 		return (NULL);
 	while (s[i] && s[i] != c)
@@ -67,7 +67,7 @@ static char	*create_subchain(char *s, char c)
 	return (str);
 }
 
-static int	create_strs(char const *s, char **strs, char c)
+static int	create_strs(char const *s, char **strs, char c, int id_gc)
 {
 	size_t	i;
 	size_t	j;
@@ -80,10 +80,10 @@ static int	create_strs(char const *s, char **strs, char c)
 			i++;
 		if (s[i] != '\0')
 		{
-			strs[j] = create_subchain((char *)&s[i], c);
+			strs[j] = create_subchain((char *)&s[i], c, id_gc);
 			if (strs[j] == NULL)
 			{
-				free_subs(strs, j);
+				free_subs(strs, j, id_gc);
 				return (0);
 			}
 			j++;
@@ -95,7 +95,7 @@ static int	create_strs(char const *s, char **strs, char c)
 	return (1);
 }
 
-char	**ft_split(char const *s, char c)
+char	**split_gc(char const *s, char c, int id_gc)
 {
 	char	**strs;
 	size_t	len_subchain;
@@ -103,13 +103,10 @@ char	**ft_split(char const *s, char c)
 	if (s == NULL)
 		return (NULL);
 	len_subchain = count_subchain((char *)s, c);
-	strs = (char **)malloc((len_subchain + 1) * sizeof(char *));
+	strs = (char **)malloc_gc((len_subchain + 1) * sizeof(char *), id_gc);
 	if (!strs)
 		return (NULL);
-	if (!create_strs(s, strs, c))
-	{
-		free(strs);
-		strs = NULL;
-	}
+	if (!create_strs(s, strs, c, id_gc))
+		return (del_one_garbage(strs, id_gc), NULL);
 	return (strs);
 }

@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_gc.c                                     :+:      :+:    :+:   */
+/*   realloc_gc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/26 16:33:51 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:21:08 by hanglade         ###   ########.fr       */
+/*   Created: 2024/01/29 10:55:12 by hanglade          #+#    #+#             */
+/*   Updated: 2024/01/29 14:44:26 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-t_list	*ft_lstnew_gc(void *content, int id_gc)
+void	*realloc_gc(void *ptr, size_t prev_size, size_t new_size, int id_gc)
 {
-	t_list	*elem;
+	size_t	size;
+	void	*new;
 
-	elem = (t_list *) malloc_gc(sizeof(t_list), id_gc);
-	if (elem == NULL)
-		return (NULL);
-	elem->content = content;
-	elem->next = NULL;
-	return (elem);
+	if (new_size == 0)
+		return (del_one_garbage(ptr, id_gc), NULL);
+	size = (size_t) max_value(prev_size, new_size, sizeof(size_t));
+	new = malloc_gc(size, id_gc);
+	if(ptr)
+		ft_memcpy(new, ptr, size);
+	del_one_garbage(ptr, id_gc);
+	return (new);
 }
