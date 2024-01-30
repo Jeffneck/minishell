@@ -304,6 +304,97 @@ int	cmd_handler(char *buffer, t_lister *list)
 	return (i + 1);
 	
 }
+
+//buffer = prompt
+
+// void	process_token(char *buffer, t_lister *list)
+// {
+// 	int	i;
+// 	token_type type;
+
+// 	i = 0;
+// 	while (buffer[i])
+// 	{
+// 		type = detect_chr(buffer[i], buffer[i + 1]);
+// 		if (type == TWO_QUOTE){
+// 			i += double_quote_handler(&buffer[i], list);
+// 			continue;
+// 		}
+// 		else if (type == ONE_QUOTE){
+// 			i += simple_quote_handler(&buffer[i], list);
+// 			continue;
+// 		}
+// 		if (type == PIPE){
+// 			i += pipe_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == AND){
+// 			i += and_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == OR){
+// 			i += or_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == HEREDOC){
+// 			i += heredoc_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == IN){
+// 			i += in_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == OUT){
+// 			i += out_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == APPEND){
+// 			i += append_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == LEFT_PAR){
+// 			i += parenthese_handler(&buffer[i], list);
+// 			continue ;
+// 		}
+// 		if (type == CMD){
+// 			i += cmd_handler(&buffer[i], list);
+// 			continue;
+// 		}
+//  		i++;
+// 	}
+// 	return ;
+// }
+
+void	handle_token(char *buffer, t_lister *list, token_type type, int *i)
+{
+	if (type == TWO_QUOTE)
+			double_quote_handler(&buffer[*i], list, i);
+	else if (type == ONE_QUOTE)
+		i += simple_quote_handler(&buffer[*i], list, i);
+	if (type == PIPE)
+		i += pipe_handler(&buffer[*i], list, i);
+	if (type == AND)
+		i += and_handler(&buffer[*i], list, i);
+	if (type == OR)
+		i += or_handler(&buffer[*i], list, i);
+	if (type == HEREDOC){
+		i += heredoc_handler(&buffer[*i], list, i);
+	if (type == IN){
+		i += in_handler(&buffer[*i], list, i);
+	if (type == OUT)
+		out_handler(&buffer[*i], list, i);
+	if (type == APPEND)
+		append_handler(&buffer[*i], list, i);
+	if (type == LEFT_PAR)
+		parenthese_handler(&buffer[*i], list, i);
+	if (type == CMD)
+		cmd_handler(&buffer[*i], list, i);
+	if (type == CMD){
+		i += cmd_handler(&buffer[*i], list);
+	if (ft_isspace(buffer[*i]))
+		space_handler(&buffer[*i], i);
+}
+
 void	process_token(char *buffer, t_lister *list)
 {
 	int	i;
@@ -313,51 +404,7 @@ void	process_token(char *buffer, t_lister *list)
 	while (buffer[i])
 	{
 		type = detect_chr(buffer[i], buffer[i + 1]);
-		if (type == TWO_QUOTE){
-			i += double_quote_handler(&buffer[i], list);
-			continue;
-		}
-		else if (type == ONE_QUOTE){
-			i += simple_quote_handler(&buffer[i], list);
-			continue;
-		}
-		if (type == PIPE){
-			i += pipe_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == AND){
-			i += and_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == OR){
-			i += or_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == HEREDOC){
-			i += heredoc_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == IN){
-			i += in_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == OUT){
-			i += out_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == APPEND){
-			i += append_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == LEFT_PAR){
-			i += parenthese_handler(&buffer[i], list);
-			continue ;
-		}
-		if (type == CMD){
-			i += cmd_handler(&buffer[i], list);
-			continue;
-		}
- 		i++;
+		
 	}
 	return ;
 }
