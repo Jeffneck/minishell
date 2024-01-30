@@ -1,50 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 09:44:39 by gemartel          #+#    #+#             */
-/*   Updated: 2024/01/29 09:57:39 by gemartel         ###   ########.fr       */
+/*   Created: 2023/12/07 10:26:40 by gemartel          #+#    #+#             */
+/*   Updated: 2023/12/07 16:42:12 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-#define LEXER_H
+#include "../libft.h"
 
-typedef enum
+char	*ft_strcat(char *dest, const char *src)
 {
-	CMD,
-	ARG,
-	IN,
-	OUT,
-	HEREDOC,
-	APPEND,
-	PIPE,
-	SEMICOLON,
-	AND,
-	OR,
-	LEFT_PAR,
-	RIGHT_PAR,
-	ONE_QUOTE,
-	TWO_QUOTE,
-	PARENTHESE,
-	WORD
-} token_type;
+	int	i;
+	int	len;
 
-typedef struct	s_token
-{
-	token_type		type;
-	char			*content;
-	struct s_token	*next;
-	struct s_token	*prev;
-}	t_token;
-
-typedef struct s_lister
-{
-	struct s_token	*head;
-	struct s_token	*tail;
-}	t_lister;
-
-#endif
+	i = 0;
+	len = ft_strlen(dest);
+	while (src[i])
+	{
+		dest[len + i] = src[i];
+		i++;
+	}
+	dest[len + i] = '\0';
+	return (dest);
+}
