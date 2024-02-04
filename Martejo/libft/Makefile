@@ -68,6 +68,22 @@ SRCS	=	\
 			printf/ft_putnbr_pf.c\
 			printf/ft_putptr_pf.c\
 			printf/ft_putstr_pf.c\
+			\
+			gc/add_to_garbage.c \
+			gc/calloc_gc.c \
+			gc/clear_garbage.c \
+			gc/del_one_garbage.c \
+			gc/ft_lstmap_gc.c \
+			gc/ft_lstnew_gc.c \
+			gc/garbage_ptr.c \
+			gc/malloc_gc.c \
+			gc/realloc_gc.c \
+			gc/split_gc.c \
+			gc/strdup_gc.c \
+			gc/strjoin_gc.c \
+			gc/strmapi_gc.c \
+			gc/strtrim_gc.c \
+			gc/substr_gc.c \
 
 OBJS	= ${SRCS:.c=.o}
 

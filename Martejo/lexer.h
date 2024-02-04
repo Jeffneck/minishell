@@ -36,9 +36,8 @@ typedef enum
 	LEFT_PAR,
 	ONE_QUOTE,
 	TWO_QUOTE,
-	PARENTHESE,
-	WILDCARD
-} token_type;
+	PARENTHESIS,
+} e_tkntype;
 
 typedef enum
 {
@@ -51,36 +50,38 @@ typedef enum
 /**list**/
 typedef struct	s_token
 {
-	token_type		type;
+	e_tkntype		type;
 	char			*content;
+	int				link;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
 
-typedef struct s_lister
+typedef struct s__tknlist
 {
 	struct s_token	*head;
 	struct s_token	*tail;
-}	t_lister;
+}	t_tknlist;
 
-t_token *create_node(int type, char *content);
-int add_node(t_lister *list, t_token *node);
-void free_lister(t_lister *list);
+t_token *create_node(e_tkntype type, char *content, int link);
+int add_node(t_tknlist *list, t_token *node);
+void free_lister(t_tknlist *list);
+t_tknlist	*init_list(t_tknlist **list);
 
 /**lexer**/
-void	lexer(char *buffer, t_lister *list);
+t_tknlist	*lexer(char *buffer);
 char *ft_strndup(char *buffer, int len);
 
 /**token_parse**/
-int parenthese_handler(char *buffer, t_lister *list, e_error *error);
-int	double_quote_handler(char *buffer, t_lister *list, e_error *error);
-int	simple_quote_handler(char *buffer, t_lister *list, e_error *error);
-int	pipe_handler(char *buffer, t_lister *list, e_error *error);
-int file_handler(char *buffer, t_lister *list, token_type type, e_error *error);
-int	operator_handler(char *buffer, t_lister *list, token_type type, e_error *error);
-int	cmd_handler(char *buffer, t_lister *list, e_error *error);
+int parenthese_handler(char *buffer, t_tknlist *list);
+int	double_quote_handler(char *buffer, t_tknlist *list);
+int	simple_quote_handler(char *buffer, t_tknlist *list);
+int	pipe_handler(char *buffer, t_tknlist *list);
+int file_handler(char *buffer, t_tknlist *list, e_tkntype type);
+int	operator_handler(char *buffer, t_tknlist *list, e_tkntype type);
+int	cmd_handler(char *buffer, t_tknlist *list);
 
 /**error**/
-void error_handler(t_lister *list, char *buffer, char *msg);
+void error_handler_lexer(int id_gc, char *msg);
 
 #endif

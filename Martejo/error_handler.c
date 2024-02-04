@@ -1,10 +1,8 @@
 #include "lexer.h"
 
-void error_handler(t_lister *list, char *buffer, char *msg)
+void error_handler_lexer(int id_gc, char *msg)
 {
-	
-	free(buffer);
-	free_lister(list);
+	clear_garbage(id_gc, free);
 	ft_putstr_fd(msg, 2);
 	exit(EXIT_FAILURE);
 }

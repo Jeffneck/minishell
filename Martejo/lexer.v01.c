@@ -22,29 +22,26 @@ int	detect_type(const char c, const char c2)
 		return (AND);
 	else if (c == '|' && c2 == '|')
 		return (OR);
-	else if (c == '*')
-		return (WILDCARD);
 	return (WORD);
 }
 
-int	detect_error_type(const char c)
+void	detect_error_type(const char c)
 {
-	if (c == ')' || c == ';')
-		return (-1);
-	return (1);
+	if (c == ')' || c == ';' || c == '\\')
+		error_handler_lexer(1, "Error of type.\n");
 }
 
 char *ft_strndup(char *buffer, int len)
 {
-	char *new;
-	int i;
+	char	*new;
+	int		i;
 
 	i = 0;
 	while (buffer[i] && i < len)
 		i++;
-	new = (char *)malloc((i + 1) * sizeof(char));
+	new = malloc_gc((i + 1) * sizeof(char), 1);
 	if (!new)
-		return (NULL);
+		error_handler_lexer(1, "Malloc error\n");
 	i = 0;
 	while (buffer[i] && i < len)
 	{
@@ -55,50 +52,47 @@ char *ft_strndup(char *buffer, int len)
 	return (new);
 }
 
-void	handle_token(char *buffer, t_lister *list, token_type type, int *i, e_error *error)
+void	handle_token(char *buffer, t_tknlist *list, e_tkntype type, int *i)
 {
 	if (type == TWO_QUOTE)
-		*i += double_quote_handler(buffer, list, error);
+		*i += double_quote_handler(buffer, list);
 	else if (type == ONE_QUOTE)
-		*i += simple_quote_handler(buffer, list, error);
+		*i += simple_quote_handler(buffer, list);
 	else if (type == PIPE)
-		*i += pipe_handler(buffer, list, error);
+		*i += pipe_handler(buffer, list);
 	else if (type == AND || type == OR)
-		*i += operator_handler(buffer, list, type, error);
+		*i += operator_handler(buffer, list, type);
 	else if (type == HEREDOC || type == IN || type == OUT || type == APPEND)
-		*i += file_handler(buffer, list, type, error);
+		*i += file_handler(buffer, list, type);
 	else if (type == LEFT_PAR)
-		*i += parenthese_handler(buffer, list, error);
+		*i += parenthese_handler(buffer, list);
 	else if (type == WORD)
-		*i += cmd_handler(buffer, list, error);
+		*i += cmd_handler(buffer, list);
 }
 
-void	lexer(char *buffer, t_lister *list)
+t_tknlist	*lexer(char *buffer)
 {
 	int			i;
-	token_type	type;
-	e_error		error;
-
+	int			len;
+	e_tkntype	type;
+	t_tknlist	*list;
+	
 	if (!buffer)
-		return ;
+		return (NULL);//close
+	len = ft_strlen(buffer);
+	init_list(&list);
 	i = 0;
-	error = -1;
-	while (buffer[i])
+	while (i < len)
 	{
 		if (!ft_isspace(buffer[i]))
 		{
-			if (!detect_error_type(buffer[i]))
-				error_handler(list, buffer, "Error type\n");
+			detect_error_type(buffer[i]);
 			type = detect_type(buffer[i], buffer[i + 1]);
-			handle_token(&buffer[i], list, type, &i, &error);
-			if (error >= 0)
-			{
-				printf("%d\n", error);
-				error_handler(list, buffer, "Error\n");
-			}
+			handle_token(&buffer[i], list, type, &i);
+			
 		}
 		else
 			i++;
 	}
-	return ;
+	return (list);
 }

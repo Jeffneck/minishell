@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libft.h"
 
 t_list	*ft_lstmap_gc(t_list *lst, void *(*f)(void *), void (*del)(void *),
 	int id_gc)
@@ -23,10 +23,10 @@ t_list	*ft_lstmap_gc(t_list *lst, void *(*f)(void *), void (*del)(void *),
 	nlst = NULL;
 	while (lst)
 	{
-		elem = ft_lstnew(f(lst->content), garbage);
+		elem = ft_lstnew_gc(f(lst->content), id_gc);
 		if (!elem)
 		{
-			clear_garbage(del, id_gc);
+			clear_garbage(id_gc, del);
 			return (NULL);
 		}
 		ft_lstadd_back(&nlst, elem);

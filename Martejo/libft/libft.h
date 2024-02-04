@@ -132,9 +132,9 @@ void	*malloc_gc(size_t size, int id_gc);
 void	*calloc_gc(size_t nmemb, size_t size, int id_gc);
 void	clear_garbage(int id_gc, void (*del)(void*));
 void	del_one_garbage(void *ptr_to_free, int id_gc);
-t_list	*lstmap_gc(t_list *lst, void *(*f)(void *), void (*del)(void *),
+t_list	*ft_lstmap_gc(t_list *lst, void *(*f)(void *), void (*del)(void *),
 	int id_gc);
-t_list	*lstnew_gc(void *content, int id_gc);
+t_list	*ft_lstnew_gc(void *content, int id_gc);
 void	*realloc_gc(void *ptr, size_t prev_size, size_t new_size, int id_gc);
 char	**split_gc(char const *s, char c, int id_gc);
 char	*strdup_gc(const char *str, int id_gc);
