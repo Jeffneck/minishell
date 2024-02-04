@@ -7,4 +7,8 @@ ensuite apres l' expander, on regroupe tous les tokens qui se suivaient (qui eta
 
 ajouter dans le lexer backslash error si pas entre SQ ou DQ
 
+verifier la position du type parenthesis dans le lexer = une parenthese ne peut jamais suivre une commande ? 
+on dirait que les seules positions possibles pour une parenthese sont apres un operateur de priorite ou en debut de ligne ?
+
 Askip : attention a l' impression de newlines lors de l' exit sur un minishell imbrique
+ajouter strndup_gc dans libft.h et makefile
