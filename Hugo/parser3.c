@@ -89,6 +89,7 @@ void	verify_syntax(t_lister *list_tkn)
 	}
 }
 
+//probleme, on ne peut pas gerer id_gc (idee : creer une variable char ** qui contient str et replacement)
 char	*replace_substr(char *str, char *replacement, size_t start, size_t length)
 {
 	char	*new;
@@ -123,16 +124,25 @@ char	*replace_endstr(char *str, char *replacement, size_t end_pos)
 	return (new);
 }
 
-char	*apply_expand_dollar(char *str, char *p_dollar, size_t pos_dollar) // un espace peut separer la var de la suite du txt donc utiliser replace sub
+char	*expand_dollar(char *str, size_t start, size_t len) // un espace peut separer la var de la suite du txt donc utiliser replace sub
 {
+	char	*var;
 	char	*expansion;
 	char	*new;
-
-	expansion = getenv(&str[1]); //il ne faut pas liberer la memoire
-	if (!expansion)
-		new = replace_endstr(str, &str[0], "\n");
+	size_t	i;
+	
+	while(str[start + i] && !is_space(str[start + i]))
+		i++;
+	var = ft_calloc(i, sizeof(char)); //TMP
+	if (!var)
+		return(ERROR);//
+	ft_memcpy(var, str, i); //peut etre i + 1 ?
+	expansion = getenv_mini(var);
+	if (expansion)
+		new = replace_substr(str, expansion, start, len);
 	else
-		new = replace_endstr(str, &str[0], expansion);
+		new = strdup_gc()////////////////
+	free(var);
 	return (new);
 }
 
@@ -151,7 +161,7 @@ char	*expand_tilde(char *str, size_t start) //tilde n a pas besoin de start
 	return (new);
 }
 
-char	*expand_lastcmd_var(char *str, size_t start)
+char	*expand_lastcmd(char *str, size_t start)
 {
 	char	*expansion;
 	char	*new;
@@ -166,31 +176,81 @@ char	*expand_lastcmd_var(char *str, size_t start)
 	return (new);
 }
 
-
-char	*handle_wordtype_expand(char *str)
+int	char_is_in_word(char *begin_word, char c)
 {
-	//*
-	//$ /$?
-	//~ => est expand seulement si c' est le 1er char du word
-
-	char	*new;
 	size_t	i;
 
 	i = 0;
-	if (str[i] == '~')
-		new = expand_tilde(&str[i]);
-	while (str[i])
+	while(begin_word[i] && !is_space(begin_word[i]))
 	{
-		if (ft_strcmp(&str[i], "$?") == 0)
-			new = expand_lastcmd_var(str, &str[i]);
-		else if (str[i] == '$')
-			new = expand_dollar(str, &str[i], i);
-		else if (str[i] == '*')
-			new = expand_wildcard(&str[i]);
-		else if (str[i] == '~')
-			new = expand_tilde(&str[i]);
+		if (begin_word[i] == c)
+			return (1);
+		i++;
 	}
-	return (new);
+	return (0);
+}
+
+bool	is_word_begin(char *str, size_t pos)
+{
+	if(pos == 0)
+		return(TRUE);
+	else if (is_space(str[pos - 1])
+		return(TRUE);
+	return (FALSE);
+}
+
+// char	*handle_wordtype_expand(char *str)
+// {
+// 	//*
+// 	//$ /$?
+// 	//~ => est expand seulement si c' est le 1er char du word
+
+// 	char	*new;
+// 	size_t	i;
+// 	size_t	j;
+
+// 	i = 0;
+// 	while (str[i])
+// 	{
+// 		if (ft_strcmp(&str[i], "$?") == 0)
+// 			new = expand_lastcmd(str, &str[i]);
+// 		else if (str[i] == '$')
+// 		{
+// 			j = 0;
+// 			while (str[i + j] && !is_space(str[i + j]))
+// 				j++;
+// 			new = expand_dollar(str, i, j);
+// 		}
+// 		else if (is_word_begin(str, i) && str[i] == '~')
+// 			new = expand_tilde(&str[i], i);
+// 		else if (is_word_begin(str, i) && char_is_in_word(&str[i], '*')) //on detecte directement au debut du mot s' il y a un tilde.
+// 			new = expand_wildcard(str, i);
+// 		else if (is_word_begin(str, i) && char_is_in_word(&str[i], '*')) //on detecte directement au debut du mot s' il y a un tilde.
+// 			new = expand_wildcard(str, i);
+// 	}
+// 	return (new);
+// }
+
+char	*expand_everything(char *word)
+{
+	char *tmp;
+	char *new;
+	char *words;
+
+	new = NULL;
+	if(word[0] == '~')
+	{
+		tmp = getenv_mini("HOME");
+		new =replace_substr(word, tmp, 0, 1); //
+		
+	}
+	while(word)
+	{
+
+	}
+
+
+
 }
 
 char	**expand_type_dquotes(char *str)
@@ -221,16 +281,51 @@ void	expander(t_lister *list_tkn)
 	while (curr)
 	{
 		//expansion heredoc
-		if(curr->type == WORD)
-			curr->content = expand_type_word(curr->content);
+		if(curr->type == WORD || curr->type == IN || curr->type == OUT || curr->type == APPEND)
+			curr->content = expand_everything(curr->content);
 		if(curr->type == TWO_QUOTE)
 			curr->content = expand_type_dquotes(curr->content);
-		if(curr->type == ONE_QUOTE)
-			curr->content = expand_type_squotes(curr->content);
+		// if(curr->type == ONE_QUOTE) //inutile car il n' y a rien a expand
+		// 	curr->content = expand_type_squotes(curr->content);
 		curr = curr->next;
 	}
 
 }
+
+char	*remove_n_prefix(char *str, size_t nb_toremove)
+{
+	char	*new;
+
+	new = strcut_gc(str,  ID); ///////////////////////
+	if (!new)
+		return (NULL);
+	del_one_garbage(str, ID2);
+	return (new);
+}
+
+void	reducer(t_lister *list_tkn) 
+{
+	t_token	*curr;
+
+	curr = list_tkn->head;
+	while (curr)
+	{
+		//expansion heredoc
+		if(curr->type == IN || curr->type == OUT)
+		{
+			curr->content = remove_n_prefix(curr->content, 2); //pourquoi ne pas extraire directement le nom 
+			curr->content = remove_spaces(curr->content, 2); //pourquoi ne pas extraire directement le nom 
+		}
+
+		if(curr->type == TWO_QUOTE || curr->type == ONE_QUOTE || curr->type == PARENTHESIS)
+			curr->content = remove_prefix(curr->content);
+			curr->content = remove_suffix(curr->content);
+		curr = curr->next;
+	}
+
+extract(, debut, fin)   //strndup_gc 
+}
+
 void	verify_syntax(t_lister *list_tkn)
 {
 	//un token parenthese ne peut qu etre au debut ou a la fin de la ligne de cmd
@@ -240,11 +335,13 @@ void	verify_syntax(t_lister *list_tkn)
 	curr = list_tkn->head;
 
 }
+
 t_btree	*parser(t_lister *list_tkn)
 {
 	verify_syntax(list_tkn);
+	reducer(list_tkn);
 	expander(list_tkn);
-	linker(list_tkn); //regroupe plusieurs nodes linkes en 1 seul
+	linker(list_tkn); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee)
 	set_token_index(list_tkn);
 	create_bin_tree(list_tkn);
 
