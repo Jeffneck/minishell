@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbicanic <rbicanic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 02:34:46 by cberganz          #+#    #+#             */
-/*   Updated: 2022/03/25 14:57:14 by rbicanic         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:36:08 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ int	builtin_cd(char **exec_args, char **envp[], int exit)
 	char	*path;
 	int		ret;
 
+
+	printf("cd\n");
 	ret = 0;
 	if (exec_args[0] && exec_args[1])
 		return (cd_to_many_args(exit));

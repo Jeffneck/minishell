@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_echo.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 01:30:55 by cberganz          #+#    #+#             */
-/*   Updated: 2024/01/29 15:12:20 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/05 15:33:46 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ int	builtin_echo(char **exec_args, int exit, int fd)
 	int	nflag;
 	int	save_fd;
 
+	ft_putstr_fd("1", fd);//test
 	save_fd = 0;
 	nflag = 0;
 	while (*exec_args && is_nflag(*exec_args)) // hugo : mettre strcmp ici
@@ -40,7 +41,6 @@ int	builtin_echo(char **exec_args, int exit, int fd)
 	}
 	while (*exec_args && *(exec_args + 1))
 	{
-		ft_putstr_fd("1", fd);//test
 		ft_putstr_fd(*exec_args, fd);
 		if (*(exec_args + 1))
 			ft_putstr_fd(" ", fd);
