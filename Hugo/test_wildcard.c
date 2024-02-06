@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <dirent.h>
+# include "lexer.h"
 
 
 int	str_contains_all_subs_ordered(char *str, char **subs)
@@ -33,22 +34,31 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 	return (0);
 }
 
-void listerFichiersRepertoireCourant() {
+char	*expand_wildcard(char *str) 
+{
     DIR *dir;
     struct dirent *entry;
+	char *tmp;
 
-    dir = opendir("."); // Ouvre le répertoire courant
-    if (dir == NULL) {
+	char ** split;
+	split = ft_split(str, '*');
+
+
+    dir = opendir("."); // on souhaite ouvrir le cwd donc on reverra cette partie
+    if (dir == NULL)
+	{
         perror("Erreur lors de l'ouverture du répertoire courant");
         exit(1);
     }
 
     printf("Liste des fichiers dans le répertoire courant :\n");
 
-    while ((entry = readdir(dir)) != NULL) {
-        if (entry->d_type == DT_REG) { // Vérifie que c'est un fichier régulier
-            printf("%s", entry->d_name);
-        }
+    while ((entry = readdir(dir)) != NULL)
+	{
+		news ;
+		if (!expanded)
+			exit(EXIT_FAILURE); //revoir
+	}
     }
 
     closedir(dir);
