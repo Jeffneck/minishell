@@ -6,9 +6,11 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:40:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/05 14:49:02 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:37:31 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../include/minishell.h"
 
 int	size_cmds(char **cmds)
 {
@@ -16,7 +18,7 @@ int	size_cmds(char **cmds)
 	
 	size = 0;
 	while (cmds[size])
-		size;
+		size++;
 	return (size);
 }
 

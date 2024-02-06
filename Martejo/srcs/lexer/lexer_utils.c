@@ -6,13 +6,14 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:13:08 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/05 13:33:48 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:34:33 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../include/minishell.h"
 
-char	*ft_strndup(char *buffer, int len)
+//A rajouter dans libft
+char	*ft_strndup(char *buffer, int len, t_id_gc id)
 {
 	char	*new;
 	int		i;
@@ -20,9 +21,10 @@ char	*ft_strndup(char *buffer, int len)
 	i = 0;
 	while (buffer[i] && i < len)
 		i++;
-	new = malloc_gc((i + 1) * sizeof(char), 1);
+	new = malloc_gc((i + 1) * sizeof(char), id);
 	if (!new)
-		error_handler_lexer(1, "Malloc error\n");
+		return (NULL);
+		//error_handler_lexer(ENV, "Malloc error\n");
 	i = 0;
 	while (buffer[i] && i < len)
 	{

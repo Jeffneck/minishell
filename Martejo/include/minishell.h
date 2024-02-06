@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.h                                            :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/29 09:44:39 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/05 13:35:01 by gemartel         ###   ########.fr       */
+/*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
+/*   Updated: 2024/02/06 12:36:31 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEXER_H
-# define LEXER_H
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -21,7 +21,15 @@
 # include <unistd.h>
 # include <sys/wait.h>
 # include <signal.h>
-# include "libft/libft.h"
+# include <limits.h>
+# include "../libft/libft.h"
+
+typedef enum e_id_gc
+{
+	LEXER = 1,
+	ENV,
+	TREE
+}	t_id_gc;
 
 typedef enum e_tkntype
 {
@@ -47,7 +55,7 @@ typedef enum e_error
 	TYPE_E
 }	t_error;
 
-/**list**/
+/**list_token**/
 typedef struct s_token
 {
 	t_tkntype		type;
@@ -63,6 +71,20 @@ typedef struct s__tknlist
 	struct s_token	*tail;
 }	t_tknlist;
 
+/**list_env**/
+typedef struct	s_env
+{
+	char			*value;
+	struct s_env	*next;
+}				t_env;
+
+typedef struct	s_mini
+{
+	//t_token			*start;
+	t_env			*env;
+}				t_mini;
+
+/**list**/
 t_token		*create_node(t_tkntype type, char *content, int link);
 int			add_node(t_tknlist *list, t_token *node);
 void		init_list(t_tknlist **list);
@@ -73,7 +95,7 @@ int			detect_type(const char c, const char c2);
 void		handle_token(char *buffer, t_tknlist *list, t_tkntype type, int *i);
 
 /**lexer_utils**/
-char		*ft_strndup(char *buffer, int len);
+char	*ft_strndup(char *buffer, int len, t_id_gc id); // add to libft
 int			is_operator(const char c, const char c2);
 void		detect_error_type(const char c);
 
@@ -90,5 +112,11 @@ int	operator_handler(char *buffer, t_tknlist *list, t_tkntype type);
 
 /**error**/
 void		error_handler_lexer(int id_gc, char *msg);
+
+/**env_handler**/
+t_env	*init_env(char **env_array);
+char	*ft_strndup(char *buffer, int len, t_id_gc id);
+ void env_add_back(t_env **env, t_env *new);
+ int	cd(char **cmds, t_env *env);
 
 #endif

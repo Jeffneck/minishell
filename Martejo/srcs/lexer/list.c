@@ -6,11 +6,11 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:15:16 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/05 13:29:42 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:32:07 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../include/minishell.h"
 
 t_token	*create_node(t_tkntype type, char *content, int link)
 {

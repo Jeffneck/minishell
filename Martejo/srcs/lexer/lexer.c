@@ -6,11 +6,11 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:12:00 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/05 13:29:12 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/06 12:36:50 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../../include/minishell.h"
 
 int	detect_type(const char c, const char c2)
 {
@@ -60,7 +60,6 @@ t_tknlist	*lexer(char *buffer)
 	int			i;
 	int			flag;
 	t_tkntype	type;
-	t_tkntype	type_flag;
 	t_tknlist	*list;
 
 	if (!buffer)
