@@ -10,7 +10,7 @@ typedef	struct s_btree
 	struct s_btree	*right;
 }	t_btree;
 
-
+//token_utils.c
 t_token	*find_prior_token(t_lister *list_tkn)
 {
 	t_token	*curr;
@@ -27,7 +27,21 @@ t_token	*find_prior_token(t_lister *list_tkn)
 	return (target);
 }
 
+//syntaxic_tree.c
+t_btree	*place_in_tree(t_btree *root, t_btree *toplace, int index)
+{
+	if (root == NULL)
+		return (toplace);
+	// if (root->type == PARENTHESE)//
+	// 	root->left = toplace;//
+	if (index < root->branch)
+		root->left = place_in_tree(root->left, toplace, index);
+	else if (index > root->branch)
+		root->right = place_in_tree(root->right, toplace, index);
+	return (root);
+}
 
+//syntaxic_tree.c
 t_btree	*create_bin_tree(t_lister *list_tkn)
 {
 	t_token	*target;
@@ -37,31 +51,20 @@ t_btree	*create_bin_tree(t_lister *list_tkn)
 	{
 		target = find_prior_token(list_tkn);
 		if (!root)
-		 	root = place(root, btree_new(target), target->index);
+		 	root =  _in_tree(root, btree_new(target), target->index);
 		else if (target->type == PARENTHESE)
 		{
 			// verify_syntax_inside_parenthesis
-			place(root, parser(lexer(target->content)), target->index);
+			place_in_tree(root, parser(lexer(target->content)), target->index);
 		}
 		else
-			place(root, btree_new(target), target->index);
+			place_in_tree(root, btree_new(target), target->index);
 	}
 	return root;
 }
 
-t_btree	*place(t_btree *root, t_btree *toplace, int index)
-{
-	if (root == NULL)
-		return (toplace);
-	// if (root->type == PARENTHESE)//
-	// 	root->left = toplace;//
-	if (index < root->branch)
-		root->left = place(root->left, toplace);
-	else if (index > root->branch)
-		root->right = place(root->right, toplace);
-	return (root);
-}
 
+//token_utils.c
 int	is_token_operator(token_type type)
 {
 	if (type == AND || type == OR || type == PIPE || type == HEREDOC || type == IN || type == OUT || type == APPEND)
@@ -89,6 +92,7 @@ void	verify_syntax(t_lister *list_tkn)
 	}
 }
 
+//expander_utils.c
 //probleme, on ne peut pas gerer id_gc de l' exterieur (idee : creer une variable char ** qui contient str et replacement ou add to gc en dehors de la fonction ou toutjours utiliser le m^eme id ?
 char	*replace_substr(char *str, char *replacement, size_t start, size_t len)
 {
@@ -105,6 +109,7 @@ char	*replace_substr(char *str, char *replacement, size_t start, size_t len)
 	return (new);
 }
 
+//expander_utils.c
 //probleme, on ne peut pas gerer id_gc de l' exterieur (idee : creer une variable char ** qui contient str et replacement ou add to gc en dehors de la fonction ou toutjours utiliser le m^eme id ?
 char	*remove_substr(char *str, size_t start, size_t len)
 {
@@ -120,27 +125,8 @@ char	*remove_substr(char *str, size_t start, size_t len)
 	return (new);
 }
 
-
-char	*replace_endstr(char *str, char *replacement, size_t end_pos)
-{
-	//utiliser pour $var
-	char	*new;
-	size_t	len_str;
-	size_t	size_new;
-
-	if (!str || !replacement)
-		return (NULL);
-	len_str = ft_strlen(str);
-	size_new = (len_str - (len_str - end_pos) + ft_strlen(replacement) + 1) * sizeof(char);
-	new = (char *) malloc_gc(size_new, ID);
-	if (!new)
-		return (NULL);// appliquer gestion d' erreur
-	ft_memcpy(new, str, end_pos); //ou end_pos + 1 ou end_pos - 1
-	ft_strcat(new, replacement);
-	return (new);
-}
-
 //avance tant que la fonction ne detecte pas un char cible
+//libft
 size_t	ft_strlen_until(const char *str, int(*f)(char))
 {
 	size_t	len;
@@ -152,6 +138,7 @@ size_t	ft_strlen_until(const char *str, int(*f)(char))
 }
 
 //avance tant que la fonction detecte un char cible
+//libft
 size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 {
 	size_t	len;
@@ -162,41 +149,39 @@ size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 	return (len);
 }
 
-
-char	*expand_dollar(char *str, size_t start) // un espace peut separer la var de la suite du txt donc utiliser replace sub
+//Expander_utils.c
+char	*apply_expansion(char *str, char *expansion, size_t	len)
 {
+	if (expansion)
+		new = replace_substr(str, expansion, 0, len);
+	else
+		new = remove_substr(str, 0, len);
+}
+
+//apply_expansion.c
+char	*expand_dollar(char *str, size_t start)
 	char	*var;
 	char	*expansion;
 	char	*new;
 	size_t	len_var;
 	
 	if (str[start + 1] == '?')
-	{
 		len_var = 2;
-
-	}
 	else
-	{
 		len_var = ft_strlen_until(str[start], ft_isspace);
-		var = ft_calloc(len_var, sizeof(char)); //TMP
-		if (!var)
-			return(ERROR);//
-		ft_memcpy(var, str, len_var); //peut etre i + 1 ?
-		expansion = getenv_mini(var);
-	}
-	//add in new funct-------
-	if (expansion)
-		new = replace_substr(str, expansion, start, len_var);
-	else
-		new = remove_substr(str, start, len_var);
-	//add in new funct---------
+	var = ft_calloc(len_var + 1, sizeof(char));
+	if (!var)
+		return(ERROR);//
+	ft_memcpy(var, str, len_var); //peut etre i + 1 ?
+	expansion = getenv_mini(var);
+	apply_expansion(str, expansion);
 	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
-	
 	del_one_garbage(str, ID);
 	free(var);
 	return (new);
 }
 
+//apply_expansion.c
 char	*expand_tilde(char *str) //tilde n a pas besoin de start 
 {
 	char	*expansion;
@@ -204,23 +189,82 @@ char	*expand_tilde(char *str) //tilde n a pas besoin de start
 	size_t	len_sub;
 
 	len_sub = 1;
-	expansion = getenv_mini("HOME");
-	//add in new funct-------
-	if (expansion)
-		new = replace_substr(str, expansion, 0, len_sub);
-	else
-		new = remove_substr(str, 0, len_sub);
-	//add in new funct-------
+	expansion = getenv_mini("HOME"); //ajouter ID dans getenv_mini
+	apply_expansion(str, expansion, len_sub);
 	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
-	
 	del_one_garbage(str, ID);
 	return (new);
 }
 
-char	*expand_in_word(char *str)
+
+int	str_contains_all_subs_ordered(char *str, char **subs)
+{
+	size_t	i;
+	size_t	sub;
+	size_t	j;
+	
+	if (!str || !subs || !subs[0])
+		return (0);
+	i = 0;
+	sub = 0;
+	j = 0;
+	while(str[i])
+	{
+		if (subs[sub][j] == str[i])
+			j++;
+		if (!subs[sub][j])
+		{
+			printf("a");
+			sub++;
+			j = 0;
+			if (!subs[sub])
+				return (1);
+			continue;
+		}
+		i++;
+	}
+	return (0);
+}
+
+#include <sys/types.h>
+#include <dirent.h>
+
+//apply_expansion.c
+char	*expand_wildcard(char *str) //tilde n a pas besoin de start 
+{
+	DIR				*dir;
+	char	*cwd;
+	char	*new;
+	size_t	len_sub;
+
+	len_sub = 1;
+	cwd = getenv_mini("PWD"); //ajouter ID dans getenv_mini
+	opendir(cwd);
+	apply_expansion(str, expansion, len_sub);
+	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
+	del_one_garbage(str, ID);
+	return (new);
+}
+
+//libft
+int	str_contains_char(char *str, char c)
+{
+	size_t	i;
+
+	i = 0;
+	while(str[i])
+	{
+		if (str[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*expander_handle_word(char *str)
 {
 	char *new;
-	size_t	i;
+	ssize_t	i;
 
 	new = NULL;
 	if (!str)
@@ -236,11 +280,12 @@ char	*expand_in_word(char *str)
 			new = expand_wildcard(str, i);
 		i++;
 	}
+	if(str_contains_char(str, '*'))
+		new = expand_wildcard(str, i);
 	return (new)
-
 }
 
-char	*expand_in_dquotes(char *str)
+char	*expander_handle_dquotes(char *str)
 {
 	char *new;
 	size_t	i;
@@ -255,31 +300,8 @@ char	*expand_in_dquotes(char *str)
 			new = expand_dollar(str, i);
 		i++;
 	}
-
 }
 
-int	char_is_in_word(char *begin_word, char c)
-{
-	size_t	i;
-
-	i = 0;
-	while(begin_word[i] && !is_space(begin_word[i]))
-	{
-		if (begin_word[i] == c)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	ft_is_word_begin(char *str, size_t pos)
-{
-	if(pos == 0)
-		return(1);
-	else if (is_space(str[pos - 1])
-		return(1);
-	return (0);
-}
 
 
 void	expander(t_lister *list_tkn)
@@ -293,29 +315,18 @@ void	expander(t_lister *list_tkn)
 		//expansion heredoc
 		if(curr->type == WORD || curr->type == IN || curr->type == OUT || curr->type == APPEND)
 		{
-			tmp = expand_in_word(curr->content);
+			tmp = expander_handle_word(curr->content);
 			del_one_garbage(curr->content, ID);
 			curr->content = tmp;
 		}
 		else if(curr->type == TWO_QUOTE)
 		{
-			curr->content = expand_in_dquotes(curr->content);
+			curr->content = expander_handle_dquotes(curr->content);
 			del_one_garbage(curr->content, ID);
 			curr->content = tmp;
 		}
 		curr = curr->next;
 	}
-}
-
-char	*remove_n_prefix(char *str, size_t nb_toremove)
-{
-	char	*new;
-
-	new = strcut_gc(str,  ID); ///////////////////////
-	if (!new)
-		return (NULL);
-	del_one_garbage(str, ID2);
-	return (new);
 }
 
 char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
@@ -337,64 +348,50 @@ char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
 	return (dest);
 }
 
-void	reducer(t_lister *list_tkn) 
+int	type_need_reducing(token_type type)
 {
-	t_token	*curr;
-	char	*str;
+	if (type == IN || type == OUT || type == APPEND 
+		|| type == HEREDOC || type == TWO_QUOTE || type == ONE_QUOTE)
+		return (1);
+	return(0);
+
+}
+
+void	reducer(t_token	*tkn) 
+{
+	char	*tmp;
 	bool	flag;
 
-
-	curr = list_tkn->head;
-	while (curr)
+	while (tkn)
 	{
-		
-		str = curr->content;
+		flag = 0;
 		//expansion heredoc
-		if(curr->type == IN || curr->type == OUT)
+		if (type_need_reducing(tkn->type))
 		{
-			tmp = remove_substr(str, 0, 1 + strlen_until_not(str, ft_isspace));
-			if (!tmp)
-				return (ERROR);
-			del_one_garbage(curr->content, ID);
-		}
-
-		if(curr->type == TWO_QUOTE || curr->type == ONE_QUOTE || curr->type == PARENTHESIS)
-		{
-			tmp = strcut_gc(tmp, 1, 1, ID);
-
-			
+			flag = 1;
+			if(tkn->type == IN || tkn->type == OUT)
+				tmp = remove_substr(tkn->content, 0, 1 + strlen_until_not(tkn->content, ft_isspace));
+			else if (tkn->type == TWO_QUOTE || tkn->type == ONE_QUOTE || tkn->type == PARENTHESIS)
+				tmp = strcut_gc(tkn->content, 1, 1, ID);
 		}
 		if (flag)
 		{
 			if (!tmp)
 				return (ERROR);
-			del_one_garbage(curr->content, ID);
-			flag = 0;
+			del_one_garbage(tkn->content, ID);
+			tkn->content = tmp;
 		}
-		curr->content = tmp;
-		curr = curr->next;
+		tkn = tkn->next;
 	}
-
-extract(, debut, fin)   //strndup_gc 
-}
-
-void	verify_syntax(t_lister *list_tkn)
-{
-	//un token parenthese ne peut qu etre au debut ou a la fin de la ligne de cmd
-	//et etre precede ou succede par un operateur | || &&
-	t_token *curr;
-
-	curr = list_tkn->head;
-
 }
 
 t_btree	*parser(t_lister *list_tkn)
 {
 	verify_syntax(list_tkn);
-	reducer(list_tkn);
-	expander(list_tkn);
-	linker(list_tkn); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee)
-	set_token_index(list_tkn);
-	create_bin_tree(list_tkn);
+	reducer(list_tkn->head);
+	expander(list_tkn->head);
+	linker(list_tkn->head); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee)
+	set_token_index(list_tkn->head);
+	create_bin_tree(list_tkn->head);
 
 }
