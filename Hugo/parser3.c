@@ -89,21 +89,37 @@ void	verify_syntax(t_lister *list_tkn)
 	}
 }
 
-//probleme, on ne peut pas gerer id_gc (idee : creer une variable char ** qui contient str et replacement)
-char	*replace_substr(char *str, char *replacement, size_t start, size_t length)
+//probleme, on ne peut pas gerer id_gc de l' exterieur (idee : creer une variable char ** qui contient str et replacement ou add to gc en dehors de la fonction ou toutjours utiliser le m^eme id ?
+char	*replace_substr(char *str, char *replacement, size_t start, size_t len)
 {
 	char	*new;
 	size_t	size_new;
 
-	size_new = (ft_strlen(str) - length + ft_strlen(replacement)) + 1;
-	new = (char *) malloc_gc(size_new, ID);
+	size_new = (ft_strlen(str) - len + ft_strlen(replacement)) + 1;
+	new = (char *) calloc_gc(size_new, ID);
 	if (new == NULL)
 		return (NULL);// appliquer gestion d' erreur
 	ft_memcpy(new, str, start); //ou start + 1 ou start - 1
 	ft_strcat(new, replacement);
-	ft_strcat(new, &str[start + length]); //valider
+	ft_strcat(new, &str[start + len]); //valider
 	return (new);
 }
+
+//probleme, on ne peut pas gerer id_gc de l' exterieur (idee : creer une variable char ** qui contient str et replacement ou add to gc en dehors de la fonction ou toutjours utiliser le m^eme id ?
+char	*remove_substr(char *str, size_t start, size_t len)
+{
+	char	*new;
+	size_t	size_new;
+
+	size_new = ft_strlen(str) - len + 1;
+	new = (char *) calloc_gc(size_new, ID);
+	if (new == NULL)
+		return (NULL);// appliquer gestion d' erreur
+	ft_memcpy(new, str, start); //ou start + 1 ou start - 1
+	ft_strcat(new, &str[start + len]); //valider
+	return (new);
+}
+
 
 char	*replace_endstr(char *str, char *replacement, size_t end_pos)
 {
@@ -124,56 +140,122 @@ char	*replace_endstr(char *str, char *replacement, size_t end_pos)
 	return (new);
 }
 
-char	*expand_dollar(char *str, size_t start, size_t len) // un espace peut separer la var de la suite du txt donc utiliser replace sub
+//avance tant que la fonction ne detecte pas un char cible
+size_t	ft_strlen_until(const char *str, int(*f)(char))
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len] && !f(str[len]))
+		len++;
+	return (len);
+}
+
+//avance tant que la fonction detecte un char cible
+size_t	ft_strlen_until_not(const char *str, int(*f)(char))
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len] && f(str[len]))
+		len++;
+	return (len);
+}
+
+
+char	*expand_dollar(char *str, size_t start) // un espace peut separer la var de la suite du txt donc utiliser replace sub
 {
 	char	*var;
 	char	*expansion;
 	char	*new;
-	size_t	i;
+	size_t	len_var;
 	
-	while(str[start + i] && !is_space(str[start + i]))
-		i++;
-	var = ft_calloc(i, sizeof(char)); //TMP
-	if (!var)
-		return(ERROR);//
-	ft_memcpy(var, str, i); //peut etre i + 1 ?
-	expansion = getenv_mini(var);
-	if (expansion)
-		new = replace_substr(str, expansion, start, len);
+	if (str[start + 1] == '?')
+	{
+		len_var = 2;
+
+	}
 	else
-		new = strdup_gc()////////////////
+	{
+		len_var = ft_strlen_until(str[start], ft_isspace);
+		var = ft_calloc(len_var, sizeof(char)); //TMP
+		if (!var)
+			return(ERROR);//
+		ft_memcpy(var, str, len_var); //peut etre i + 1 ?
+		expansion = getenv_mini(var);
+	}
+	//add in new funct-------
+	if (expansion)
+		new = replace_substr(str, expansion, start, len_var);
+	else
+		new = remove_substr(str, start, len_var);
+	//add in new funct---------
+	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
+	
+	del_one_garbage(str, ID);
 	free(var);
 	return (new);
 }
 
-char	*expand_tilde(char *str, size_t start) //tilde n a pas besoin de start 
+char	*expand_tilde(char *str) //tilde n a pas besoin de start 
 {
 	char	*expansion;
 	char	*new;
 	size_t	len_sub;
 
-	len_sub = 2;
-	expansion = getenv("HOME"); //il ne faut pas liberer la memoire
-	if (!expansion)
-		new = replace_substr(str, "\n", start, len_sub);
+	len_sub = 1;
+	expansion = getenv_mini("HOME");
+	//add in new funct-------
+	if (expansion)
+		new = replace_substr(str, expansion, 0, len_sub);
 	else
-		new = replace_substr(str, expansion, start, len_sub);
+		new = remove_substr(str, 0, len_sub);
+	//add in new funct-------
+	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
+	
+	del_one_garbage(str, ID);
 	return (new);
 }
 
-char	*expand_lastcmd(char *str, size_t start)
+char	*expand_in_word(char *str)
 {
-	char	*expansion;
-	char	*new;
-	size_t	len_sub;
+	char *new;
+	size_t	i;
 
-	len_sub = 2;
-	expansion = getenv("HOME"); //il ne faut pas liberer la memoire
-	if (!expansion)
-		new = replace_substr(str, "\n", start, len_sub);
-	else
-		new = replace_substr(str, expansion, start, len_sub);
-	return (new);
+	new = NULL;
+	if (!str)
+		return (ERROR); //utile ?
+	if(str[0] == '~')
+		new = expand_tilde(str);
+	i = 0;
+	while(str[i])
+	{
+		if (str[i] == '$')
+			new = expand_dollar(str, i);
+		if (str[i] == '*')
+			new = expand_wildcard(str, i);
+		i++;
+	}
+	return (new)
+
+}
+
+char	*expand_in_dquotes(char *str)
+{
+	char *new;
+	size_t	i;
+
+	new = NULL;
+	if (!str)
+		return (ERROR); //utile ?
+	i = 0;
+	while(str[i])
+	{
+		if (str[i] == '$')
+			new = expand_dollar(str, i);
+		i++;
+	}
+
 }
 
 int	char_is_in_word(char *begin_word, char c)
@@ -190,106 +272,39 @@ int	char_is_in_word(char *begin_word, char c)
 	return (0);
 }
 
-bool	is_word_begin(char *str, size_t pos)
+int	ft_is_word_begin(char *str, size_t pos)
 {
 	if(pos == 0)
-		return(TRUE);
+		return(1);
 	else if (is_space(str[pos - 1])
-		return(TRUE);
-	return (FALSE);
+		return(1);
+	return (0);
 }
 
-// char	*handle_wordtype_expand(char *str)
-// {
-// 	//*
-// 	//$ /$?
-// 	//~ => est expand seulement si c' est le 1er char du word
-
-// 	char	*new;
-// 	size_t	i;
-// 	size_t	j;
-
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (ft_strcmp(&str[i], "$?") == 0)
-// 			new = expand_lastcmd(str, &str[i]);
-// 		else if (str[i] == '$')
-// 		{
-// 			j = 0;
-// 			while (str[i + j] && !is_space(str[i + j]))
-// 				j++;
-// 			new = expand_dollar(str, i, j);
-// 		}
-// 		else if (is_word_begin(str, i) && str[i] == '~')
-// 			new = expand_tilde(&str[i], i);
-// 		else if (is_word_begin(str, i) && char_is_in_word(&str[i], '*')) //on detecte directement au debut du mot s' il y a un tilde.
-// 			new = expand_wildcard(str, i);
-// 		else if (is_word_begin(str, i) && char_is_in_word(&str[i], '*')) //on detecte directement au debut du mot s' il y a un tilde.
-// 			new = expand_wildcard(str, i);
-// 	}
-// 	return (new);
-// }
-
-char	*expand_everything(char *word)
-{
-	char *tmp;
-	char *new;
-	char *words;
-
-	new = NULL;
-	if(word[0] == '~')
-	{
-		tmp = getenv_mini("HOME");
-		new =replace_substr(word, tmp, 0, 1); //
-		
-	}
-	while(word)
-	{
-
-	}
-
-
-
-}
-
-char	**expand_type_dquotes(char *str)
-{
-	char	*replace;
-	char	*new;
-	int	i;
-
-	i = 0;
-	
-	while (str[i])
-	{
-		if (str[i] == '$')
-		{
-			replace = expand_envp(&str[i]);
-			new = replace_var(str, &str[i], replace);
-		}
-
-	}
-	
-}
 
 void	expander(t_lister *list_tkn)
 {
 	t_token	*curr;
+	char	*tmp;
 
 	curr = list_tkn->head;
 	while (curr)
 	{
 		//expansion heredoc
 		if(curr->type == WORD || curr->type == IN || curr->type == OUT || curr->type == APPEND)
-			curr->content = expand_everything(curr->content);
-		if(curr->type == TWO_QUOTE)
-			curr->content = expand_type_dquotes(curr->content);
-		// if(curr->type == ONE_QUOTE) //inutile car il n' y a rien a expand
-		// 	curr->content = expand_type_squotes(curr->content);
+		{
+			tmp = expand_in_word(curr->content);
+			del_one_garbage(curr->content, ID);
+			curr->content = tmp;
+		}
+		else if(curr->type == TWO_QUOTE)
+		{
+			curr->content = expand_in_dquotes(curr->content);
+			del_one_garbage(curr->content, ID);
+			curr->content = tmp;
+		}
 		curr = curr->next;
 	}
-
 }
 
 char	*remove_n_prefix(char *str, size_t nb_toremove)
@@ -303,23 +318,60 @@ char	*remove_n_prefix(char *str, size_t nb_toremove)
 	return (new);
 }
 
+char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
+{
+	char	*dest;
+	size_t	i;
+	int		len;
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str) - cut_begin - cut_end;
+	if (len <= 0)
+		return (strdup_gc("", id_gc));
+	dest = (char *)calloc_gc((len + 1), sizeof(char), id_gc); //utile pour le \0 automatique ?
+	if (!dest)
+		return (NULL);
+	ft_strlcpy(dest, &str[cut_begin], len); //les char end sont bien retires sans compter le char de fin ?
+	dest[len] = '\0'; //utile
+	return (dest);
+}
+
 void	reducer(t_lister *list_tkn) 
 {
 	t_token	*curr;
+	char	*str;
+	bool	flag;
+
 
 	curr = list_tkn->head;
 	while (curr)
 	{
+		
+		str = curr->content;
 		//expansion heredoc
 		if(curr->type == IN || curr->type == OUT)
 		{
-			curr->content = remove_n_prefix(curr->content, 2); //pourquoi ne pas extraire directement le nom 
-			curr->content = remove_spaces(curr->content, 2); //pourquoi ne pas extraire directement le nom 
+			tmp = remove_substr(str, 0, 1 + strlen_until_not(str, ft_isspace));
+			if (!tmp)
+				return (ERROR);
+			del_one_garbage(curr->content, ID);
 		}
 
 		if(curr->type == TWO_QUOTE || curr->type == ONE_QUOTE || curr->type == PARENTHESIS)
-			curr->content = remove_prefix(curr->content);
-			curr->content = remove_suffix(curr->content);
+		{
+			tmp = strcut_gc(tmp, 1, 1, ID);
+
+			
+		}
+		if (flag)
+		{
+			if (!tmp)
+				return (ERROR);
+			del_one_garbage(curr->content, ID);
+			flag = 0;
+		}
+		curr->content = tmp;
 		curr = curr->next;
 	}
 
