@@ -230,20 +230,21 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 #include <dirent.h>
 
 //apply_expansion.c
-char	*expand_wildcard(char *str) //tilde n a pas besoin de start 
+//cette expansion peut creer de nouveaux nodes 
+char	*expand_wildcard(char *str, t_lister *list_tkn) //recupe la fonction du test
 {
-	DIR				*dir;
-	char	*cwd;
-	char	*new;
-	size_t	len_sub;
+	// DIR				*dir;
+	// char	*cwd;
+	// char	*new;
+	// size_t	len_sub;
 
-	len_sub = 1;
-	cwd = getenv_mini("PWD"); //ajouter ID dans getenv_mini
-	opendir(cwd);
-	apply_expansion(str, expansion, len_sub);
-	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
-	del_one_garbage(str, ID);
-	return (new);
+	// len_sub = 1;
+	// cwd = getenv_mini("PWD"); //ajouter ID dans getenv_mini
+	// opendir(cwd);
+	// apply_expansion(str, expansion, len_sub);
+	// del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
+	// del_one_garbage(str, ID);
+	// return (new);
 }
 
 //libft
@@ -261,7 +262,7 @@ int	str_contains_char(char *str, char c)
 	return (0);
 }
 
-char	*expander_handle_word(char *str)
+char	*expander_handle_word(char *str, t_lister *list_tkn)
 {
 	char *new;
 	ssize_t	i;
@@ -276,12 +277,12 @@ char	*expander_handle_word(char *str)
 	{
 		if (str[i] == '$')
 			new = expand_dollar(str, i);
-		if (str[i] == '*')
-			new = expand_wildcard(str, i);
+		if (str[i] == '*') // avant, pendant ou apres la boucle ??
+			new = expand_wildcard(str, list_tkn);
 		i++;
 	}
-	if(str_contains_char(str, '*'))
-		new = expand_wildcard(str, i);
+	if(str_contains_char(str, '*') && !str_contains_char(str, '/')) // avant, pendant ou apres la boucle ??
+		new = expand_wildcard(str, list_tkn);
 	return (new)
 }
 
@@ -315,7 +316,7 @@ void	expander(t_lister *list_tkn)
 		//expansion heredoc
 		if(curr->type == WORD || curr->type == IN || curr->type == OUT || curr->type == APPEND)
 		{
-			tmp = expander_handle_word(curr->content);
+			tmp = expander_handle_word(curr->content, list_tkn);
 			del_one_garbage(curr->content, ID);
 			curr->content = tmp;
 		}

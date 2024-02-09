@@ -14,3 +14,5 @@ Askip : attention a l' impression de newlines lors de l' exit sur un minishell i
 ajouter strndup_gc dans libft.h et makefile
 
 attention, les variables globales sont expandes dans l' entree std d' un heredoc alors qu' elles ne le sont pas dans l' affichage d' un fichier test (ne semble pas provenir du comportement de stdin (cat $TEST))
+
+gerer l' expansion .* ==> affiche les fichiers caches
