@@ -13,6 +13,15 @@ on dirait que les seules positions possibles pour une parenthese sont apres un o
 Askip : attention a l' impression de newlines lors de l' exit sur un minishell imbrique
 ajouter strndup_gc dans libft.h et makefile
 
+
+modifier la variable d' env '_' a chaque execution ($_ affiche le dernier argument de la derniere commande terminee hors pipe)
+
 attention, les variables globales sont expandes dans l' entree std d' un heredoc alors qu' elles ne le sont pas dans l' affichage d' un fichier test (ne semble pas provenir du comportement de stdin (cat $TEST))
 
 gerer l' expansion .* ==> affiche les fichiers caches
+si * est le premier 
+
+si .* et . le 1er char => affiche les fichiers caches, si *
+
+2 cas : on commence par une * : les fichiers caches ne sont pas affiches
+on commence par une chaine : les fichiers contenant toutes les sous chaines sont affiches
