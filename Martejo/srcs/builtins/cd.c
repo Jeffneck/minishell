@@ -16,36 +16,6 @@
 //errno contient le code d'erreur de chdir en cas d'echec
 //getcwd renvoie le working directory du processus actuel, utile pour le minishell
 
-
-int			env_add(char *value, t_env *env)
-{
-	t_env	*new;
-
-	if (env && env->value == NULL)
-	{
-		env->value = ft_strndup(value, ft_strlen(value), ENV);
-		return (1);
-	}
-	new = malloc_gc(sizeof(t_env), ENV);
-	if (!new) //gerer erreur malloc
-		return (-1);
-	new->value = ft_strndup(value, ft_strlen(value), ENV);
-	env_add_back(&env, new);
-	return (1);
-}
-
-void	get_env_name_var(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] && src[i] != '=')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-}
 int	is_in_env(t_env *env, char *args)
 {
 	char	var_name[1024];
