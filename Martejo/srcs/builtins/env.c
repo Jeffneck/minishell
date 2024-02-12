@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 11:14:00 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:32:41 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:36:37 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ int	env(t_env *env)
 {
 	while (env)
 	{
-		ft_printf("%s\n", env->value);
+		if (env->secret == 0)
+			ft_printf("%s\n", env->value);
 		env = env->next;
 	}
 	return (1);

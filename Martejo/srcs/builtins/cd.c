@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:17:17 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:37:10 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:43:38 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,6 @@ int	is_in_env(t_env *env, char *args)
 	return (0);
 }
 
-char	*get_env_path(t_env *env, const char *var, size_t len)
-{
-	char	*path;
-
-	while (env != NULL)
-	{
-		if (ft_strncmp(env->value, var, len) == 0)
-		{
-			path = ft_strdup(&env->value[len]);
-			if (!path)
-				return (NULL); // gerer erreur malloc
-			return (path);
-		}
-		env = env->next;
-	}
-	return (NULL);
-}
-
 int	update_oldpwd(t_env *env)
 {
 	char	cwd[PATH_MAX];
@@ -65,7 +47,7 @@ int	update_oldpwd(t_env *env)
 	if (!oldpwd)
 		return (-1);
 	if (is_in_env(env, oldpwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
-		env_add(oldpwd, env); // sinon si var n'est pas present dans env on rajoute 
+		env_add(oldpwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
 	return (0);
 }
 
@@ -80,7 +62,7 @@ int	update_pwd(t_env *env)
 	if (!pwd)
 		return (-1);
 	if (is_in_env(env, pwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
-		env_add(pwd, env); // sinon si var n'est pas present dans env on rajoute 
+		env_add(pwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
 	return (0);
 }
 

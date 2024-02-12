@@ -15,11 +15,17 @@ SRCS =  srcs/lexer/lexer.c \
 		\
 		srcs/builtins/cd.c \
 		srcs/builtins/echo.c \
-		srcs/builtins/env_handler.c \
 		srcs/builtins/env.c \
 		srcs/builtins/pwd.c \
+		srcs/builtins/unset.c \
+		srcs/builtins/export.c \
+		\
+		srcs/env/env_handler.c \
+		srcs/env/env_utils.c \
+		srcs/env/sort_env.c \
 		\
 		srcs/main.c
+
 OBJS    = ${SRCS:.c=.o}
 
 LIBFT_DIR = libft
@@ -35,12 +41,12 @@ $(LIBFT_A): libft/libft.h
 	@echo "$(_CLEAR)"
 
 ${NAME}: ${OBJS} $(LIBFT_A)
-	@${CC} ${CFLAGS} -g3 -I include -I libft/ -o $@ $^ -Llibft -lft -lreadline
+	@${CC} ${CFLAGS} -g -I include -I libft/ -o $@ $^ -Llibft -lft -lreadline
 	@echo "$(_OK) $(NAME) compiled"
 
 %.o: %.c  include/fdf.h libft/libft.h
 	@echo "[..] $(NAME_SHORT)... compiling $*.c\r\c"
-	@${CC} ${CFLAGS} -g3 -Iinclude -Ilibft/ -c $< -o $@
+	@${CC} ${CFLAGS} -g -Iinclude -Ilibft/ -c $< -o $@
 	@echo "$(_CLEAR)"
 
 clean :

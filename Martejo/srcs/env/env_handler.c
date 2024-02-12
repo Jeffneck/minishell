@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:10:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:34:15 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:46:33 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // Bien gerer les erreurs et liberation en cas d'echec
 
- void env_add_back(t_env **env, t_env *new)
+void env_add_back(t_env **env, t_env *new)
 {
 	t_env *tmp;
 
@@ -29,25 +29,7 @@
 	}
 }
 
-
-int			env_add(char *value, t_env *env)
-{
-	t_env	*new;
-
-	if (env && env->value == NULL)
-	{
-		env->value = ft_strndup(value, ft_strlen(value), ENV);
-		return (1);
-	}
-	new = malloc_gc(sizeof(t_env), ENV);
-	if (!new) //gerer erreur malloc
-		return (-1);
-	new->value = ft_strndup(value, ft_strlen(value), ENV);
-	env_add_back(&env, new);
-	return (1);
-}
-
-void	get_env_name_var(char *dest, char *src)
+void	*get_env_name_var(char *dest, char *src) //changer nom fonction
 {
 	int	i;
 
@@ -58,6 +40,7 @@ void	get_env_name_var(char *dest, char *src)
 		i++;
 	}
 	dest[i] = '\0';
+	return (dest);
 }
 
 t_env	*init_env(char **env_array)
@@ -70,15 +53,18 @@ t_env	*init_env(char **env_array)
 		return (NULL); // gerer erreur
 	i = 0;
 	env = NULL;
+	new = NULL;
 	while (env_array[i] != NULL)
 	{
-		new = malloc_gc(sizeof(env), ENV);
+		new = malloc_gc(sizeof(t_env), ENV);
 		if (!new)
 			return (NULL); //gerer erreur
 		new->value = ft_strndup(env_array[i], ft_strlen(env_array[i]), ENV);
 		new->next = NULL;
+		new->secret = 0;
 		env_add_back(&env, new);
 		i++;
 	}
 	return (env);
 }
+

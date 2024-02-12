@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:36:31 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/12 15:37:07 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ typedef struct s__tknlist
 typedef struct	s_env
 {
 	char			*value;
+	int				secret;
 	struct s_env	*next;
 }				t_env;
 
@@ -113,10 +114,48 @@ int	operator_handler(char *buffer, t_tknlist *list, t_tkntype type);
 /**error**/
 void		error_handler_lexer(int id_gc, char *msg);
 
+/**cd**/
+int	is_in_env(t_env *env, char *args);
+int	update_oldpwd(t_env *env);
+int	update_pwd(t_env *env);
+int	go_to_path(t_env *env);
+int	cd(char **cmds, t_env *env);
+
+/**echo**/
+ int	echo(char **cmds);
+ int	size_cmds(char **cmds); //attention fonction en double
+
+ /**env_builtin**/
+ int	env(t_env *env);
+
+/**pwd**/
+int	ft_pwd(void);
+
+ /**export**/
+ int	ft_export(char **args, t_env *env);
+ int	is_valid_env(const char *env);
+
+ /**Unset**/
+int	unset(char **value, t_env *env);
+
 /**env_handler**/
 t_env	*init_env(char **env_array);
 char	*ft_strndup(char *buffer, int len, t_id_gc id);
- void env_add_back(t_env **env, t_env *new);
- int	cd(char **cmds, t_env *env);
+ void	env_add_back(t_env **env, t_env *new);
+ int	env_add(char *value, t_env *env, int mod);
+ void	*get_env_name_var(char *dest, char *src);
+
+ /**env_utils**/
+ size_t	size_env(t_env *lst);
+ char	*env_to_str(t_env *lst);
+ char	*get_env_path(t_env *env, const char *var, size_t len); // changer nom fonction ? 
+
+ /**sort_env**/
+ int	strlen_2d(char **tab); // a voir si utile
+ void	sort_env(char **tab, int len_env);
+void	print_sorted_env(t_env *env);
+
+/****/
+
 
 #endif

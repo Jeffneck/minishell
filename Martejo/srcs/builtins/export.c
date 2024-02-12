@@ -19,7 +19,27 @@ int		is_valid_env(const char *env)
 	return (1);
 }
 
-int			ft_export(char **args, t_env *env)
+int			env_add(char *value, t_env *env, int mod)
+{
+	t_env	*new;
+
+	new = NULL;
+	if (env && env->value == NULL)
+	{
+		env->value = ft_strndup(value, ft_strlen(value), ENV);
+		return (1);
+	}
+	new = malloc_gc(sizeof(t_env), ENV);
+	if (!new) //gerer erreur malloc
+		return (-1);
+	new->value = ft_strndup(value, ft_strlen(value), ENV);
+	new->secret = mod;
+	new->next = NULL;
+	env_add_back(&env, new);
+	return (1);
+}
+
+int	ft_export(char **args, t_env *env)
 {
 	int	new_env;
 	int	error_ret;
@@ -27,7 +47,7 @@ int			ft_export(char **args, t_env *env)
 	new_env = 0;
 	if (!args[1])
 	{
-		print_sorted_env(seconde liste);
+		print_sorted_env(env);
 		return (1);
 	}
 	else
@@ -44,8 +64,9 @@ int			ft_export(char **args, t_env *env)
 		if (new_env == 0)
 		{
 			if (error_ret == 1)
-				env_add(args[1], env);
-			env_add(args[1], secret);
+				env_add(args[1], env, 0);
+			else
+				env_add(args[1], env, 1);
 		}
 	}
 	return (0);
