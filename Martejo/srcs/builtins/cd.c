@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:17:17 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/12 15:43:38 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:37:35 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 //errno contient le code d'erreur de chdir en cas d'echec
 //getcwd renvoie le working directory du processus actuel, utile pour le minishell
 
+
+// degager cette fonction et la foutre dans dossier env utils
 int	is_in_env(t_env *env, char *args)
 {
 	char	var_name[1024];
@@ -27,6 +29,7 @@ int	is_in_env(t_env *env, char *args)
 		get_env_name_var(env_name, env->value);
 		if (ft_strcmp(var_name, env_name) == 0)
 		{
+			printf("var name = %s\nenv_name = %s\n", var_name, env_name);
 			del_one_garbage(env->value, ENV);
 			env->value = ft_strndup(args, ft_strlen(args), ENV);
 			return (1);
@@ -85,6 +88,7 @@ int	go_to_path(t_env *env)
 int	cd(char **cmds, t_env *env)
 {
 	int	ret_cd;
+
 
 	if (cmds[1] == NULL)
 		return (go_to_path(env));

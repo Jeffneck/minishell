@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 01:30:55 by cberganz          #+#    #+#             */
-/*   Updated: 2024/02/05 15:33:46 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:15:47 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	builtin_echo(char **exec_args, int exit, int fd)
 	int	nflag;
 	int	save_fd;
 
-	ft_putstr_fd("1", fd);//test
+	//ft_putstr_fd("1", fd);//test
 	save_fd = 0;
 	nflag = 0;
 	while (*exec_args && is_nflag(*exec_args)) // hugo : mettre strcmp ici

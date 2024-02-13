@@ -6,13 +6,13 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:06:36 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/12 14:30:20 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/13 15:04:38 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*get_env_path(t_env *env, const char *var, size_t len)
+char	*get_env_path(t_env *env, const char *var, size_t len) //changer nom par get_env_value
 {
 	char	*path;
 
@@ -27,7 +27,7 @@ char	*get_env_path(t_env *env, const char *var, size_t len)
 		}
 		env = env->next;
 	}
-	return (NULL);
+	return ("");
 }
 
 size_t	size_env(t_env *lst)

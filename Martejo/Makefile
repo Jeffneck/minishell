@@ -1,3 +1,5 @@
+#.DEFAULT_GOAL:all
+
 NAME = minishell
 
 CC = cc
@@ -24,7 +26,9 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/env/env_utils.c \
 		srcs/env/sort_env.c \
 		\
-		srcs/main.c
+		srcs/main.c \
+		srcs/terminal/prompt.c \
+		srcs/terminal/loop.c
 
 OBJS    = ${SRCS:.c=.o}
 
@@ -33,7 +37,7 @@ LIBFT_A = libft/libft.a
 _CLEAR	= \033[0K\r\c
 _OK	= [\033[32mOK\033[0m]
 
-all : $(LIBFT_A) $(NAME)
+all : force $(LIBFT_A) $(NAME)
 
 $(LIBFT_A): libft/libft.h
 	@echo "[..] libft... compiling \r\c"
@@ -49,6 +53,9 @@ ${NAME}: ${OBJS} $(LIBFT_A)
 	@${CC} ${CFLAGS} -g -Iinclude -Ilibft/ -c $< -o $@
 	@echo "$(_CLEAR)"
 
+force :
+	make -C libft
+
 clean :
 	@$(MAKE) -C $(LIBFT_DIR) clean -s
 	@$(RM) $(OBJS)
@@ -61,5 +68,5 @@ fclean : clean
 
 re : fclean all
 
-.PHONY: all clean fclean re libft
+.PHONY: all clean fclean re libft force
 

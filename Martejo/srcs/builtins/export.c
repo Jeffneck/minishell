@@ -1,17 +1,22 @@
 #include "../../include/minishell.h"
 
 
-int		is_valid_env(const char *env)
+//Voir par rapport a la detection des singles et doubles quotes exemple :
+// export sak='sa!lu^%*' ->> ca fonctionne car single quotes
+//export sak=sa!lu^%*  ---> zsh: event not found: lu ca ne fonctionne oas
+
+int	is_valid_env(const char *env)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (ft_isdigit(env[i]) == 1)
-		return (0);
+		return (0); // message erreur avec export: not an identifier: nombre trouvé
 	while (env[i] && env[i] != '=')
 	{
-		if (ft_isalnum(env[i]) == 0) //verifier par rapport au underscore
-			return (-1);
+		if (ft_isalnum(env[i]) == 0 && env[i] != '_') //verifier par rapport au underscore
+			return (-1); //export: «l'argument d'export» : not a valid identifier
+		//bash: !sa=df: event not found
 		i++;
 	}
 	if (env[i] != '=')
@@ -39,35 +44,48 @@ int			env_add(char *value, t_env *env, int mod)
 	return (1);
 }
 
-int	ft_export(char **args, t_env *env)
+
+int	export_handler(char *args, t_env *env)
 {
 	int	new_env;
 	int	error_ret;
 
 	new_env = 0;
+	error_ret = 0;
+	error_ret = is_valid_env(args);
+	if (args[0] == '=') // bash: export: `=': not a valid identifier
+		error_ret = -3;
+	if (error_ret <= 0)
+		return (-1); //gerer erreur et afficher
+	new_env = is_in_env(env, args);
+	if (new_env == 0)
+	{
+		if (error_ret == 1)
+			env_add(args, env, 0);// 0 ou 1 pour secret export
+		else
+			env_add(args, env, 1);
+	}
+	return (0);
+}
+int	ft_export(char **args, t_env *envt)
+{
+	int	i;
+
+	i = 1;
 	if (!args[1])
 	{
-		print_sorted_env(env);
+		print_sorted_env(envt);
 		return (1);
 	}
 	else
 	{
-		error_ret = is_valid_env(args[1]);
-		if (args[1][0] == '=')
-			error_ret = -3;
-		if (error_ret <= 0)
-			return (-1); //gerer erreur et afficher
-		if (error_ret == 2) 
-			new_env = 1;
-		else 
-			new_env = is_in_env(env, args[1]);
-		if (new_env == 0)
+		while (args[i] != NULL)
 		{
-			if (error_ret == 1)
-				env_add(args[1], env, 0);
-			else
-				env_add(args[1], env, 1);
-		}
+			if (export_handler(args[i], envt) != 0)
+				//gerer erreur retour	
+			env(envt);
+			i++;
+		}	
 	}
 	return (0);
 }

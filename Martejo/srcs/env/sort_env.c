@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:01:46 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/12 14:32:09 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:47:52 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,6 @@ void	print_sorted_env(t_env *env)
 	free(str_env);
 	sort_env(tab, strlen_2d(tab));
 	while (tab[i])
-		ft_printf("%s\n", tab[i++]);
+		ft_printf("declare -x %s\n", tab[i++]);
 	//liberer tableau 2d;
 }

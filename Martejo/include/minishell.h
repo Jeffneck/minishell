@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/12 15:37:07 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/13 16:22:37 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,6 +156,7 @@ char	*ft_strndup(char *buffer, int len, t_id_gc id);
 void	print_sorted_env(t_env *env);
 
 /****/
-
+char	*create_prompt(t_mini *mini);
+void	prompt_loop(t_mini *mini);
 
 #endif
