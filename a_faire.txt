@@ -25,3 +25,8 @@ si .* et . le 1er char => affiche les fichiers caches, si *
 
 2 cas : on commence par une * : les fichiers caches ne sont pas affiches
 on commence par une chaine : les fichiers contenant toutes les sous chaines sont affiches
+
+modifier le vrai del_one_garbage comme dans le bac a sable.
+attention les wildcards dans le nom de commande ?
+
+pour le GC revoir l' enum de maniere plus coherente avec les types TKNLIST, BINTREE, TMP

@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 14:25:41 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 14:37:12 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/13 10:16:54 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,13 @@ void	del_one_garbage(void *ptr_to_free, int id_gc)
 
 	alst = garbage_ptr(id_gc);
 	tmp = *alst;
+	if (!ptr_to_free || id_gc > GARBAGE_SIZE || id_gc < 0)
+		return ;
 	if (tmp && tmp->content == ptr_to_free)
 	{
 		*alst = tmp->next;
 		ft_lstdelone(tmp, free);
+		return ;
 	}
 	while (tmp && tmp->content != ptr_to_free)
 	{

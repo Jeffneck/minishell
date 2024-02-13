@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/12 17:50:47 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/13 14:58:46 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,8 @@ char	*ft_strndup(char *buffer, int len, t_id_gc id);
 void	print_sorted_env(t_env *env);
 
 
-
-int	expand_wildcard(t_tknlist *list_tkn, t_token *curr, int hide_mode); 
+void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd);
+t_tknlist	*expand_wildcard(t_token *curr, int hide_mode);
 int	is_asterisk(char c);
 void	display_tknlist(t_tknlist *list);
 void	pop_node_in_place(t_tknlist *list_tkn, t_token *to_pop);
