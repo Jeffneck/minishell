@@ -182,19 +182,19 @@ char	*expand_dollar(char *str, size_t start)
 }
 
 //apply_expansion.c
-char	*expand_tilde(char *str) //tilde n a pas besoin de start 
-{
-	char	*expansion;
-	char	*new;
-	size_t	len_sub;
+// char	*expand_tilde(char *str) //tilde n' est pas dans le sujet !!!!!
+// {
+// 	char	*expansion;
+// 	char	*new;
+// 	size_t	len_sub;
 
-	len_sub = 1;
-	expansion = getenv_mini("HOME"); //ajouter ID dans getenv_mini
-	apply_expansion(str, expansion, len_sub);
-	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
-	del_one_garbage(str, ID);
-	return (new);
-}
+// 	len_sub = 1;
+// 	expansion = getenv_mini("HOME"); //ajouter ID dans getenv_mini
+// 	apply_expansion(str, expansion, len_sub);
+// 	del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
+// 	del_one_garbage(str, ID);
+// 	return (new);
+// }
 
 
 int	str_contains_all_subs_ordered(char *str, char **subs)
@@ -226,25 +226,73 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 	return (0);
 }
 
+
+
+
+
+
+
 #include <sys/types.h>
 #include <dirent.h>
 
+
+int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
+{
+	if (to_expand[0] == '*' && file[0] == '.')
+		return (0);
+	if (!str_contains_all_subs_ordered(file, subs_needed))
+		return (0);
+	if (to_expand[ft_strlen(to_expand) - 1] != '*' && !is_str_suffix(subs_needed[char2len(subs_needed) - 1], file))
+		return (0);
+	return (1);
+}
+
+t_lister	*lstadd_compatible_cwd_files(t_lister *lst, char **subs_needed, char *to_expand)
+{
+	DIR *dir;
+    struct dirent *entry;
+	t_token	*new_tkn;
+
+	dir = opendir(".");
+    if (dir == NULL)
+		exit(EXIT_FAILURE); //retour d'erreur specifique
+	entry = readdir(dir);
+	while (entry)
+	{
+		if (is_compatible_file_wildcard(entry->d_name, subs_needed, to_expand))
+		{
+			new_tkn = create_node(WORD, strdup_gc(entry->d_name, EXPANDER), 0); //valider pou la var link
+			if (!new_tkn)
+			{
+				closedir(dir);
+				exit(EXIT_FAILURE);//error mnagement
+			}
+			add_node(lst, new_tkn);
+		}
+		entry = readdir(dir);
+	}
+	closedir(dir);
+}
 //apply_expansion.c
 //cette expansion peut creer de nouveaux nodes 
-char	*expand_wildcard(char *str, t_lister *list_tkn) //recupe la fonction du test
+void	expand_wildcard(t_token *tkn_to_expand, t_lister *tkn_lst) //recupe la fonction du test
 {
-	// DIR				*dir;
-	// char	*cwd;
-	// char	*new;
-	// size_t	len_sub;
+	//splitter la str initiale
+	char ** splitted;
+	splitted = split_gc(tkn_to_expand->content, '*', TMP); //strtrim surement pas obligatoire 
 
-	// len_sub = 1;
-	// cwd = getenv_mini("PWD"); //ajouter ID dans getenv_mini
-	// opendir(cwd);
-	// apply_expansion(str, expansion, len_sub);
-	// del_one_garbage(expansion, ID); // on peut ne pas utiliser le gc dans getenv_mini
-	// del_one_garbage(str, ID);
-	// return (new);
+	//faire une liste dans laquelle les str compatibles sont ajoutees
+	t_lister *wildcard_lst;
+	init_list(&wildcard_lst);//gestion d' erreur sur retour ?
+	lstadd_compatible_cwd_files(wildcard_lst, splitted, tkn_to_expand);;
+	if (!wildcard_lst || !wildcard_lst->head)
+		return ;
+	//trier la liste dans l' ordre attendu
+	ascii_case_sensitive_sort(wildcard_lst);
+	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_to_expand, wildcard_lst);
+	pop_node_in_place(tkn_lst, tkn_to_expand);
+	clear_garbage(TMP, free);
+	return ;
 }
 
 //libft

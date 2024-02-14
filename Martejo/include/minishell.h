@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/14 12:10:08 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/14 16:32:54 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,30 @@
 # include <limits.h>
 # include <errno.h>
 # include "../libft/libft.h"
+# include <sys/types.h>
+# include <dirent.h>
+
+typedef	struct s_btree
+{
+	char **content;
+	int	io[2]; //in out (peut etre compose de pipe)
+	int	branch;
+	t_tkntype	type;
+	struct s_btree	*left;
+	struct s_btree	*right;
+}	t_btree;
+
+typedef enum {
+    false, // false vaut 0
+    true   // true vaut 1
+} e_bool;
 
 typedef enum e_id_gc
 {
-	LEXER = 1,
+	TKN_LIST = 1,
+	B_TREE,
 	ENV,
-	TREE
+	TMP
 }	t_id_gc;
 
 typedef enum e_tkntype
@@ -84,6 +102,9 @@ typedef struct	s_mini
 {
 	//t_token			*start;
 	t_env			*env;
+	t_tknlist		*tkn_lst;
+	t_btree			*b_tree;
+	
 }				t_mini;
 
 /**list**/

@@ -20,7 +20,6 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 			j++;
 		if (!subs[sub][j])
 		{
-			printf("a");//
 			sub++;
 			j = 0;
 			if (!subs[sub])
@@ -130,69 +129,52 @@ int	is_asterisk(char c)
 	return (0);
 }
 
-int	is_str_suffix(char *suffix, char *str)
+int	s1_is_s2_suffix(char *s1, char *s2)
 {
-	size_t	len_str; 
-	size_t	len_suffix; 
-	size_t	suffix_pos; 
-	ft_printf("suffix = %s\t", suffix);
-	ft_printf("str = %s\n", str);
-	if (!suffix || !str)
+	size_t	len_s2;
+	size_t	len_s1;
+	size_t	suffix_pos;
+	ft_printf("s1 = %s\t", s1);
+	ft_printf("s2 = %s\n", s2);
+	if (!s1 || !s2)
 		return (0);
-	if (!suffix[0])
+	if (!s1[0])
 		return (1);
-	len_str = ft_strlen(str);
-	len_suffix = ft_strlen(suffix);
-	suffix_pos = len_str - len_suffix;
+	len_s2 = ft_strlen(s2);
+	len_s1 = ft_strlen(s1);
+	suffix_pos = len_s2 - len_s1;
 	if (suffix_pos < 0)
 		return (0);
-	str = str + suffix_pos;
-	while(*str)
+	s2 = s2 + suffix_pos;
+	while(*s2)
 	{
-		if(*str != *suffix)
+		if(*s2 != *s1)
 			return (0);
-		suffix++;
-		str++;
+		s1++;
+		s2++;
 	}
 	return (1);
 }
 
 void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2)
 {
+    t_token *tmp_prev;
+
     if (tkn1 == NULL || tkn2 == NULL || lst == NULL || lst->head == NULL || lst->tail == NULL)
-        return ; // Vérifiez les cas d'erreur et renvoyez NULL si nécessaire
-
-    // Si tkn1 est la tête de la liste
-    if (tkn1 == lst->head) {
+		return ;// error management
+	tmp_prev = tkn1->prev;
+    if (tkn1 == lst->head)
         lst->head = tkn2;
-    } else {
+    else
         (tkn1->prev)->next = tkn2;
-    }
-
-    // Si tkn2 est la queue de la liste
-    if (tkn2 == lst->tail) {
+    if (tkn2 == lst->tail)
         lst->tail = tkn1;
-    } else {
+    else
         (tkn2->next)->prev = tkn1;
-    }
-
-    // Mettez à jour les liens pour les nœuds tkn1 et tkn2
-    t_token *tmp_prev = tkn1->prev;
-    // t_token *tmp_next = tkn1->next;
-	// ft_printf("tkn1 = %s\n", tkn1->content);//
-	// ft_printf("tkn1->next = %s\n", tkn1->next->content);//
-	// ft_printf("tkn2 = %s\n", tkn2->content);//
-	// ft_printf("tkn2->next = %s\n", tkn2->next->content);//
     tkn1->prev = tkn2;
     tkn1->next = tkn2->next;
     tkn2->prev = tmp_prev;
     tkn2->next = tkn1;
-	// ft_printf("after tkn1 = %s\n", tkn1->content);//
-	// ft_printf("after tkn1->next = %s\n", tkn1->next->content);//
-	// ft_printf("after tkn2 = %s\n", tkn2->content);//
-	// ft_printf("after tkn2->next = %s\n", tkn2->next->content);//
-	sleep(10);//
-	// display_tknlist(lst); //test debug
 }
 
 int	ft_strcmp_case_insensitive(char *s1, char *s2)
@@ -224,21 +206,8 @@ size_t	tknlst_size(t_tknlist *tknlst)
 	return (i);
 }
 
-void	ascii_case_sensitive_sort(t_tknlist *list_expnd)
+void	tknlst_sort_ascii_case(t_tknlist *list_expnd)
 {
-	// t_tknlist	*list_sorted;
-	// size_t		i;
-
-	// ft_bzero(list_expnd, 1);
-	// curr = list_expnd->head;
-	// t_target =
-	// while()
-	// while(curr)
-	// {
-	// 	if (!target || ft_strcmp_case_sensitive(curr->content, target->content) > 0)
-	// 		target = curr;
-	// }
-
 	t_token		*curr;
 	t_token		*next;
 	size_t		i;
@@ -249,19 +218,12 @@ void	ascii_case_sensitive_sort(t_tknlist *list_expnd)
 	while(i < lst_size)
 	{
 		curr = list_expnd->head;
-		// next = curr->next;
-		while (curr && next)
+		while (curr)
 		{
-			// ft_printf("curr = %s\n", curr->content);//
-			// ft_printf("curr->next = %s\n", curr->next->content);//
-			// ft_printf("real next = %s\n", next->content);//
 			next = curr->next;
-			if (ft_strcmp_case_insensitive(curr->content, next->content) > 0)
+			if (next && ft_strcmp_case_insensitive(curr->content, next->content) > 0)
 			{
 				swap_tokens(list_expnd, curr, next);
-				// ft_printf("after curr = %s\n", curr->content);//
-				// ft_printf("after curr->next = %s\n", curr->next->content);//
-				// ft_printf("after real next = %s\n", next->content);//
 				continue;
 			}
 			curr = curr->next;
@@ -280,54 +242,151 @@ void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_t
 	target_tkn->next = (list_expnd->head);
 }
 
-t_tknlist	*expand_wildcard(t_token *curr, int hide_mode) //list_lexer inutile
+// t_tknlist	*expand_wildcard(t_token *curr, int hide_mode) //list_lexer inutile
+// {
+//     DIR *dir;
+//     struct dirent *entry;
+// 	char ** splitted;
+// 	t_token	*new_tkn;
+// 	t_tknlist *list_expnd;
+// 	init_list(&list_expnd);
+
+
+// 	splitted = split_gc(strtrim_gc(curr->content, "*", TMP), '*', TMP); //strtrim surement pas obligatoire 
+// 	// ft_printf("splitted = %p splitted[0] = %s\n", splitted, splitted[0]);
+
+// 	//revoir cette partie -----------
+//     dir = opendir(".");
+//     if (dir == NULL)
+// 	{
+//         perror("Erreur lors de l'ouverture du répertoire courant");
+//         exit(1);
+//     }
+// 	//revoir cette partie -----------
+
+// 	while ((entry = readdir(dir)) != NULL)
+// 	{
+// 		// printf("sortie readdir = %s\n", entry->d_name);//
+// 		if ((hide_mode && entry->d_name[0] == '.') || !str_contains_all_subs_ordered(entry->d_name, splitted) || (splitted[0] && !s1_is_s2_suffix(splitted[char2len(splitted) - 1], entry->d_name)))
+// 			continue;
+// 		// ft_printf("node is being created\n");//
+// 		new_tkn = create_node(WORD, strdup_gc(entry->d_name, EXPANDER), 0); //valider pou la var link
+// 		if (!new_tkn)
+// 			return (clear_garbage(TMP, free), closedir(dir), NULL); //error management, penser a close
+// 		add_node(list_expnd, new_tkn);
+
+// 	}
+// 	// display_tknlist(list_expnd);
+// 	tknlst_sort_ascii_case(list_expnd);
+// 	return (clear_garbage(TMP, free), closedir(dir), list_expnd); //error management, penser a close
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 {
-    DIR *dir;
+	if (to_expand[0] == '*' && file[0] == '.')
+		return (0);
+	if (!str_contains_all_subs_ordered(file, subs_needed))
+		return (0);
+	if (to_expand[ft_strlen(to_expand) - 1] != '*' && !s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
+		return (0);
+	return (1);
+}
+
+void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand)
+{
+	DIR *dir;
     struct dirent *entry;
-	char ** splitted;
 	t_token	*new_tkn;
 
-	// t_token *init_tkn;
-	// init_tkn = curr;
-	// int	flag_pop_init;
-	// flag_pop_init = 0;
-	t_tknlist *list_expnd;
-	init_list(&list_expnd);
-
-
-	splitted = split_gc(strtrim_gc(curr->content, "*", TMP), '*', TMP);
-	ft_printf("splitted = %p splitted[0] = %s\n", splitted, splitted[0]);
-
-	//revoir cette partie -----------
-    dir = opendir(".");
+	dir = opendir(".");
     if (dir == NULL)
+		exit(EXIT_FAILURE); //retour d'erreur specifique
+	entry = readdir(dir);
+	while (entry)
 	{
-        perror("Erreur lors de l'ouverture du répertoire courant");
-        exit(1);
-    }
-	//revoir cette partie -----------
-
-	while ((entry = readdir(dir)) != NULL)
-	{
-		printf("sortie readdir = %s\n", entry->d_name);//
-		if ((hide_mode && entry->d_name[0] == '.') || !str_contains_all_subs_ordered(entry->d_name, splitted) || (splitted[0] && !is_str_suffix(splitted[char2len(splitted) - 1], entry->d_name)))
-			continue;
-		ft_printf("node is being created\n");//
-		// if (!flag_pop_init++) //inutile car gere avec la valeur de retour d' expand wildcard
-		// 	pop_node_in_place(&list_lexer, init_tkn);
-		new_tkn = create_node(WORD, strdup_gc(entry->d_name, EXPANDER), 0); //valider pou la var link
-		if (!new_tkn)
-			return (clear_garbage(TMP, free), closedir(dir), NULL); //error management, penser a close
-		add_node(list_expnd, new_tkn);
-		//add_after_another(list_expnd, curr, new_tkn); //inutile puisque les listes sont gerees de maniere independantes
-		// curr = curr->next;
+		if (is_compatible_file_wildcard(entry->d_name, subs_needed, to_expand))
+		{
+			new_tkn = create_node(WORD, strdup_gc(entry->d_name, EXPANDER), 0); //valider pou la var link
+			if (!new_tkn)
+			{
+				closedir(dir);
+				exit(EXIT_FAILURE);//error mnagement
+			}
+			add_node(lst, new_tkn);
+		}
+		entry = readdir(dir);
 	}
-	display_tknlist(list_expnd);
-	// ft_printf("1\n");//
-	ascii_case_sensitive_sort(list_expnd);
-	// display_tknlist(list_expnd);
-	return (clear_garbage(TMP, free), closedir(dir), list_expnd); //error management, penser a close
+	closedir(dir);
 }
+//apply_expansion.c
+//cette expansion peut creer de nouveaux nodes 
+void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst) //recupe la fonction du test
+{
+	//splitter la str initiale
+	char ** splitted;
+	splitted = split_gc(tkn_to_expand->content, '*', TMP); //strtrim surement pas obligatoire 
+
+	//faire une liste dans laquelle les str compatibles sont ajoutees
+	t_tknlist *wildcard_lst;
+	init_list(&wildcard_lst);//gestion d' erreur sur retour ?
+	lstadd_compatible_cwd_files(wildcard_lst, splitted, tkn_to_expand->content);;
+	if (!wildcard_lst || !wildcard_lst->head)
+		return ;
+	//trier la liste dans l' ordre attendu
+	tknlst_sort_ascii_case(wildcard_lst);
+	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_to_expand, wildcard_lst);
+	pop_node_in_place(tkn_lst, tkn_to_expand);
+	display_tknlist(tkn_lst);//
+	clear_garbage(TMP, free);
+	return ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //idee creer un nouveau node non linke pour chaque nouvelle sortie de readdir

@@ -29,4 +29,10 @@ on commence par une chaine : les fichiers contenant toutes les sous chaines sont
 modifier le vrai del_one_garbage comme dans le bac a sable.
 attention les wildcards dans le nom de commande ?
 
-pour le GC revoir l' enum de maniere plus coherente avec les types TKNLIST, BINTREE, TMP
+pour le GC revoir l' enum de maniere plus coherente avec les types TKNLIST, BINTREE, TMP 
+verifier s' il faut mettre les enum en maj ou min
+
+
+export = le parametre ne doit pas etre un char special comme * par exemple
+
+echo $ renvoie $
