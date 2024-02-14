@@ -24,28 +24,28 @@ int	is_valid_env(const char *env)
 	return (1);
 }
 
-int			env_add(char *value, t_env *env, int mod)
+int			env_add(char *value, t_env **env, int mod)
 {
 	t_env	*new;
 
 	new = NULL;
-	if (env && env->value == NULL)
-	{
-		env->value = ft_strndup(value, ft_strlen(value), ENV);
-		return (1);
-	}
+	// if (env && env->value == NULL)
+	// {
+	// 	env->value = ft_strndup(value, ft_strlen(value), ENV);
+	// 	return (1);
+	// }
 	new = malloc_gc(sizeof(t_env), ENV);
 	if (!new) //gerer erreur malloc
 		return (-1);
 	new->value = ft_strndup(value, ft_strlen(value), ENV);
 	new->secret = mod;
 	new->next = NULL;
-	env_add_back(&env, new);
+	env_add_back(env, new);
 	return (1);
 }
 
 
-int	export_handler(char *args, t_env *env)
+int	export_handler(char *args, t_env **env)
 {
 	int	new_env;
 	int	error_ret;
@@ -57,7 +57,7 @@ int	export_handler(char *args, t_env *env)
 		error_ret = -3;
 	if (error_ret <= 0)
 		return (-1); //gerer erreur et afficher
-	new_env = is_in_env(env, args);
+	new_env = is_in_env((*env), args);
 	if (new_env == 0)
 	{
 		if (error_ret == 1)
@@ -67,14 +67,14 @@ int	export_handler(char *args, t_env *env)
 	}
 	return (0);
 }
-int	ft_export(char **args, t_env *envt)
+int	ft_export(char **args, t_env **envt)
 {
 	int	i;
 
 	i = 1;
 	if (!args[1])
 	{
-		print_sorted_env(envt);
+		print_sorted_env(*envt);
 		return (1);
 	}
 	else
@@ -82,8 +82,7 @@ int	ft_export(char **args, t_env *envt)
 		while (args[i] != NULL)
 		{
 			if (export_handler(args[i], envt) != 0)
-				//gerer erreur retour	
-			env(envt);
+				return (-1);
 			i++;
 		}	
 	}

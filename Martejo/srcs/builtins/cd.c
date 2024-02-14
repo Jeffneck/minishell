@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:17:17 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 16:37:35 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:15:29 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 // degager cette fonction et la foutre dans dossier env utils
 int	is_in_env(t_env *env, char *args)
 {
-	char	var_name[1024];
-	char	env_name[1024];
+	char	var_name[PATH_MAX];
+	char	env_name[PATH_MAX];
 
 	get_env_name_var(var_name, args);
 	while (env)
@@ -39,7 +39,7 @@ int	is_in_env(t_env *env, char *args)
 	return (0);
 }
 
-int	update_oldpwd(t_env *env)
+int	update_oldpwd(t_env **env)
 {
 	char	cwd[PATH_MAX];
 	char	*oldpwd;
@@ -49,12 +49,12 @@ int	update_oldpwd(t_env *env)
 	oldpwd = ft_strjoin("OLDPWD=", cwd);
 	if (!oldpwd)
 		return (-1);
-	if (is_in_env(env, oldpwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
+	if (is_in_env(*env, oldpwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
 		env_add(oldpwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
 	return (0);
 }
 
-int	update_pwd(t_env *env)
+int	update_pwd(t_env **env)
 {
 	char	cwd[PATH_MAX];
 	char	*pwd;
@@ -64,28 +64,41 @@ int	update_pwd(t_env *env)
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
 		return (-1);
-	if (is_in_env(env, pwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
+	if (is_in_env(*env, pwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
 		env_add(pwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
 	return (0);
 }
 
-int	go_to_path(t_env *env)
+int	go_to_path(t_env **env)
 {
 	int		ret;
 	char	*env_path;
 
 	env_path = NULL;
 	update_oldpwd(env);
-	env_path = get_env_path(env, "HOME=", 5); // remplacer par notre fonction
+	env_path = get_env_path(*env, "HOME=", 5); // remplacer par notre fonction
 	if (!env_path)
+	{
+		printf("erreur malloc");
 		return (-1);
-		//afficher erreur comme quoi HOME n'existe pas et return erreur
+	}
+	else if (ft_strcmp(env_path, "") == 0)
+	{
+		printf("bash: cd: HOME not set\n");
+		return (1);
+	}
+	//afficher erreur comme quoi HOME n'existe pas et return erreur
 	ret = chdir(env_path); //recuperer erreur de chdir
+	if (ret)
+	{
+		ft_printf("%s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 	update_pwd(env);
 	free(env_path); //liberer ce buffer;
 	return (ret);
 }
-int	cd(char **cmds, t_env *env)
+int	cd(char **cmds, t_env **env)
 {
 	int	ret_cd;
 

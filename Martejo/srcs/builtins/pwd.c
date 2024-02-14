@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:52:45 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:36:16 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/14 11:50:16 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,7 @@ int	ft_pwd(void)
 		return (0); //gerer erreur
 	}
 	else
-		write(1, cwd, strlen(cwd));
-		//ft_printf("%s", cwd);
+		ft_printf("%s\n", cwd);
 	return (1);
 }
 

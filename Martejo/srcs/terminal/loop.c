@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 16:26:33 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/14 11:44:32 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 int	prompt_processing(char **input, t_mini *mini)
 {
 	if (ft_strcmp(input[0], "export") == 0)
-		ft_export(input, mini->env);
+		ft_export(input, &mini->env);
 	else if (ft_strcmp(input[0], "unset") == 0)
 		unset(input, mini->env);
 	else if (ft_strcmp(input[0], "cd") == 0)
-		cd(input, mini->env);
+		cd(input, &mini->env);
 	else if (ft_strcmp(input[0], "env") == 0)
 		env(mini->env);
 	else if (ft_strcmp(input[0], "echo") == 0)

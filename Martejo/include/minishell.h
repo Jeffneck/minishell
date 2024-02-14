@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 16:22:37 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/14 12:10:08 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <sys/wait.h>
 # include <signal.h>
 # include <limits.h>
+# include <errno.h>
 # include "../libft/libft.h"
 
 typedef enum e_id_gc
@@ -116,10 +117,10 @@ void		error_handler_lexer(int id_gc, char *msg);
 
 /**cd**/
 int	is_in_env(t_env *env, char *args);
-int	update_oldpwd(t_env *env);
-int	update_pwd(t_env *env);
-int	go_to_path(t_env *env);
-int	cd(char **cmds, t_env *env);
+int	update_oldpwd(t_env **env);
+int	update_pwd(t_env **env);
+int	go_to_path(t_env **env);
+int	cd(char **cmds, t_env **env);
 
 /**echo**/
  int	echo(char **cmds);
@@ -132,7 +133,7 @@ int	cd(char **cmds, t_env *env);
 int	ft_pwd(void);
 
  /**export**/
- int	ft_export(char **args, t_env *env);
+ int	ft_export(char **args, t_env **env);
  int	is_valid_env(const char *env);
 
  /**Unset**/
@@ -142,7 +143,7 @@ int	unset(char **value, t_env *env);
 t_env	*init_env(char **env_array);
 char	*ft_strndup(char *buffer, int len, t_id_gc id);
  void	env_add_back(t_env **env, t_env *new);
- int	env_add(char *value, t_env *env, int mod);
+ int	env_add(char *value, t_env **env, int mod);
  void	*get_env_name_var(char *dest, char *src);
 
  /**env_utils**/
