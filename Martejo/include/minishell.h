@@ -82,6 +82,8 @@ typedef struct s_token
 	t_tkntype		type;
 	char			*content;
 	int				link;
+	size_t			index;
+	int				priority;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
@@ -110,7 +112,7 @@ typedef struct	s_mini
 }				t_mini;
 
 /**list**/
-t_token		*create_node(t_tkntype type, char *content, int link);
+t_token	*create_node(t_tkntype typed, char *value, int linked);
 int			add_node(t_tknlist *list, t_token *node);
 void		init_list(t_tknlist **list);
 
@@ -206,6 +208,7 @@ void	display_tknlist(t_tknlist *list);
 
 //libft-extension
 char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc);
+char	*ft_strcut(char const *str, size_t cut_begin, size_t cut_end);
 char	*replace_substr(char *str, char *replacement, size_t start, size_t len);
 char	*remove_substr(char *str, size_t start, size_t len);
 size_t	ft_strlen_until(const char *str, int(*f)(char));
@@ -222,6 +225,8 @@ void	verify_syntax(t_tknlist *list_tkn);
 int	type_need_reducing(t_tkntype type);
 void	reducer(t_token	*tkn) ;
 
+int is_link_sensitive(t_tkntype type);
+void    linker(t_tknlist *tkn_lst);
 
 int	is_charset_env(char c);
 char	*expand_dollar(t_env *env, char *str, size_t start);

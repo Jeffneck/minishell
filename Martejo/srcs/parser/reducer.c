@@ -11,6 +11,7 @@ int	type_need_reducing(t_tkntype type)
 
 void	reducer(t_token	*tkn) 
 {
+	ft_printf("reducer\n");
 	char	*tmp;
 	e_bool	flag;
 
@@ -26,12 +27,13 @@ void	reducer(t_token	*tkn)
 			if(tkn->type == HEREDOC || tkn->type == APPEND)
 				tmp = remove_substr(tkn->content, 0, 2 + ft_strlen_until_not(&tkn->content[2], ft_isspace));
 			else if (tkn->type == TWO_QUOTE || tkn->type == ONE_QUOTE || tkn->type == PARENTHESIS)
-				tmp = strcut_gc(tkn->content, 1, 1, TKN_LIST);
+				tmp = ft_strcut(tkn->content, 1, 1);
 		}
 		if (flag)
 		{
 			if (!tmp)
 				exit(EXIT_FAILURE); //err management
+			add_to_garbage(tmp, TKN_LIST);
 			del_one_garbage(tkn->content, TKN_LIST);
 			tkn->content = tmp;
 		}

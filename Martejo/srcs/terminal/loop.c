@@ -42,15 +42,14 @@ void	prompt_loop(t_mini *mini)
 	//char	*prompt;
 	//char	*read_buffer;
 	//char	**cmds;
-	char *buffer = "<< heredoc";
+	char *buffer = "'colle''serre'\"caliente\" espace|espace";
 	
 	
 	//prompt = create_prompt(mini);
 	//read_buffer = readline(prompt);
 	mini->tkn_lst = lexer(buffer);
+	parser(*mini);
 	display_tknlist(mini->tkn_lst);
-	
-	// parser(*mini);
 		
 	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');

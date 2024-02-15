@@ -12,18 +12,20 @@
 
 #include "../../include/minishell.h"
 
-t_token	*create_node(t_tkntype type, char *content, int link)
+t_token	*create_node(t_tkntype typed, char *value, int linked)
 {
 	t_token	*node;
 
-	if (!content)
+	if (!value)
 		return (NULL);
 	node = malloc_gc(sizeof(t_token), TKN_LIST);
 	if (!node)
 		error_handler_lexer(1, "Malloc error\n");
-	node->content = content;
-	node->type = type;
-	node->link = link;
+	node->content = value;
+	node->type = typed;
+	node->link = linked;
+	node->index = 0;
+	node->priority = 0;
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);

@@ -5,6 +5,7 @@ void	verify_syntax(t_tknlist *list_tkn)
 // ne pas commencer par un token impossible &&, || , |
 // certains tokens doivent obligatoirement être suivis d’autre chose qu’un operateur <, >, >>, <<, |, (, ||
 
+	ft_printf("verify_syntax\n");
 	t_token *curr;
 	t_token *next;
 

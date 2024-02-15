@@ -32,11 +32,12 @@ SRCS =  srcs/lexer/lexer.c \
 		\
 		srcs/parser/expand_wildcards.c \
 		srcs/parser/parser.c \
-		srcs/parser/expander.c \
-		srcs/parser/libft_extension.c \
-		srcs/parser/reducer.c \
-		srcs/parser/tknlist_utils_extension.c \
 		srcs/parser/verify_syntax.c \
+		srcs/parser/reducer.c \
+		srcs/parser/expander.c \
+		srcs/parser/linker.c \
+		srcs/parser/libft_extension.c \
+		srcs/parser/tknlist_utils_extension.c
 
 OBJS    = ${SRCS:.c=.o}
 

@@ -19,6 +19,25 @@ char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
 	return (dest);
 }
 
+char	*ft_strcut(char const *str, size_t cut_begin, size_t cut_end)
+{
+	char	*dest;
+	int		len; //size_t au cas ou super longue chaine"
+
+	if (!str)
+		return (NULL);
+	len = ft_strlen(str) - cut_begin - cut_end;
+	// ft_printf("len after cut = %d", len);
+	if (len <= 0)
+		return (ft_strdup(""));
+	dest = (char *)ft_calloc((len + 1), sizeof(char)); //utile pour le \0 automatique ?
+	if (!dest)
+		return (NULL);
+	ft_strlcpy(dest, &str[cut_begin], len + 1); //les char end sont bien retires sans compter le char de fin ?
+	dest[len] = '\0'; //utile
+	return (dest);
+}
+
 //expander_utils.c
 //probleme, on ne peut pas gerer id_gc de l' exterieur (idee : creer une variable char ** qui contient str et replacement ou add to gc en dehors de la fonction ou toutjours utiliser le m^eme id ?
 char	*replace_substr(char *str, char *replacement, size_t start, size_t len)
@@ -45,7 +64,7 @@ char	*remove_substr(char *str, size_t start, size_t len_toremove)
 
 	
 	size_new = ft_strlen(str) - len_toremove + 1;
-	printf("len_to rm = %zu, size new = %zu", len_toremove, size_new);//
+	// printf("len_to rm = %zu, size new = %zu\n", len_toremove, size_new);//
 	new = (char *) ft_calloc(size_new, sizeof(char));
 	if (new == NULL)
 		return (NULL);// appliquer gestion d' erreur
@@ -61,7 +80,7 @@ size_t	ft_strlen_until(const char *str, int(*f)(char))
 	size_t	len;
 
 	len = 0;
-	while (str[len] && f(str[len]))
+	while (str[len] && !f(str[len]))
 		len++;
 	return (len);
 }
@@ -73,7 +92,7 @@ size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 	size_t	len;
 
 	len = 0;
-	while (str[len] && !f(str[len]))
+	while (str[len] && f(str[len]))
 		len++;
 	return (len);
 }
@@ -151,9 +170,9 @@ int	s1_is_s2_suffix(char *s1, char *s2)
 		return (1);
 	len_s2 = ft_strlen(s2);
 	len_s1 = ft_strlen(s1);
-	suffix_pos = len_s2 - len_s1;
-	if (suffix_pos < 0)
+	if (len_s1 < len_s2)
 		return (0);
+	suffix_pos = len_s2 - len_s1;
 	s2 = s2 + suffix_pos;
 	while(*s2)
 	{

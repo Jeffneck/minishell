@@ -12,7 +12,7 @@ void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace)
 //token_utils.c
 int	is_token_operator(t_token tkn)
 {
-	if (tkn.type == AND || tkn.type == OR || tkn.type == PIPE || tkn.type == HEREDOC || tkn.type == IN || tkn.type == OUT || tkn.type == APPEND)
+	if (tkn.type == AND || tkn.type == OR || tkn.type == PIPE)
 		return (1);
 	return (0);
 }
@@ -83,16 +83,16 @@ size_t	tknlst_size(t_tknlist *tknlst)
 void	display_tknlist(t_tknlist *list)
 {
 		t_token *curr;
-		int	i;
 
 		curr = list->head;
-		i = 0;
 		while (curr)
 		{
-			printf("--NODE (%d)--\n", i);
+			printf("\n--NODE--\n");
 			printf("type = %d\n", curr->type);
-			printf("content = %s\n\n", curr->content);
+			printf("content =%s\n", curr->content);
+			printf("link =%d\n", curr->link);
+			printf("index =%d\n", (unsigned int) curr->index);
+			printf("priority =%d\n\n", curr->priority);
 			curr = curr->next;
-			i++;
 		}
 }
