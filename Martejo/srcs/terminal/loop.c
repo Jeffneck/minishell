@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 13:06:56 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:21:45 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,19 +39,20 @@ void	free_all(char ***buffer, char **prompt)
 }
 void	prompt_loop(t_mini *mini)
 {
-	char	*prompt;
-	char	*read_buffer;
+	//char	*prompt;
+	//char	*read_buffer;
 	//char	**cmds;
+	char *buffer = "<< heredoc";
 	
-	while (1)
-	{
-		prompt = create_prompt(mini);
-		read_buffer = readline(prompt);
-		mini->tkn_lst = lexer(read_buffer);
+	
+	//prompt = create_prompt(mini);
+	//read_buffer = readline(prompt);
+	mini->tkn_lst = lexer(buffer);
+	display_tknlist(mini->tkn_lst);
+	
+	// parser(*mini);
 		
-		parser(*mini);
-		
-		display_tknlist(mini->tkn_lst);
+	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');
 		// if (prompt_processing(cmds, mini) == -1)
 		// {
@@ -59,11 +60,13 @@ void	prompt_loop(t_mini *mini)
 		// 	free_all(&cmds, &prompt);
 		// 	exit(EXIT_SUCCESS);
 		// }
-		free(read_buffer);
-		free(prompt);
-		read_buffer = NULL;
-		prompt = NULL;
+		//free(read_buffer);
+		//free(prompt);
+		//read_buffer = NULL;
+		//prompt = NULL;
 		//free_char2(&cmds);
-	}
 	
+	clear_garbage(TKN_LIST, free);
+	clear_garbage(ENV, free);
+	clear_garbage(TMP, free);
 }

@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 11:23:23 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:30:14 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,6 @@ void	expander(t_tknlist *tkn_lst, t_env *env);
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
 void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
-void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst);
+void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst);
 
 #endif

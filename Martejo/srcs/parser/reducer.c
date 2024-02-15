@@ -22,7 +22,9 @@ void	reducer(t_token	*tkn)
 		{
 			flag = true;
 			if(tkn->type == IN || tkn->type == OUT)
-				tmp = remove_substr(tkn->content, 0, 1 + ft_strlen_until_not(tkn->content, ft_isspace));
+				tmp = remove_substr(tkn->content, 0, 1 + ft_strlen_until_not(&tkn->content[1], ft_isspace));
+			if(tkn->type == HEREDOC || tkn->type == APPEND)
+				tmp = remove_substr(tkn->content, 0, 2 + ft_strlen_until_not(&tkn->content[2], ft_isspace));
 			else if (tkn->type == TWO_QUOTE || tkn->type == ONE_QUOTE || tkn->type == PARENTHESIS)
 				tmp = strcut_gc(tkn->content, 1, 1, TKN_LIST);
 		}

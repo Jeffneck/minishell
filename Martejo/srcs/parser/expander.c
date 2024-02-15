@@ -66,7 +66,7 @@ char	*expand_dollar(t_env *env, char *str, size_t start) //stopper a wildcard et
 
 char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst) //cette commande ne sert pratiquement a rien, refactoriser
 {
-	ft_printf(" expander_handler\n");
+	ft_printf(" expander_handler, token to expand = %s\n", tkn->content);
 	char *new;
 	ssize_t	i;
 
@@ -109,9 +109,11 @@ void	expander(t_tknlist *tkn_lst, t_env *env)
 				del_one_garbage(curr->content, TKN_LIST);
 				curr->content = tmp;
 				continue;
-			}	
+			}
+			// ft_printf("node after expander handler => %s type : %d\n", curr->content, curr->type);
 			if(curr->type != TWO_QUOTE && char_is_in_str('*', curr->content)) // garder apres la boucle
-				expand_wildcard(curr, tkn_lst);
+				expand_wildcard(&curr, tkn_lst);
+		
 		}
 		curr = curr->next;
 	}

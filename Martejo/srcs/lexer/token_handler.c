@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:19:28 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 11:20:01 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/15 14:26:03 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,10 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 		i = 2;
 	else
 		i = 1;
+	while (buffer[i] && ft_isspace(buffer[i]))
+		i++;
+	while (buffer[i] && ft_isalnum(buffer[i]))
+		i++;
 	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 0)))
 		error_handler_lexer(1, "Malloc error\n");
 	return (i);

@@ -39,6 +39,8 @@ int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 
 void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand)
 {
+	ft_printf(" lstadd_compatible_cwd_files\n");
+	
 	DIR *dir;
     struct dirent *entry;
 	t_token	*new_tkn;
@@ -64,9 +66,12 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 	closedir(dir);
 }
 
-void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst) //recupe la fonction du test
+void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst) //recupe la fonction du test
 {
+	ft_printf(" expand_wildcard\n");
 	//splitter la str initiale
+	t_token	*tkn_to_expand;
+	tkn_to_expand = *p_tkn_to_expand;
 	char ** splitted;
 	splitted = split_gc(tkn_to_expand->content, '*', TMP); //strtrim surement pas obligatoire 
 
@@ -80,6 +85,7 @@ void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst) //recupe la fon
 	tknlst_sort_ascii_case(wildcard_lst);
 	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_to_expand, wildcard_lst);
 	pop_token_in_place(tkn_lst, tkn_to_expand);
+	*p_tkn_to_expand = wildcard_lst->head;
 	// display_tknlist(tkn_lst);//
 	clear_garbage(TMP, free);
 	return ;
