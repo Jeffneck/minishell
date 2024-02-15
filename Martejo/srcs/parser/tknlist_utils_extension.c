@@ -1,4 +1,3 @@
-#include "parser.h"
 #include "../../include/minishell.h"
 
 void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace)
@@ -18,7 +17,7 @@ int	is_token_operator(t_token tkn)
 	return (0);
 }
 
-void	pop_node_in_place(t_tknlist *list_tkn, t_token *to_pop)
+void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
 {
     if (to_pop == NULL)
 		return;
@@ -31,8 +30,8 @@ void	pop_node_in_place(t_tknlist *list_tkn, t_token *to_pop)
 	else 
 		list_tkn->tail = to_pop->prev;
     if (to_pop->content)
-		del_one_garbage(to_pop->content, LEXER);
-    del_one_garbage(to_pop, LEXER);
+		del_one_garbage(to_pop->content, TKN_LIST);
+    del_one_garbage(to_pop, TKN_LIST);
 }
 
 void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd)

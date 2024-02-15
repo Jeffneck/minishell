@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   list.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:15:16 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 10:01:43 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:19:23 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*create_node(t_tkntype type, char *content, int link)
 
 	if (!content)
 		return (NULL);
-	node = malloc_gc(sizeof(t_token), LEXER);
+	node = malloc_gc(sizeof(t_token), TKN_LIST);
 	if (!node)
 		error_handler_lexer(1, "Malloc error\n");
 	node->content = content;
@@ -49,7 +49,7 @@ int	add_node(t_tknlist *list, t_token *node)
 
 void	init_list(t_tknlist **list)
 {
-	(*list) = malloc_gc(sizeof(t_tknlist), LEXER);
+	(*list) = malloc_gc(sizeof(t_tknlist), TKN_LIST);
 	if (!(*list))
 		error_handler_lexer(1, "Malloc error\n");
 	(*list)->head = NULL;

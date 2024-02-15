@@ -28,7 +28,15 @@ SRCS =  srcs/lexer/lexer.c \
 		\
 		srcs/main.c \
 		srcs/terminal/prompt.c \
-		srcs/terminal/loop.c
+		srcs/terminal/loop.c \
+		\
+		srcs/parser/expand_wildcards.c \
+		srcs/parser/parser.c \
+		srcs/parser/expander.c \
+		srcs/parser/libft_extension.c \
+		srcs/parser/reducer.c \
+		srcs/parser/tknlist_utils_extension.c \
+		srcs/parser/verify_syntax.c \
 
 OBJS    = ${SRCS:.c=.o}
 

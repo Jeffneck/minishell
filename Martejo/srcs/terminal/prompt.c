@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 12:48:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 16:02:42 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:55:13 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ char	*create_prompt(t_mini *mini)
 	int		home_len;
 
 	home = getenv("HOME");
-	prompt = get_env_path(mini->env, "PWD=", 4);
+	prompt = get_env_path(mini->env, "PWD", 3);
 	if (!prompt)
 		prompt = "Minishell";
 	if (home && ft_strnstr(prompt, home, ft_strlen(home)))  //si on est dans le home, on remplace le chemin par ~$

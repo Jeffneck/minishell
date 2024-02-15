@@ -1,4 +1,3 @@
-#include "parser.h"
 #include "../../include/minishell.h"
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd)
@@ -52,7 +51,7 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 	{
 		if (is_compatible_file_wildcard(entry->d_name, subs_needed, to_expand))
 		{
-			new_tkn = create_node(WORD, strdup_gc(entry->d_name, EXPANDER), 0); //valider pou la var link
+			new_tkn = create_node(WORD, strdup_gc(entry->d_name, TKN_LIST), 0); //valider pou la var link
 			if (!new_tkn)
 			{
 				closedir(dir);
@@ -80,8 +79,8 @@ void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst) //recupe la fon
 	//trier la liste dans l' ordre attendu
 	tknlst_sort_ascii_case(wildcard_lst);
 	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_to_expand, wildcard_lst);
-	pop_node_in_place(tkn_lst, tkn_to_expand);
-	display_tknlist(tkn_lst);//
+	pop_token_in_place(tkn_lst, tkn_to_expand);
+	// display_tknlist(tkn_lst);//
 	clear_garbage(TMP, free);
 	return ;
 }

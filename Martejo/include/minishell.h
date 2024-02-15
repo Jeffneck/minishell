@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/14 16:32:54 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:23:23 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,6 @@
 # include <sys/types.h>
 # include <dirent.h>
 
-typedef	struct s_btree
-{
-	char **content;
-	int	io[2]; //in out (peut etre compose de pipe)
-	int	branch;
-	t_tkntype	type;
-	struct s_btree	*left;
-	struct s_btree	*right;
-}	t_btree;
-
-typedef enum {
-    false, // false vaut 0
-    true   // true vaut 1
-} e_bool;
 
 typedef enum e_id_gc
 {
@@ -65,6 +51,22 @@ typedef enum e_tkntype
 	TWO_QUOTE,
 	PARENTHESIS,
 }	t_tkntype;
+
+typedef	struct s_btree
+{
+	char **content;
+	int	io[2]; //in out (peut etre compose de pipe)
+	int	branch;
+	t_tkntype	type;
+	struct s_btree	*left;
+	struct s_btree	*right;
+}	t_btree;
+
+typedef enum {
+    false, // false vaut 0
+    true   // true vaut 1
+} e_bool;
+
 
 typedef enum e_error
 {
@@ -180,5 +182,55 @@ void	print_sorted_env(t_env *env);
 /****/
 char	*create_prompt(t_mini *mini);
 void	prompt_loop(t_mini *mini);
+
+
+
+
+
+
+
+
+
+
+//TEST PARSER
+
+//tknlist_utils
+void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace);
+int	is_token_operator(t_token tkn);
+void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop);
+void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd);
+void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2);
+size_t	tknlst_size(t_tknlist *tknlst);
+void	display_tknlist(t_tknlist *list);
+
+
+//libft-extension
+char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc);
+char	*replace_substr(char *str, char *replacement, size_t start, size_t len);
+char	*remove_substr(char *str, size_t start, size_t len);
+size_t	ft_strlen_until(const char *str, int(*f)(char));
+size_t	ft_strlen_until_not(const char *str, int(*f)(char));
+int	str_contains_all_subs_ordered(char *str, char **subs);
+int	char_is_in_str(char c, char *str);
+int	ft_strcmp_case_insensitive(char *s1, char *s2);
+int	s1_is_s2_suffix(char *s1, char *s2);
+
+t_btree	*parser(t_mini mini);
+
+void	verify_syntax(t_tknlist *list_tkn);
+
+int	type_need_reducing(t_tkntype type);
+void	reducer(t_token	*tkn) ;
+
+
+int	is_charset_env(char c);
+char	*expand_dollar(t_env *env, char *str, size_t start);
+char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst);
+void	expander(t_tknlist *tkn_lst, t_env *env);
+
+void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
+int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
+void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
+void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst);
 
 #endif

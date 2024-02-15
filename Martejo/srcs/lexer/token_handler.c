@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:19:28 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:35:10 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:20:01 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ int	simple_quote_handler(char *buffer, t_tknlist *list)
 	if (ft_isspace(buffer[i + 1]) == 0)
 		link = 1;
 	if (!add_node(list,
-			create_node(ONE_QUOTE, ft_strndup(buffer, i + 1, LEXER), link)))
+			create_node(ONE_QUOTE, ft_strndup(buffer, i + 1, TKN_LIST), link)))
 		error_handler_lexer(1, "Malloc error\n");
 	return (i + 1);
 }
 
 int	pipe_handler(char *buffer, t_tknlist *list)
 {
-	if (!add_node(list, create_node(PIPE, ft_strndup(buffer, 1, LEXER), 0)))
+	if (!add_node(list, create_node(PIPE, ft_strndup(buffer, 1, TKN_LIST), 0)))
 		error_handler_lexer(1, "Malloc error\n");
 	return (1);
 }
@@ -50,7 +50,7 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 		i = 2;
 	else
 		i = 1;
-	if (!add_node(list, create_node(type, ft_strndup(buffer, i, LEXER), 0)))
+	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 0)))
 		error_handler_lexer(1, "Malloc error\n");
 	return (i);
 }
@@ -71,7 +71,7 @@ int	cmd_handler(char *buffer, t_tknlist *list)
 	}
 	if (buffer[i] != '\0' && ft_isspace(buffer[i]) == 0)
 		link = 1;
-	if (!add_node(list, create_node(WORD, ft_strndup(buffer, i, LEXER), link)))
+	if (!add_node(list, create_node(WORD, ft_strndup(buffer, i, TKN_LIST), link)))
 		error_handler_lexer(1, "Malloc error\n");
 	return (i);
 }

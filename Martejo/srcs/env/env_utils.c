@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:06:36 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 15:04:38 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/15 11:52:57 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*get_env_path(t_env *env, const char *var, size_t len) //changer nom par ge
 	{
 		if (ft_strncmp(env->value, var, len) == 0)
 		{
-			path = ft_strdup(&env->value[len]);
+			path = ft_strdup(&env->value[len + 1]);
 			if (!path)
 				return (NULL); // gerer erreur malloc
 			return (path);

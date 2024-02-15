@@ -1,5 +1,4 @@
 #include "../../include/minishell.h"
-#include "parser.h"
 
 void	verify_syntax(t_tknlist *list_tkn)
 {

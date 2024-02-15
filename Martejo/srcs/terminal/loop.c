@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/14 11:44:32 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/15 13:06:56 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,24 +41,29 @@ void	prompt_loop(t_mini *mini)
 {
 	char	*prompt;
 	char	*read_buffer;
-	char	**cmds;
+	//char	**cmds;
 	
 	while (1)
 	{
 		prompt = create_prompt(mini);
 		read_buffer = readline(prompt);
-		cmds = ft_split(read_buffer, ' ');
-		if (prompt_processing(cmds, mini) == -1)
-		{
-			free(read_buffer);
-			free_all(&cmds, &prompt);
-			exit(EXIT_SUCCESS);
-		}
+		mini->tkn_lst = lexer(read_buffer);
+		
+		parser(*mini);
+		
+		display_tknlist(mini->tkn_lst);
+		//cmds = ft_split(read_buffer, ' ');
+		// if (prompt_processing(cmds, mini) == -1)
+		// {
+		// 	free(read_buffer);
+		// 	free_all(&cmds, &prompt);
+		// 	exit(EXIT_SUCCESS);
+		// }
 		free(read_buffer);
 		free(prompt);
 		read_buffer = NULL;
 		prompt = NULL;
-		free_char2(&cmds);
+		//free_char2(&cmds);
 	}
 	
 }

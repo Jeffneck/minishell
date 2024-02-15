@@ -1,4 +1,3 @@
-#include "parser.h"
 #include "../../include/minishell.h"
 
 int	type_need_reducing(t_tkntype type)
@@ -23,7 +22,7 @@ void	reducer(t_token	*tkn)
 		{
 			flag = true;
 			if(tkn->type == IN || tkn->type == OUT)
-				tmp = remove_substr(tkn->content, 0, 1 + strlen_until_not(tkn->content, ft_isspace));
+				tmp = remove_substr(tkn->content, 0, 1 + ft_strlen_until_not(tkn->content, ft_isspace));
 			else if (tkn->type == TWO_QUOTE || tkn->type == ONE_QUOTE || tkn->type == PARENTHESIS)
 				tmp = strcut_gc(tkn->content, 1, 1, TKN_LIST);
 		}

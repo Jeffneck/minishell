@@ -1,10 +1,8 @@
-#include "parser.h"
 #include "../../include/minishell.h"
 
 char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
 {
 	char	*dest;
-	size_t	i;
 	int		len;
 
 	if (!str)
@@ -28,7 +26,7 @@ char	*replace_substr(char *str, char *replacement, size_t start, size_t len)
 	size_t	size_new;
 
 	size_new = (ft_strlen(str) - len + ft_strlen(replacement)) + 1;
-	new = (char *) calloc_gc(size_new, LEXER);
+	new = (char *) ft_calloc(size_new, sizeof(char));
 	if (new == NULL)
 		return (NULL);// appliquer gestion d' erreur
 	ft_memcpy(new, str, start); //ou start + 1 ou start - 1
@@ -45,7 +43,7 @@ char	*remove_substr(char *str, size_t start, size_t len)
 	size_t	size_new;
 
 	size_new = ft_strlen(str) - len + 1;
-	new = (char *) calloc_gc(size_new, ID);
+	new = (char *) ft_calloc(size_new, sizeof(char));
 	if (new == NULL)
 		return (NULL);// appliquer gestion d' erreur
 	ft_memcpy(new, str, start); //ou start + 1 ou start - 1
@@ -60,7 +58,7 @@ size_t	ft_strlen_until(const char *str, int(*f)(char))
 	size_t	len;
 
 	len = 0;
-	while (str[len] && !f(str[len]))
+	while (str[len] && f(str[len]))
 		len++;
 	return (len);
 }
@@ -72,7 +70,7 @@ size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 	size_t	len;
 
 	len = 0;
-	while (str[len] && f(str[len]))
+	while (str[len] && !f(str[len]))
 		len++;
 	return (len);
 }
