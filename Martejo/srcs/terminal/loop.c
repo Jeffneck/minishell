@@ -48,8 +48,9 @@ void	prompt_loop(t_mini *mini)
 	//prompt = create_prompt(mini);
 	//read_buffer = readline(prompt);
 	mini->tkn_lst = lexer(buffer);
-	parser(*mini);
-	display_tknlist(mini->tkn_lst);
+	parser(mini->tkn_lst, mini->env);
+	ft_printf("BTREE TOKENS IN EXEC ORDER CREATION ///////////////////////////////////\n\n");
+	display_btree(mini->tkn_lst);
 		
 	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');

@@ -26,6 +26,7 @@ t_token	*create_node(t_tkntype typed, char *value, int linked)
 	node->link = linked;
 	node->index = 0;
 	node->priority = 0;
+	node->used_flag = 0;
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);

@@ -54,9 +54,10 @@ typedef enum e_tkntype
 
 typedef	struct s_btree
 {
-	char **content;
-	int	io[2]; //in out (peut etre compose de pipe)
-	int	branch;
+	char	*content;
+	t_list	*args; // arguments
+	int		io[2]; //in out (peut etre compose de pipe)
+	// int	branch; //je ne me souviens plus de l' utilite de ce champs
 	t_tkntype	type;
 	struct s_btree	*left;
 	struct s_btree	*right;
@@ -81,9 +82,10 @@ typedef struct s_token
 {
 	t_tkntype		type;
 	char			*content;
-	int				link;
+	int				link; //transformer en bool
 	size_t			index;
 	int				priority;
+	int				used_flag;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
@@ -186,14 +188,6 @@ char	*create_prompt(t_mini *mini);
 void	prompt_loop(t_mini *mini);
 
 
-
-
-
-
-
-
-
-
 //TEST PARSER
 
 //tknlist_utils
@@ -218,7 +212,7 @@ int	char_is_in_str(char c, char *str);
 int	ft_strcmp_case_insensitive(char *s1, char *s2);
 int	s1_is_s2_suffix(char *s1, char *s2);
 
-t_btree	*parser(t_mini mini);
+t_btree	*parser(t_tknlist *tknlst, t_env *env);
 
 void	verify_syntax(t_tknlist *list_tkn);
 
@@ -232,6 +226,8 @@ int	is_charset_env(char c);
 char	*expand_dollar(t_env *env, char *str, size_t start);
 char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst);
 void	expander(t_tknlist *tkn_lst, t_env *env);
+
+t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);

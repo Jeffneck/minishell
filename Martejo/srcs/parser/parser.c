@@ -21,16 +21,15 @@ void	set_token_index(t_token	*curr)
 	}
 }
 
-
-t_btree	*parser(t_mini mini)
+t_btree	*parser(t_tknlist *tknlst, t_env *env)
 {
 	ft_printf("parser\n");
-	verify_syntax(mini.tkn_lst);
-	// display_tknlist(mini.tkn_lst);//
-	reducer(mini.tkn_lst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
-	expander(mini.tkn_lst, mini.env);
-	linker(mini.tkn_lst); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee
-	set_token_index(mini.tkn_lst->head);
-	// create_bin_tree(list_tkn->head);
-	return (NULL);
+	verify_syntax(tknlst);
+	reducer(tknlst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
+	expander(tknlst, env);
+	linker(tknlst); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee
+	set_token_index(tknlst->head);
+	ft_printf("TOKENS PARSED BEFORE BTREE CREATION ///////////////////////////////////\n\n");
+	display_tknlist(tknlst);//
+	return (create_bin_tree(tknlst, env));
 }
