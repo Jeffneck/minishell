@@ -57,7 +57,7 @@ typedef	struct s_btree
 	char	*content;
 	t_list	*args; // arguments
 	int		io[2]; //in out (peut etre compose de pipe)
-	// int	branch; //je ne me souviens plus de l' utilite de ce champs
+	int	branch; //je ne me souviens plus de l' utilite de ce champs
 	t_tkntype	type;
 	struct s_btree	*left;
 	struct s_btree	*right;

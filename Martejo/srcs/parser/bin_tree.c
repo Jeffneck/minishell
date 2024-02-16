@@ -43,17 +43,17 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 		exit (EXIT_FAILURE);
 	tkn_toconvert->used_flag = 1;
 	//si le tkn ne peut pas avoir d' arguments on retourne direct le node
-	if (tkn_toconvert->type != WORD)
+	if (tkn_toconvert->type != WORD) //le type word est il le seul a ce moment capable d' avoir des arguments ?
 		return (tree_el);
 	//sinon on ajoute les arguments dans une liste
 	tkn_toargs = tkn_toconvert->next;
-	while(tkn_toargs && tkn_toargs->used_flag == 0 && tkn_toargs->type == WORD)
+	while(tkn_toargs && tkn_toargs->used_flag == 0 && tkn_toargs->type == WORD) //used flag semble inutile avec la logique des branches
 	{
 		new_arg = ft_lstnew_gc(tkn_toargs->content, B_TREE);
 		if (!new_arg)
 			exit (EXIT_FAILURE);
 		ft_lstadd_back(&(tree_el->args), new_arg);
-		tkn_toargs->used_flag = 1; //semble inutile avec la logique des branches
+		tkn_toargs->used_flag = 1; //used flag semble inutile avec la logique des branches
 		tkn_toargs = tkn_toargs->next;
 	}
 	return (tree_el);
@@ -93,9 +93,9 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
 
 	while(tknlst->head)
 	{
-		if (tknlst->head->used_flag == 1)
+		if (tknlst->head->used_flag == 1)//used flag semble inutile avec la logique des branches
 		{
-			pop_token_in_place(tknlst, tknlst->head);
+			pop_token_in_place(tknlst, tknlst->head);//pop les tokens apres chaque insertipon dans btree plutot (logique des branches)
 			continue;
 		}
 		prio_tkn = find_prior_token(tknlst->head);
