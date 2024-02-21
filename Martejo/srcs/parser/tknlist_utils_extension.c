@@ -19,7 +19,8 @@ int	is_token_operator(t_token tkn)
 
 void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
 {
-    if (to_pop == NULL)
+	ft_printf("pop_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
+	if (to_pop == NULL)
 		return;
     if (to_pop != list_tkn->head)
         (to_pop->prev)->next = to_pop->next;
@@ -29,8 +30,9 @@ void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
         (to_pop->next)->prev = to_pop->prev;
 	else 
 		list_tkn->tail = to_pop->prev;
-    if (to_pop->content)
+	if (to_pop->content)
 		del_one_garbage(to_pop->content, TKN_LIST);
+	ft_printf("after head %p tail %p\n", list_tkn->head, list_tkn->tail);
     del_one_garbage(to_pop, TKN_LIST);
 }
 

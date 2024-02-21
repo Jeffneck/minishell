@@ -21,7 +21,7 @@ void    linker(t_tknlist *tkn_lst)
         next = curr->next;
         if(next && curr->link == 1 && is_link_sensitive(curr->type) && is_link_sensitive(next->type))
         {
-            ft_printf("node va etre link");
+            // ft_printf("node va etre link");
             new_content = strjoin_gc(curr->content, next->content, TKN_LIST);
             curr->link = next->link;
             if(!new_content)

@@ -36,3 +36,7 @@ verifier s' il faut mettre les enum en maj ou min
 export = le parametre ne doit pas etre un char special comme * par exemple
 
 echo $ renvoie $
+
+
+
+Autoriser une redirection apres un operateur (si ce n' est pas deja fait) car cela est possible

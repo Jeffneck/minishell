@@ -42,15 +42,15 @@ void	prompt_loop(t_mini *mini)
 	//char	*prompt;
 	//char	*read_buffer;
 	//char	**cmds;
-	char *buffer = "'colle''serre'\"caliente\" espace|espace";
+	char *buffer = "1 || 2 | 3 && 4";
 	
 	
 	//prompt = create_prompt(mini);
 	//read_buffer = readline(prompt);
 	mini->tkn_lst = lexer(buffer);
-	parser(mini->tkn_lst, mini->env);
+	mini->b_tree = parser(mini->tkn_lst, mini->env);
 	ft_printf("BTREE TOKENS IN EXEC ORDER CREATION ///////////////////////////////////\n\n");
-	display_btree(mini->tkn_lst);
+	depth_first_search(mini->b_tree, display_node);
 		
 	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');
@@ -69,4 +69,5 @@ void	prompt_loop(t_mini *mini)
 	clear_garbage(TKN_LIST, free);
 	clear_garbage(ENV, free);
 	clear_garbage(TMP, free);
+	clear_garbage(B_TREE, free);
 }

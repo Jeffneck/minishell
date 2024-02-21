@@ -52,7 +52,7 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 		i = 1;
 	while (buffer[i] && ft_isspace(buffer[i]))
 		i++;
-	while (buffer[i] && ft_isalnum(buffer[i]))
+	while (buffer[i] && !ft_isspace(buffer[i]) && !is_operator(buffer[i], buffer[i + 1]))
 		i++;
 	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 0)))
 		error_handler_lexer(1, "Malloc error\n");

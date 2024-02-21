@@ -52,12 +52,21 @@ typedef enum e_tkntype
 	PARENTHESIS,
 }	t_tkntype;
 
+// typedef	struct s_redir
+// {
+// 	int		in;
+// 	int		out;
+// 	int		errno; //si le retour de la fonction open echoue, on a un errno qui correspond au premier code d'erreur rencontre
+// }	t_redir;
+
+
 typedef	struct s_btree
 {
 	char	*content;
-	t_list	*args; // arguments
+	char	**args; // arguments
 	int		io[2]; //in out (peut etre compose de pipe)
-	int	branch; //je ne me souviens plus de l' utilite de ce champs
+	//t_redir	*redir; //redir in out heredoc
+	int	branch; // sert a placer les nodes (o0n le compare avec index du lexer)
 	t_tkntype	type;
 	struct s_btree	*left;
 	struct s_btree	*right;
@@ -227,6 +236,12 @@ char	*expand_dollar(t_env *env, char *str, size_t start);
 char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst);
 void	expander(t_tknlist *tkn_lst, t_env *env);
 
+t_token	*find_prior_token(t_token *curr);
+t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index);
+char	**pick_args(t_token *tkn_toargs);
+t_btree	*btree_new(t_token	*tkn_toconvert);
+void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
+void display_node(t_btree *tree_el, int depth);
 t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);

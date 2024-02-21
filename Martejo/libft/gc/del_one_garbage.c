@@ -24,6 +24,7 @@ void	del_one_garbage(void *ptr_to_free, int id_gc)
 	{
 		*alst = tmp->next;
 		ft_lstdelone(tmp, free);
+		tmp = NULL;
 	}
 	while (tmp && tmp->content != ptr_to_free)
 	{
@@ -34,5 +35,6 @@ void	del_one_garbage(void *ptr_to_free, int id_gc)
 	{
 		prev_el->next = tmp->next;
 		ft_lstdelone(tmp, free);
+		tmp = NULL;
 	}
 }
