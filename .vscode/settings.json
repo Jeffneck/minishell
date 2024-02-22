@@ -8,6 +8,8 @@
 		"type_traits": "c",
 		"utility": "c",
 		"minishell.h": "c",
-		"parser.h": "c"
+		"parser.h": "c",
+		"*.tcc": "c",
+		"string": "c"
 	}
 }

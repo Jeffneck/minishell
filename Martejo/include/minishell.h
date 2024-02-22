@@ -61,8 +61,8 @@ typedef enum e_tkntype
 // }	t_redir;
 
 //ne pas mettre ifndef pour ne pas rendre les valeurs suivantes modifiables
-# define FD_WRITE 1 //inverser avec read ?
 # define FD_READ 0
+# define FD_WRITE 1 //inverser avec read ?
 # define FD_IN 0
 # define FD_OUT 1
 
