@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 13:30:14 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/22 13:21:17 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include "../libft/libft.h"
 # include <sys/types.h>
 # include <dirent.h>
+# include <fcntl.h>
 
 
 typedef enum e_id_gc
@@ -59,12 +60,29 @@ typedef enum e_tkntype
 // 	int		errno; //si le retour de la fonction open echoue, on a un errno qui correspond au premier code d'erreur rencontre
 // }	t_redir;
 
+//ne pas mettre ifndef pour ne pas rendre les valeurs suivantes modifiables
+# define FD_WRITE 1 //inverser avec read ?
+# define FD_READ 0
+# define FD_IN 0
+# define FD_OUT 1
+
+typedef struct s_redir_fd
+{
+    int *fds_pipe;
+    int fd_file;
+} t_redir_fd;
+
+typedef struct s_io
+{
+    int fd_in;
+    int fd_out;
+} t_io;
 
 typedef	struct s_btree
 {
 	char	*content;
 	char	**args; // arguments
-	int		io[2]; //in out (peut etre compose de pipe)
+	// int		io[2]; //in out (peut etre compose de pipe), on donnera les io direct `a l' exec plutot que de les stocker inutilement dans chaque node
 	//t_redir	*redir; //redir in out heredoc
 	int	branch; // sert a placer les nodes (o0n le compare avec index du lexer)
 	t_tkntype	type;
