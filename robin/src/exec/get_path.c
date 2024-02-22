@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_path.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbicanic <rbicanic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 01:33:18 by cberganz          #+#    #+#             */
-/*   Updated: 2022/03/25 15:22:12 by rbicanic         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:33:48 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,12 @@ static void	set_paths(char **bin_path, char ***path,
 	char **envp[], char **exec_args)
 {
 	*bin_path = get_env("PATH", envp);
+	printf("bin_path = %s\n", *bin_path);
 	if (!*bin_path)
+	{
+		printf("bin_path NULL\n");
 		print_error(exec_args[0]);
+	}
 	*path = ft_split(*bin_path, ":", LOOP);
 	if (!*path)
 		print_message("minishell: Allocation error.\n", RED, 1);
