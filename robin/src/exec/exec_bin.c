@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_bin.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rbicanic <rbicanic@student.42.fr>          +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 01:32:41 by cberganz          #+#    #+#             */
-/*   Updated: 2022/03/26 16:37:36 by rbicanic         ###   ########.fr       */
+/*   Updated: 2024/02/22 14:35:07 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,15 @@ static char	*prepare_path(t_pipe_command *command, char **envp[])
 		{
 			if (ft_strequ(command->exec_args[0], ".") && !command->exec_args[1])
 				print_path_error(command->exec_args[0], 2, 5);
+			printf("path NULL\n");
 			path = NULL;
 		}
 		else
+		{
 			path = command->exec_args[0];
+			printf("content %s\n", path);
+		}
+			
 	}
 	else if (command->exec_args[0] && command->exec_args[0][0] != '\0')
 		path = get_path(command->exec_args, envp);
@@ -72,6 +77,7 @@ static char	*prepare_path(t_pipe_command *command, char **envp[])
 	check_dir(command, path);
 	return (path);
 }
+
 
 void	exec_bin(t_pipe_command *command, char **envp[])
 {
