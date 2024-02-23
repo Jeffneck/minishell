@@ -124,15 +124,29 @@ char	**get_argv_cmd(t_token *curr, size_t argc)
 	i = 0;
 	while (i < argc)
 	{
+		if (i > 0) //condition retirable mais plus clair ainsi ?
+			curr->used_flag = 1;
 		argv[i] = strdup_gc(curr->content, B_TREE);
 		if (!argv[i])
 			exit (EXIT_FAILURE);//
-		curr->used_flag = 1;
 		curr = curr->next;
 		i++;
 	}
 	return (argv);
 }
+
+char	**cpy_heredoc_delim_char2(char *delimiter)
+{
+	char	**cpy;
+	cpy = (char **) calloc_gc(2, sizeof(char *), B_TREE);
+	if (!cpy)
+		exit (EXIT_FAILURE);//
+	cpy[0] = strdup_gc(delimiter, B_TREE);
+	if (!cpy[0])
+		exit (EXIT_FAILURE);//
+	return (cpy);
+}
+
 char	**extract_cmd_argv(t_token *curr)
 {
 	ft_printf("pick_args\n");
@@ -146,26 +160,24 @@ char	**extract_cmd_argv(t_token *curr)
 	return (argv);
 }
 
-
 t_btree	*btree_new(t_token	*tkn_toconvert)
 {
 	ft_printf("btree_new\n");
 	t_btree		*tree_el;
 
+	tkn_toconvert->used_flag = 1;
 	tree_el = calloc_gc(1, sizeof(t_btree), B_TREE);
+	if (!tree_el)
+		exit (EXIT_FAILURE);//
 	tree_el->branch = tkn_toconvert->index;
+	tree_el->type = tkn_toconvert->index;
 	if(is_cmd_related_tkn(tkn_toconvert->type))
 	{
 		tree_el->type == WORD;
-		tree_el->content = extract_cmd_argv(tkn_toconvert);
-		if (!(tree_el->content))
-			exit (EXIT_FAILURE);//
+		tree_el->cmds = extract_cmd_argv(tkn_toconvert);//exit integre si malloc err
 	}
-	else
-	{
-		tree_el->type = tkn_toconvert->index;
-		tkn_toconvert->used_flag = 1;
-	}
+	if (tkn_toconvert->type == HEREDOC)
+		tree_el->cmds = cpy_heredoc_delim_char2(tkn_toconvert->content);
 	return (tree_el);
 }
 
@@ -184,26 +196,26 @@ void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int))
 	depth--;
 }
 
-void display_node(t_btree *tree_el, int depth)
+void display_node(t_btree *tree_el, t_io io, int depth)
 {
     size_t i;
 
 	i = 0 ;
-	if (tree_el) {
-        printf("DEPTH: %d\n", depth);
-        printf("cmds: %s\n", tree_el->cmds);
-        printf("Arguments:\n");
-        while (tree_el->argv && tree_el->argv[i]) 
-		{
-            printf("%s\n", tree_el->argv[i]);
-            i++;
-        }
-        printf("IO: [%d, %d]\n", tree_el->io[0], tree_el->io[1]);
-        printf("Type: %d\n", tree_el->type);
-    } else {
+	if (!tree_el) 
         printf("Node is NULL\n");
-    }
-	printf("\n");
+	printf("DEPTH: %d\n", depth);
+	printf("Type: %d\n", tree_el->type);
+	if (tree_el->cmds)
+	{
+		printf("Cmds:\n");
+		while (tree_el->cmds && tree_el->cmds[i]) 
+		{
+			printf("%s\n", tree_el->cmds[i]);
+			i++;
+		}
+	}
+	printf("IO: [%d, %d]\n", io.fd_in, io.fd_out);
+	printf("\n\n");
 }
 
 //syntaxic_tree.c
@@ -216,11 +228,8 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
 	btree_root = NULL;
 	while(tknlst->head)
 	{
-		if ((tknlst->head)->used_flag == 1)//used flag + tete de liste = el inutile
-		{
+		while(tknlst->head->used_flag == 1)//used flag + tete de liste = el inutile
 			pop_token_in_place(tknlst, tknlst->head);
-			continue;
-		}
 		prio_tkn = find_prior_token(tknlst->head);
 		if (!btree_root)
 		 	btree_root = btree_new(prio_tkn);
@@ -231,6 +240,7 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
 		//une fois le token insere dans l' arbre binaire, on le marque comme un flag.
 		prio_tkn->used_flag = 1;
 	}
+	clear_garbage(TKN_LIST, free);//plus besoin de ca
 	return btree_root;
 }
 //attention cela sera a la partie exec de setup les in out append heredoc ainsi que leurs consequences...

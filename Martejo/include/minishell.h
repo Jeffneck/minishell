@@ -70,7 +70,7 @@ typedef struct s_io
 typedef	struct s_btree
 {
 	char	**cmds;
-	int	branch;
+	int		branch;
 	t_tkntype	type;
 	struct s_btree	*left;
 	struct s_btree	*right;
@@ -122,7 +122,7 @@ typedef struct	s_mini
 	//t_token			*start;
 	t_env			*env;
 	t_tknlist		*tkn_lst;
-	t_btree			*b_tree;
+	t_btree			*b_tree; //tree root
 	
 }				t_mini;
 
