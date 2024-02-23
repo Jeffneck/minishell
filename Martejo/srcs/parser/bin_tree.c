@@ -60,37 +60,90 @@ t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index)
 // 	return (tree_el);
 // }
 
-char	**pick_args(t_token *tkn_toargs)
-{
-	ft_printf("pick_args\n");
-	t_token *curr;
-	size_t	size_char2;
-	char	**args;
+// char	**pick_args(t_token *tkn_toargs)
+// {
+// 	ft_printf("pick_args\n");
+// 	t_token *curr;
+// 	size_t	size_char2;
+// 	char	**args;
 
-	curr = tkn_toargs;
-	size_char2 = 0;
-	if(!tkn_toargs)
-		return (NULL);
-	while (curr && (curr->type == WORD || curr->type == ONE_QUOTE || curr->type == TWO_QUOTE))
+// 	curr = tkn_toargs;
+// 	size_char2 = 0;
+// 	if(!tkn_toargs)
+// 		return (NULL);
+// 	while (curr && (curr->type == WORD || curr->type == ONE_QUOTE || curr->type == TWO_QUOTE))
+// 	{
+// 		size_char2++;
+// 		curr = curr->next;
+// 	}
+// 	// ft_printf("size char = %d\n", size_char2);
+// 	args = (char **) calloc_gc(size_char2 + 1, sizeof(char *), B_TREE);
+// 	if (!args)
+// 		exit (EXIT_FAILURE);//
+// 	size_char2 = 0;
+// 	while (tkn_toargs && (tkn_toargs->type == WORD || tkn_toargs->type == ONE_QUOTE || tkn_toargs->type == TWO_QUOTE))
+// 	{
+// 		args[size_char2] = strdup_gc(tkn_toargs->content, B_TREE);
+// 		if (!args[size_char2])
+// 			exit (EXIT_FAILURE);//
+// 		tkn_toargs->used_flag = 1;
+// 		tkn_toargs = tkn_toargs->next;
+// 		size_char2++;
+// 	}
+// 	return (args);
+// }
+
+int		is_cmd_related_tkn(t_tkntype tkntype)
+{
+	if (tkntype == WORD || tkntype == ONE_QUOTE || tkntype == TWO_QUOTE)
+		return(1);
+	return (0);
+}
+
+size_t	count_argc_cmd(t_token *curr)
+{
+	size_t	argc;
+	
+	argc = 0;
+	while (curr && is_cmd_related_tkn(curr->type))
 	{
-		size_char2++;
+		argc++;
 		curr = curr->next;
 	}
-	// ft_printf("size char = %d\n", size_char2);
-	args = (char **) calloc_gc(size_char2 + 1, sizeof(char *), B_TREE);
-	if (!args)
+	return(argc);
+}
+
+char	**get_argv_cmd(t_token *curr, size_t argc)
+{
+	char	**argv;
+	size_t	i;
+
+	argv = (char **) calloc_gc(argc + 1, sizeof(char *), B_TREE);
+	if (!argv)
 		exit (EXIT_FAILURE);//
-	size_char2 = 0;
-	while (tkn_toargs && (tkn_toargs->type == WORD || tkn_toargs->type == ONE_QUOTE || tkn_toargs->type == TWO_QUOTE))
+	i = 0;
+	while (i < argc)
 	{
-		args[size_char2] = strdup_gc(tkn_toargs->content, B_TREE);
-		if (!args[size_char2])
+		argv[i] = strdup_gc(curr->content, B_TREE);
+		if (!argv[i])
 			exit (EXIT_FAILURE);//
-		tkn_toargs->used_flag = 1;
-		tkn_toargs = tkn_toargs->next;
-		size_char2++;
+		curr->used_flag = 1;
+		curr = curr->next;
+		i++;
 	}
-	return (args);
+	return (argv);
+}
+char	**extract_cmd_argv(t_token *curr)
+{
+	ft_printf("pick_args\n");
+	size_t	argc;
+	char	**argv;
+
+	argc = count_argc_cmd(curr);
+	argv = get_argv_cmd(curr, argc);
+	if (!argv)
+		exit (EXIT_FAILURE);//
+	return (argv);
 }
 
 
@@ -100,14 +153,19 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 	t_btree		*tree_el;
 
 	tree_el = calloc_gc(1, sizeof(t_btree), B_TREE);
-	tree_el->type = tkn_toconvert->type;
 	tree_el->branch = tkn_toconvert->index;
-	tree_el->content = strdup_gc(tkn_toconvert->content, B_TREE);
-	if (!(tree_el->content))
-		exit (EXIT_FAILURE);//
-	if (tkn_toconvert->type == WORD) //le type word est il le seul a ce moment capable d' avoir des arguments ?
-		tree_el->args = pick_args(tkn_toconvert->next);
-	tkn_toconvert->used_flag = 1;
+	if(is_cmd_related_tkn(tkn_toconvert->type))
+	{
+		tree_el->type == WORD;
+		tree_el->content = extract_cmd_argv(tkn_toconvert);
+		if (!(tree_el->content))
+			exit (EXIT_FAILURE);//
+	}
+	else
+	{
+		tree_el->type = tkn_toconvert->index;
+		tkn_toconvert->used_flag = 1;
+	}
 	return (tree_el);
 }
 
@@ -133,11 +191,11 @@ void display_node(t_btree *tree_el, int depth)
 	i = 0 ;
 	if (tree_el) {
         printf("DEPTH: %d\n", depth);
-        printf("Content: %s\n", tree_el->content);
+        printf("cmds: %s\n", tree_el->cmds);
         printf("Arguments:\n");
-        while (tree_el->args && tree_el->args[i]) 
+        while (tree_el->argv && tree_el->argv[i]) 
 		{
-            printf("%s\n", tree_el->args[i]);
+            printf("%s\n", tree_el->argv[i]);
             i++;
         }
         printf("IO: [%d, %d]\n", tree_el->io[0], tree_el->io[1]);

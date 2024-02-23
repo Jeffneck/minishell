@@ -28,6 +28,7 @@
 # include <dirent.h>
 # include <fcntl.h>
 
+int g_status = 0;
 
 typedef enum e_id_gc
 {
@@ -53,24 +54,12 @@ typedef enum e_tkntype
 	PARENTHESIS,
 }	t_tkntype;
 
-// typedef	struct s_redir
-// {
-// 	int		in;
-// 	int		out;
-// 	int		errno; //si le retour de la fonction open echoue, on a un errno qui correspond au premier code d'erreur rencontre
-// }	t_redir;
 
 //ne pas mettre ifndef pour ne pas rendre les valeurs suivantes modifiables
 # define FD_READ 0
-# define FD_WRITE 1 //inverser avec read ?
+# define FD_WRITE 1
 # define FD_IN 0
 # define FD_OUT 1
-
-typedef struct s_redir_fd
-{
-    int *fds_pipe;
-    int fd_file;
-} t_redir_fd;
 
 typedef struct s_io
 {
@@ -80,11 +69,8 @@ typedef struct s_io
 
 typedef	struct s_btree
 {
-	char	*content;
-	char	**args; // arguments
-	// int		io[2]; //in out (peut etre compose de pipe), on donnera les io direct `a l' exec plutot que de les stocker inutilement dans chaque node
-	//t_redir	*redir; //redir in out heredoc
-	int	branch; // sert a placer les nodes (o0n le compare avec index du lexer)
+	char	**cmds;
+	int	branch;
 	t_tkntype	type;
 	struct s_btree	*left;
 	struct s_btree	*right;

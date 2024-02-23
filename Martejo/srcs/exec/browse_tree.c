@@ -1,19 +1,19 @@
 #include "../../include/minishell.h"
-void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited) {
+void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
+{
     int fd_pipe[2];
     char *line;
-    ssize_t read;
 	t_io	io_transmitted;
 	
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
     if (pipe(fd_pipe) == -1)
         exit(EXIT_FAILURE);
     printf("heredoc> ");
-    line = get_next_line(stdin);
+    line = get_next_line(stdin); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)
 	{
 		// Vérifie si le délimiteur a été entré
-        if (ft_strcmp(line, tree_el->content) == 0)
+        if (ft_strcmp(line, tree_el->content) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
 			free(line);
             break;
@@ -21,7 +21,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited) {
         ft_putstr_fd(line, fd_pipe[FD_WRITE]);
         printf("heredoc> ");
     	free(line);
-	    line = get_next_line(stdin);
+	    line = get_next_line(stdin);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
     }
     close(fd_pipe[FD_WRITE]);
     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
@@ -93,12 +93,4 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == WORD || tree_el->type == ONE_QUOTE || tree_el->type == TWO_QUOTE) //transformer toutes les commandes en type word serait plus simple, ou fonction tree_el_is_cmd()
 		fork_exec(mini->env, tree_el, io_inherited);
-}
-
-
-int	main()
-{
-	t_mini mini;
-	//setup struct mini avec mini->io = (t_io){0,1}) si on ne se situe pas entre parentheses
-	browse_tree(mini, mini->btree_root, ;
 }

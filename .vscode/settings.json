@@ -10,6 +10,7 @@
 		"minishell.h": "c",
 		"parser.h": "c",
 		"*.tcc": "c",
-		"string": "c"
+		"string": "c",
+		"cstdlib": "c"
 	}
 }
