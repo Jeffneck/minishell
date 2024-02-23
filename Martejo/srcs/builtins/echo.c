@@ -22,6 +22,7 @@ int	size_cmds(char **cmds)
 	return (size);
 }
 
+
 int	echo(char **cmds)
 {
 	int	i;
@@ -46,5 +47,5 @@ int	echo(char **cmds)
 	}
 	if (n_option == 0)
 		write(1, "\n", 1);
-	return (1);
+	return (0); //status code tout va bien, a voir si echo peu renvoyer 1
 }

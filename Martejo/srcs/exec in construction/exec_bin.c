@@ -1,5 +1,53 @@
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 # include <sys/stat.h>
+
+// Trouver un moyen de discerner les differents status code d'erreur en cas d' echec d'execve
+
+//Trier ce merdier
+
+void	free_and_exit(int exit_code)
+{
+	//rl_clear_history(); A voir
+	clear_garbage(TMP, free);
+	clear_garbage(ENV, free);
+	clear_garbage(B_TREE, free);
+	exit(exit_code);
+}
+
+char	**env_to_char2(t_env *env)
+{
+	size_t	len;
+	size_t	i;
+	char	**env_2d;
+	t_env	*tmp;
+
+	if (!env)
+		return (NULL);
+	tmp = env;
+	i = 0;
+	len = 0;
+	// Remplacer boucle par fonction qui renvoie taille
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	env_2d = (char **)malloc((len + 1) * sizeof(char *));
+	if (!env_2d)
+		return (NULL); // Gestion Malloc
+	add_to_garbage(env_2d, TMP);
+	tmp = env;
+	while (i < len)
+	{
+		env_2d[i++] = strdup_gc(tmp->value, TMP);
+		if (!env_2d[i])
+			//ERROR MALLOC FREE ET EXIT
+		tmp = tmp->next;
+	}
+	env_2d[i] = NULL;
+	return (env_2d);
+}
+
 
 char	*ft_strjoin_pipex(char *s1, char *s2, char *sep)
 {
@@ -20,15 +68,19 @@ char	*ft_strjoin_pipex(char *s1, char *s2, char *sep)
 
 char	*check_command_path(char *cmd, char *path)
 {
-	char	*path_cmd;
+	char		*path_cmd;
+	struct stat	stats;
 
 	if (!cmd || !path)
 		return (NULL);
 	path_cmd = ft_strjoin_pipex(path, cmd, "/");
 	if (!path_cmd)
 		perror_msg("Malloc error");
-	if (access(path_cmd, F_OK) == 0)
+	if (lstat(path_cmd, &stats) == 0)
+	{
+		add_to_garbage(path_cmd, TMP);
 		return (path_cmd);
+	}
 	else
 		free(path_cmd);
 	return (NULL);
@@ -44,7 +96,7 @@ char	**find_path(t_env *env)
 		perror_msg("MALLOC ERROR\n");
 	if (path && path[0] == 0)
 		return (NULL);
-	path_split = ft_split(path, ':');
+	path_split = split_gc(path, ':', TMP);
 	if (!path_split)
 		perror_msg("MALLOC ERROR\n");
 	free(path);
@@ -65,15 +117,11 @@ char	*get_cmd_path(char *cmd, t_env *env)
 	{
 		exec = check_command_path(cmd, path_env[i]);
 		if (exec)
-		{
-			free_char2(path_env);
 			return (exec);
-		}
 		i++;
 	}
-	free_char2(path_env);
 	if (ft_strchr(cmd, '/') && access(cmd, F_OK) == 0)
-		return (ft_strdup(cmd));
+		return (strdup_gc(cmd, TMP));
 	return (NULL);
 }
 
@@ -134,53 +182,43 @@ static char	*path_handler(t_btree *tree_el, t_env *env)
 }
 
 
-void	exec_bin(t_btree *tree_el, t_env *env)
+void	exec_process(t_btree *tree_el, t_env *env, t_io fds)
 {
 	char *cmdpath;
 	struct stat	stats;
 
 	cmdpath = path_handler(tree_el, env);
-	if (dup2(tree_el->io[IN], STDIN_FILENO) == -1)
+	if (dup2(fds.fd_in, STDIN_FILENO) == -1)
 		perror_msg("dup2 STDIN_FILENO");
-	if (dup2(tree_el->io[OUT], STDOUT_FILENO) == -1)
+	if (dup2(fds.fd_out, STDOUT_FILENO) == -1)
 		perror_msg("dup2 STDIN_FILENO");
-	close(tree_el->io[IN]);
-	close(tree_el->io[OUT]);
-	if (lstat(cmdpath, &stat) != -1)
+	close(fds.fd_in);
+	close(fds.fd_out);
+	if (lstat(cmdpath, &stats) != -1)
 	{
 		if ((stats.st_mode & S_IXUSR) && (stats.st_mode & S_IFREG))
 		{
-			execve(cmdpath, tree_el->args, env_to_char2(env));
+			execve(cmdpath, tree_el->cmds, env_to_char2(env));
 			perror("minishell: ");
 			free_and_exit(1); // Voir pour la liberatoon
 		}
 		else
-			print_path_error(tree_el->content, 126, 2);
+			print_path_error(tree_el->cmds[0], 126, 2);
 	}
 	else
-		print_path_error(tree_el->content, 127, 3);
+		print_path_error(tree_el->cmds[0], 127, 3);
 }
 
-pid_t	fork_exec(t_env *env, t_btree *tree_el)
+int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 {
 	pid_t	pid;
+	int		status;
 
 	pid = fork();
-	if (pid == -1)
+	if (pid == -1) // Voir pour l'erreur de fork quel code retourner
 		exit(EXIT_FAILURE);
 	if(pid == 0)
-		exec_process(tree_el);
-	return (pid);
-}
-
-// A quel moment on attend le pid ?? 
-int	wait_pids(int *pid, int len)
-{
-	int	i;
-	int	status;
-
-	i = 0;
-	
+		exec_process(tree_el, env, fds);
 	waitpid(pid, &status, 0);
 	return (status);
 }

@@ -16,9 +16,9 @@ int	env(t_env *env)
 {
 	while (env)
 	{
-		if (env->secret == 0)
+		if (env->secret == 0 && env->value != NULL)
 			ft_printf("%s\n", env->value);
 		env = env->next;
 	}
-	return (1);
+	return (0);
 }

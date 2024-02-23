@@ -75,14 +75,14 @@ int	ft_export(char **args, t_env **envt)
 	if (!args[1])
 	{
 		print_sorted_env(*envt);
-		return (1);
+		return (0);
 	}
 	else
 	{
 		while (args[i] != NULL)
 		{
 			if (export_handler(args[i], envt) != 0)
-				return (-1);
+				return (1);
 			i++;
 		}	
 	}
