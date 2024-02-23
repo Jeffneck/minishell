@@ -205,7 +205,9 @@ void	prompt_loop(t_mini *mini);
 
 //tknlist_utils
 void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace);
-int	is_token_operator(t_token tkn);
+int	is_logical_op_tkn(t_tkntype tkntype);
+int	is_cmd_tkn(t_tkntype tkntype);
+int	is_redir_tkn(t_tkntype tkntype);
 void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop);
 void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd);
 void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2);
@@ -240,13 +242,20 @@ char	*expand_dollar(t_env *env, char *str, size_t start);
 char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst);
 void	expander(t_tknlist *tkn_lst, t_env *env);
 
-t_token	*find_prior_token(t_token *curr);
 t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index);
-char	**pick_args(t_token *tkn_toargs);
 t_btree	*btree_new(t_token	*tkn_toconvert);
+t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
+
+//tree_utils.c
+size_t	count_argc_cmd(t_token *curr);
+char	**get_argv_cmd(t_token *curr, size_t argc);
+char	**cpy_heredoc_delim_char2(char *delimiter);
+char	**extract_cmd_argv(t_token *curr);
+t_token	*find_prior_token(t_token *curr);
+
+//display_tree.c
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
 void display_node(t_btree *tree_el, int depth);
-t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);

@@ -8,17 +8,33 @@ void	set_token_index(t_token	*curr)
 	while(curr)
 	{
 		curr->index = i;
-		if(curr->type == APPEND || curr->type == IN || curr->type == OUT || curr->type == HEREDOC)
+		if(is_redir_tkn(curr->type))
 			curr->priority = 1;
-		if(curr->type == WORD || curr->type == ONE_QUOTE || curr->type == TWO_QUOTE ||curr->type == PARENTHESIS)
+		if(is_redir_tkn(curr->type) || curr->type == PARENTHESIS)
 			curr->priority = 2;
 		if(curr->type == PIPE)
 			curr->priority = 3;
-		if(curr->type == AND || curr->type == OR)
+		if(is_logical_op_tkn(curr->type))
 			curr->priority = 4;
 		i++;
 		curr = curr->next;
 	}
+}
+
+void	rearrange_cmd_redir_order(t_tknlist *tknlst)
+{
+	t_token *curr; 
+	t_token *next; 
+
+	curr = tknlst->head;
+	while(curr && curr->next)
+	{
+		next = curr->next;
+		if(is_redir_related_tkn(curr->type) && is_cmd_related_tkn(next->type))
+			swap_tokens(tknlst, curr, next);
+		curr = curr->next;
+	}
+
 }
 
 t_btree	*parser(t_tknlist *tknlst, t_env *env)
@@ -30,7 +46,7 @@ t_btree	*parser(t_tknlist *tknlst, t_env *env)
 	verify_syntax(tknlst);
 	reducer(tknlst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
 	expander(tknlst, env);
-	linker(tknlst); //regroupe plusieurs nodes linkes en 1 seul, transformer les types quotes en word (puisque l' expamnsion est terminee
+	rearrange_cmd_redir_order(tknlst);
 	set_token_index(tknlst->head);
 	ft_printf("TOKENS PARSED BEFORE BTREE CREATION ///////////////////////////////////\n\n");
 	display_tknlist(tknlst);//

@@ -10,10 +10,24 @@ void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace)
 }
 
 //token_utils.c
-int	is_token_operator(t_token tkn)
+int	is_logical_op_tkn(t_tkntype tkntype)
 {
-	if (tkn.type == AND || tkn.type == OR || tkn.type == PIPE)
+	if (tkntype == AND || tkntype == OR || tkntype == PIPE)
 		return (1);
+	return (0);
+}
+
+int	is_cmd_tkn(t_tkntype tkntype)
+{
+	if (tkntype == WORD || tkntype == ONE_QUOTE || tkntype == TWO_QUOTE)
+		return(1);
+	return (0);
+}
+
+int	is_redir_tkn(t_tkntype tkntype)
+{
+	if (tkntype == IN || tkntype == OUT || tkntype == APPEND || tkntype == HEREDOC)
+		return(1);
 	return (0);
 }
 
