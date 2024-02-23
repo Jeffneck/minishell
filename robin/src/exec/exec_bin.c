@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+
+
 static void	print_path_error(char *arg, int exit_status, int error)
 {
 	ft_putstr_fd("Minishell: ", 2);
