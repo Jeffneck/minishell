@@ -42,6 +42,11 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/tknlist_utils_extension.c \
 		\
 		srcs/exec/browse_tree.c \
+		\
+		srcs/exec_handler/exec_bin.c \
+		srcs/exec_handler/exec_builtins.c \
+		srcs/exec_handler/exec_handler.c \
+
 
 OBJS    = ${SRCS:.c=.o}
 
