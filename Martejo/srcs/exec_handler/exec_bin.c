@@ -75,7 +75,7 @@ char	*check_command_path(char *cmd, char *path)
 		return (NULL);
 	path_cmd = ft_strjoin_pipex(path, cmd, "/");
 	if (!path_cmd)
-		perror_msg("Malloc error");
+		exit (EXIT_FAILURE); // perror_msg("Malloc error");
 	if (lstat(path_cmd, &stats) == 0)
 	{
 		add_to_garbage(path_cmd, TMP);
@@ -93,12 +93,12 @@ char	**find_path(t_env *env)
 
 	path = get_env_path(env, "PATH", 4);
 	if (!path)
-		perror_msg("MALLOC ERROR\n");
+		exit (EXIT_FAILURE); // perror_msg("Malloc error");
 	if (path && path[0] == 0)
 		return (NULL);
 	path_split = split_gc(path, ':', TMP);
 	if (!path_split)
-		perror_msg("MALLOC ERROR\n");
+		exit (EXIT_FAILURE); // perror_msg("Malloc error");
 	free(path);
 	return (path_split);
 }
@@ -147,14 +147,14 @@ static void	check_path(char  *command, char *path)
 	DIR		*dir;
 
 	dir = NULL;
-	dir = opendir(command[0]);
+	dir = opendir(command);
 	if (dir)
 	{
 		closedir(dir);
-		print_path_error(command[0], 126, 4);
+		print_path_error(command, 126, 4);
 	}
 	if (!path)
-		print_path_error(command[0], 127, 1);
+		print_path_error(command, 127, 1);
 }
 
 static char	*path_handler(t_btree *tree_el, t_env *env)
@@ -166,7 +166,7 @@ static char	*path_handler(t_btree *tree_el, t_env *env)
 	cmdpath = NULL;
 	if (!cmd)
 		exit(0); //Voir pour liberation
-	else if (cmd && cmd[0] == '.' || cmd[0] == '\\')
+	else if (cmd && (cmd[0] == '.' || cmd[0] == '\\'))
 	{
 		if (ft_strcmp(cmd, ".") == 0 && !tree_el->cmds[1])
 			print_path_error(cmd, 2, 5);
@@ -189,9 +189,9 @@ void	exec_process(t_btree *tree_el, t_env *env, t_io fds)
 
 	cmdpath = path_handler(tree_el, env);
 	if (dup2(fds.fd_in, STDIN_FILENO) == -1)
-		perror_msg("dup2 STDIN_FILENO");
+		exit (EXIT_FAILURE); //perror_msg("dup2 STDIN_FILENO");
 	if (dup2(fds.fd_out, STDOUT_FILENO) == -1)
-		perror_msg("dup2 STDIN_FILENO");
+		exit (EXIT_FAILURE); //perror_msg("dup2 STDIN_FILENO");
 	close(fds.fd_in);
 	close(fds.fd_out);
 	if (lstat(cmdpath, &stats) != -1)

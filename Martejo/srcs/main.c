@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+int	g_status = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_mini	mini;

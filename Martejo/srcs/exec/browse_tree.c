@@ -101,7 +101,6 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		traverse_heredoc_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == OUT || tree_el->type == APPEND)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
-	else if(tree_el->type == WORD)
-		exec_handler(mini,tree_el, io_inherited);
-
+	// else if(tree_el->type == WORD)
+	// 	exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
 }

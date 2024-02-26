@@ -12,25 +12,6 @@
 
 #include "../../include/minishell.h"
 
-int	prompt_processing(char **input, t_mini *mini)
-{
-	if (ft_strcmp(input[0], "export") == 0)
-		ft_export(input, &mini->env);
-	else if (ft_strcmp(input[0], "unset") == 0)
-		unset(input, mini->env);
-	else if (ft_strcmp(input[0], "cd") == 0)
-		cd(input, &mini->env);
-	else if (ft_strcmp(input[0], "env") == 0)
-		env(mini->env);
-	else if (ft_strcmp(input[0], "echo") == 0)
-		echo(input);
-	else if (ft_strcmp(input[0], "pwd") == 0)
-		ft_pwd();
-	else if (ft_strcmp(input[0], "exit") == 0)
-		return(-1);
-	return (0);
-}
-
 void	free_all(char ***buffer, char **prompt)
 {
 	free_char2(buffer);

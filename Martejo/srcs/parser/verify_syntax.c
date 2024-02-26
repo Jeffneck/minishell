@@ -15,9 +15,9 @@ void	verify_syntax(t_tknlist *list_tkn)
 	while (curr)
 	{
 		next = curr->next;
-		if (is_token_operator(*curr))
+		if (is_operator_tkn(curr->type))
 		{
-			if (!next || is_token_operator(*next))
+			if (!next || is_operator_tkn(next->type))
 				exit(EXIT_FAILURE); //err management
 		}
 		curr = curr->next;

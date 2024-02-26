@@ -40,6 +40,7 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/bin_tree_utils.c \
 		srcs/parser/libft_extension.c \
 		srcs/parser/tknlist_utils_extension.c \
+		srcs/parser/display_tree.c \
 		\
 		srcs/exec/browse_tree.c \
 		\

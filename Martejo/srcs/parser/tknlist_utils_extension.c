@@ -31,6 +31,14 @@ int	is_redir_tkn(t_tkntype tkntype)
 	return (0);
 }
 
+int	is_operator_tkn(t_tkntype tkntype)
+{
+	if (tkntype == PIPE || is_logical_op_tkn(tkntype))
+		return(1);
+	return (0);
+}
+
+
 void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
 {
 	ft_printf("pop_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);

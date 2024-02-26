@@ -28,7 +28,7 @@
 # include <dirent.h>
 # include <fcntl.h>
 
-int g_status = 0;
+extern int g_status;
 
 typedef enum e_id_gc
 {
@@ -208,6 +208,7 @@ void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace);
 int	is_logical_op_tkn(t_tkntype tkntype);
 int	is_cmd_tkn(t_tkntype tkntype);
 int	is_redir_tkn(t_tkntype tkntype);
+int	is_operator_tkn(t_tkntype tkntype);
 void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop);
 void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd);
 void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2);
@@ -256,7 +257,7 @@ int	cmd_is_inside_pipe(t_btree *root, int branch_id);
 
 //display_tree.c
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
-void display_node(t_btree *tree_el, int depth);
+void display_node(t_btree *tree_el, t_io io, int depth);
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
@@ -264,19 +265,19 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst);
 
 //exec_builtins
-void	fork_builtin(t_mini *mini, t_btree *tree_el, t_io fds);
-int		exec_builtin(t_env *envt, t_btree *tree_el, t_io fds);
+int	fork_builtin(t_env **envt, t_btree *tree_el, t_io fds);
+int		exec_builtin(t_env **envt, t_btree *tree_el, t_io fds);
 int		is_builtin(char *command);
 
 //exec_handler
-exec_handler(t_mini *mini, t_btree *tree_el, t_io fds);
+int		exec_handler(t_mini *mini, t_btree *tree_el, t_io fds);
 
 //exec_bin
 int	exec_bin(t_env *env, t_btree *tree_el, t_io fds);
 void	exec_process(t_btree *tree_el, t_env *env, t_io fds);
-static char	*path_handler(t_btree *tree_el, t_env *env);
-static void	check_path(char  *command, char *path);
-static void	print_path_error(char *arg, int exit_status, int error);
+// static char	*path_handler(t_btree *tree_el, t_env *env);
+// static void	check_path(char  *command, char *path);
+// static void	print_path_error(char *arg, int exit_status, int error);
 char	*get_cmd_path(char *cmd, t_env *env);
 char	**find_path(t_env *env);
 char	*check_command_path(char *cmd, char *path);
