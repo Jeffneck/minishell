@@ -162,13 +162,13 @@ static char	*path_handler(t_btree *tree_el, t_env *env)
 	char	*cmdpath;
 	char	*cmd;
 
-	cmd = tree_el->content;
+	cmd = tree_el->cmds[0];
 	cmdpath = NULL;
 	if (!cmd)
 		exit(0); //Voir pour liberation
 	else if (cmd && cmd[0] == '.' || cmd[0] == '\\')
 	{
-		if (ft_strcmp(cmd, ".") == 0 && !tree_el->args)
+		if (ft_strcmp(cmd, ".") == 0 && !tree_el->cmds[1])
 			print_path_error(cmd, 2, 5);
 		else if (ft_strcmp(cmd, "..") == 0)
 			print_path_error(cmd, 127, 1);

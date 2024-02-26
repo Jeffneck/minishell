@@ -14,7 +14,7 @@
 //Pour la macro PATH_MAX représente la longueur maximale
 //(en caractères) que peut avoir un chemin de fichier sur le système de fichiers
 
-int	ft_pwd(void)
+int	ft_pwd(t_io fds)
 {
 	char	*cwd;
 	char	buffer[PATH_MAX];
@@ -22,11 +22,14 @@ int	ft_pwd(void)
 	cwd = getcwd(buffer, sizeof(buffer));
 	if (cwd == NULL)
 	{
-		//perror("getcwd() error");
-		return (0); //gerer erreur
+		perror("pwd");
+		return (1); //gerer erreur
 	}
 	else
-		ft_printf("%s\n", cwd);
-	return (1);
+	{
+		ft_putstr_fd(cwd, fds.fd_out);
+		write(fds.fd_out, "\n", 1);
+	}
+	return (0);
 }
 

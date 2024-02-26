@@ -7,7 +7,7 @@
 
 exec_handler(t_mini *mini, t_btree *tree_el, t_io fds)
 {
-	int	ret_status;
+	int		ret_status;
 	bool	cmd_builtin;
 	bool	is_pipe;
 
@@ -15,13 +15,10 @@ exec_handler(t_mini *mini, t_btree *tree_el, t_io fds)
 	is_pipe = cmd_is_inside_pipe(mini->b_tree, tree_el->branch);
 
 	if (is_pipe == true && cmd_builtin == true)
-	{
-		//fork handler puis builtin handler
-	}
-	else if (is_pipe == false && cmd_builtin== false)
-	{
-		ret_status = builtin_handler(mini, tree_el, fds); // A faire
-	}
+		ret_status = fork_builtin(mini, tree_el, fds);
+	else if (is_pipe == false && cmd_builtin == true)
+		ret_status = exec_builtin(mini, tree_el, fds);
 	else
-		//fork handler puis exec_bin
+		ret_status = exec_bin(mini->env, tree_el, fds);
+	return (ret_status);
 }

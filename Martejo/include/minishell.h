@@ -163,17 +163,17 @@ int	go_to_path(t_env **env);
 int	cd(char **cmds, t_env **env);
 
 /**echo**/
- int	echo(char **cmds);
- int	size_cmds(char **cmds); //attention fonction en double
+int	echo(char **cmds, t_io fds);
+int	size_cmds(char **cmds); //attention fonction en double
 
  /**env_builtin**/
- int	env(t_env *env);
+int	env(t_env *env, t_io fds); // A voir pour changer nom
 
 /**pwd**/
-int	ft_pwd(void);
+int	ft_pwd(t_io fds);
 
  /**export**/
- int	ft_export(char **args, t_env **env);
+int	ft_export(char **args, t_env **envt, t_io fds);
  int	is_valid_env(const char *env);
 
  /**Unset**/
@@ -194,7 +194,7 @@ char	*ft_strndup(char *buffer, int len, t_id_gc id);
  /**sort_env**/
  int	strlen_2d(char **tab); // a voir si utile
  void	sort_env(char **tab, int len_env);
-void	print_sorted_env(t_env *env);
+void	print_sorted_env(t_env *env, t_io fds);
 
 /****/
 char	*create_prompt(t_mini *mini);

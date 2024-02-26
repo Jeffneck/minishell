@@ -23,7 +23,7 @@ int	size_cmds(char **cmds)
 }
 
 
-int	echo(char **cmds)
+int	echo(char **cmds, t_io fds)
 {
 	int	i;
 	int	n_option;
@@ -41,11 +41,11 @@ int	echo(char **cmds)
 		{
 			ft_putstr_fd(cmds[i], 1);
 			if (cmds[i + 1] && cmds[i][0] != '\0')
-				write(1, " ", 1);
+				write(fds.fd_out, " ", 1);
 			i++;
 		}
 	}
 	if (n_option == 0)
-		write(1, "\n", 1);
+		write(fds.fd_out, "\n", 1);
 	return (0); //status code tout va bien, a voir si echo peu renvoyer 1
 }

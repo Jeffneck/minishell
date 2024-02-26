@@ -67,14 +67,14 @@ int	export_handler(char *args, t_env **env)
 	}
 	return (0);
 }
-int	ft_export(char **args, t_env **envt)
+int	ft_export(char **args, t_env **envt, t_io fds)
 {
 	int	i;
 
 	i = 1;
 	if (!args[1])
 	{
-		print_sorted_env(*envt);
+		print_sorted_env(*envt, fds);
 		return (0);
 	}
 	else

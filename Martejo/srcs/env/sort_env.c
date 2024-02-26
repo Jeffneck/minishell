@@ -48,7 +48,7 @@ void	sort_env(char **tab, int len_env)
 	}
 }
 
-void	print_sorted_env(t_env *env)
+void	print_sorted_env(t_env *env, t_io fds)
 {
 	int		i;
 	char	**tab;
@@ -64,6 +64,10 @@ void	print_sorted_env(t_env *env)
 	free(str_env);
 	sort_env(tab, strlen_2d(tab));
 	while (tab[i])
-		ft_printf("declare -x %s\n", tab[i++]);
+	{
+		ft_putstr_fd("declare -x ", fds.fd_out);
+		ft_putstr_fd(tab[i++], fds.fd_out);
+		write(fds.fd_out, "\n", 1);
+	}
 	//liberer tableau 2d;
 }

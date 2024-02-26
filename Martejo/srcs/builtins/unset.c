@@ -27,12 +27,10 @@ int	unset(char **value, t_env *env)
 	t_env	*tmp;
 	
 	if (!(value[1]))
-	{
-		ft_printf("unset: not enough arguments\n"); // A enlever pas d'erreur dans bash
 		return (0);
-	}
 	if (size_env(env) == 1)
-		env_add(NULL, &env, 0); // Peut etre creer un node vierge des le debut pour eviter conflit si liste vide par unset, a voir
+		env_add(NULL, &env, 0); // Peut etre creer un node vierge des le debut pour eviter conflit si liste vide par unset, a voir ce qui se passe dans la boucle
+		// Mofidier nom fonctions size_env et env_size, on comprends rien
 	if (ft_strncmp(value[1], env->value, env_size(env->value)) == 0)
 	{
 		tmp = env;

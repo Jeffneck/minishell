@@ -18,6 +18,7 @@ int		is_builtin(char *command)
 }
 
 // Voir pour le fd avec les pipes notamment pour echo et PWD
+//est ce fds 0 ou fds 1
 // Bien verifier les status code
 
 int		exec_builtin(t_env *envt, t_btree *tree_el, t_io fds)
@@ -26,15 +27,15 @@ int		exec_builtin(t_env *envt, t_btree *tree_el, t_io fds)
 
 	status = 0;
 	if (ft_strcmp(tree_el->cmds[0], "echo") == 0)
-		status = echo(tree_el->cmds);
+		status = echo(tree_el->cmds, fds);
 	if (ft_strcmp(tree_el->cmds[0], "cd") == 0)
 		status = cd(tree_el->cmds, env);
 	if (ft_strcmp(tree_el->cmds[0], "pwd") == 0)
-		status = ft_pwd();
+		status = ft_pwd(fds);
 	if (ft_strcmp(tree_el->cmds[0], "env") == 0)
-		env(envt);
+		env(envt, fds);
 	if (ft_strcmp(tree_el->cmds[0], "export") == 0)
-		status = ft_export(tree_el->cmds, envt);
+		status = ft_export(tree_el->cmds, envt, fds);
 	if (ft_strcmp(tree_el->cmds[0], "unset") == 0)
 		status = unset(tree_el->cmds, envt);
 	return (status);

@@ -12,12 +12,15 @@
 
 #include "../../include/minishell.h"
 
-int	env(t_env *env)
+int	env(t_env *env, t_io fds)
 {
 	while (env)
 	{
 		if (env->secret == 0 && env->value != NULL)
-			ft_printf("%s\n", env->value);
+		{
+			ft_putstr_fd(env->value, fds.fd_out);
+			write(fds.fd_out, "\n", 1);
+		}
 		env = env->next;
 	}
 	return (0);
