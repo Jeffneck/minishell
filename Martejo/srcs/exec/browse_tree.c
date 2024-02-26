@@ -8,20 +8,20 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
     if (pipe(fd_pipe) == -1)
         exit(EXIT_FAILURE);
-    printf("heredoc> ");
-    line = get_next_line(stdin); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
+    printf("> ");
+    line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)
 	{
 		// Vérifie si le délimiteur a été entré
-        if (ft_strcmp(line, tree_el->cmds[0] == 0)) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
+        if (ft_strcmp(line, tree_el->cmds[0]) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
 			free(line);
             break;
 		}
         ft_putstr_fd(line, fd_pipe[FD_WRITE]);
-        printf("heredoc> ");
+        printf("> ");
     	free(line);
-	    line = get_next_line(stdin);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
+	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
     }
     close(fd_pipe[FD_WRITE]);
     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
@@ -35,6 +35,10 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	t_io	io_transmitted;
+	
+	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
+	if (io_inherited.fd_in != 0)
+        close(io_inherited.fd_in);
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
 	io_transmitted.fd_in = open(tree_el->cmds[0], O_RDONLY);
 	if (io_transmitted.fd_in == -1)
@@ -45,6 +49,10 @@ void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited
 void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	t_io	io_transmitted;
+	
+	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
+	if (io_inherited.fd_out != 0)
+        close(io_inherited.fd_out);
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
 	if(tree_el->type == OUT)
 		io_transmitted.fd_out = open(tree_el->cmds[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -79,32 +87,6 @@ void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		browse_tree(mini, tree_el->right, io_inherited);
 }
 
-void exec_cmd_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
-{
-	if (is_builtin(tree_el->cmds[0]))
-		g_status = exec_builtin(mini, tree_el, io_inherited); //me renvoie le code d'erreur.
-	g_status = exec_bin(mini, tree_el, io_inherited);
-}
-
-
-//btree utils
-cmd_is_inside_pipe(t_btree *root, int branch_id)
-{
-	t_btree	*curr;
-
-	curr = root;
-	while (curr && curr->branch != branch_id)
-	{
-		if (curr->type == PIPE)
-			return (1);
-		if (branch_id < curr->branch)
-			curr = curr->left;
-		else
-			curr = curr->right;		
-	}
-	return (0);
-}
-
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	if(!tree_el)
@@ -113,11 +95,13 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		traverse_logical_op_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == PIPE)
 		traverse_pipe_node(mini,tree_el, io_inherited);
-	else if(tree_el->type == IN || tree_el->type == OUT || tree_el->type == APPEND || tree_el->type == HEREDOC)
+	else if(tree_el->type == IN)
 		traverse_redir_input_node(mini,tree_el, io_inherited);
+	else if(tree_el->type == HEREDOC)
+		traverse_heredoc_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == OUT || tree_el->type == APPEND)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == WORD)
-		exec_cmd_node(mini,tree_el, io_inherited);
+		exec_handler(mini,tree_el, io_inherited);
 
 }

@@ -252,6 +252,7 @@ char	**get_argv_cmd(t_token *curr, size_t argc);
 char	**cpy_heredoc_delim_char2(char *delimiter);
 char	**extract_cmd_argv(t_token *curr);
 t_token	*find_prior_token(t_token *curr);
+int	cmd_is_inside_pipe(t_btree *root, int branch_id);
 
 //display_tree.c
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
@@ -282,5 +283,13 @@ char	*check_command_path(char *cmd, char *path);
 char	*ft_strjoin_pipex(char *s1, char *s2, char *sep);
 char	**env_to_char2(t_env *env);
 void	free_and_exit(int exit_code);
+
+//browse_tree.c
+void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
 #endif

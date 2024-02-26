@@ -30,11 +30,10 @@ void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 	while(curr && curr->next)
 	{
 		next = curr->next;
-		if(is_redir_related_tkn(curr->type) && is_cmd_related_tkn(next->type))
+		if((is_redir_tkn(curr->type) || curr->type == HEREDOC) && is_cmd_tkn(next->type))
 			swap_tokens(tknlst, curr, next);
 		curr = curr->next;
 	}
-
 }
 
 t_btree	*parser(t_tknlist *tknlst, t_env *env)

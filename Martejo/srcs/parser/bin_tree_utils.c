@@ -5,7 +5,7 @@ size_t	count_argc_cmd(t_token *curr)
 	size_t	argc;
 	
 	argc = 0;
-	while (curr && is_cmd_related_tkn(curr->type))
+	while (curr && is_cmd_tkn(curr->type))
 	{
 		argc++;
 		curr = curr->next;
@@ -73,5 +73,22 @@ t_token	*find_prior_token(t_token *curr)
 	}
 	ft_printf("find_prior_token, target = %s\n", target->content);
 	return (target);
+}
+
+int	cmd_is_inside_pipe(t_btree *root, int branch_id)
+{
+	t_btree	*curr;
+
+	curr = root;
+	while (curr && curr->branch != branch_id)
+	{
+		if (curr->type == PIPE)
+			return (1);
+		if (branch_id < curr->branch)
+			curr = curr->left;
+		else
+			curr = curr->right;		
+	}
+	return (0);
 }
 

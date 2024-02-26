@@ -37,8 +37,11 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/expander.c \
 		srcs/parser/linker.c \
 		srcs/parser/bin_tree.c \
+		srcs/parser/bin_tree_utils.c \
 		srcs/parser/libft_extension.c \
-		srcs/parser/tknlist_utils_extension.c
+		srcs/parser/tknlist_utils_extension.c \
+		\
+		srcs/exec/browse_tree.c \
 
 OBJS    = ${SRCS:.c=.o}
 
