@@ -123,6 +123,7 @@ typedef struct	s_mini
 	t_env			*env;
 	t_tknlist		*tkn_lst;
 	t_btree			*b_tree; //tree root
+	t_io			io_global;
 	
 }				t_mini;
 
@@ -223,6 +224,8 @@ char	*replace_substr(char *str, char *replacement, size_t start, size_t len);
 char	*remove_substr(char *str, size_t start, size_t len);
 size_t	ft_strlen_until(const char *str, int(*f)(char));
 size_t	ft_strlen_until_not(const char *str, int(*f)(char));
+size_t	ft_strlen_until_char(const char *str, char c);
+size_t	ft_strlen_until_not_char(const char *str, char c);
 int	str_contains_all_subs_ordered(char *str, char **subs);
 int	char_is_in_str(char c, char *str);
 int	ft_strcmp_case_insensitive(char *s1, char *s2);

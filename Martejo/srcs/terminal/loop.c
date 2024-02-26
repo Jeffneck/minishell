@@ -23,7 +23,7 @@ void	prompt_loop(t_mini *mini)
 	//char	*prompt;
 	//char	*read_buffer;
 	//char	**cmds;
-	char *buffer = "c1 c1arg1 c1arg2 <in <in2 <in3 <in4 || >>app  c2 c2arg1 c2arg2 >out| c3 c3arg1 && c4 c4arg1";
+	char *buffer = "export >test1.txt";
 	
 	
 	//prompt = create_prompt(mini);
@@ -32,7 +32,7 @@ void	prompt_loop(t_mini *mini)
 	mini->b_tree = parser(mini->tkn_lst, mini->env);
 	ft_printf("BTREE TOKENS IN EXEC ORDER CREATION ///////////////////////////////////\n\n");
 	root_first_search(mini->b_tree, display_node);
-		
+	browse_tree(mini, mini->b_tree, mini->io_global);
 	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');
 		// if (prompt_processing(cmds, mini) == -1)

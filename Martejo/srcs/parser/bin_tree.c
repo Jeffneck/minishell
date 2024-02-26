@@ -25,7 +25,7 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 	if (!tree_el)
 		exit (EXIT_FAILURE);//
 	tree_el->branch = tkn_toconvert->index;
-	tree_el->type = tkn_toconvert->index;
+	tree_el->type = tkn_toconvert->type;
 	if(is_cmd_tkn(tkn_toconvert->type))
 	{
 		tree_el->type = WORD;

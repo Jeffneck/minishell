@@ -48,13 +48,72 @@ void	sort_env(char **tab, int len_env)
 	}
 }
 
+// void	print_export(char **tab, t_io fds)
+// {
+// 	size_t	i;
+// 	size_t	j;
+// 	size_t len_varname;
+
+// 	i = 0;
+// 	j = 0;
+// 	len_varname = ft_strlen_until(tab[i], '=');
+// 	while (tab[i])
+// 	{
+// 		j = 0;
+// 		ft_putstr_fd("declare -x ", fds.fd_out);
+// 		write(fds.fd_out, &tab[i], );
+
+// 		while (tab[i][j])
+// 		{
+// 			write(fds.fd_out, &tab[i][j++], 1);
+// 			if (tab[i][j - 1] == '=')
+// 				write(fds.fd_out, "\'", 1);
+// 		}
+// 		write(fds.fd_out, "\'", 1);
+// 		write(fds.fd_out, "\n", 1);
+// 		i++;
+// 	}
+// }
+
+void	print_export(char **tab, t_io fds)
+{
+	size_t	i;
+	size_t	j;
+	size_t size_varname;
+	//char backslash = '\\';
+
+	i = 0;
+	j = 0;
+	while (tab[i])
+	{
+		size_varname = ft_strlen_until_char(tab[i], '=') + 1;
+		j = 0;
+		ft_putstr_fd("declare -x ", fds.fd_out);
+		write(fds.fd_out, tab[i], size_varname);
+		write(fds.fd_out, "$\'", 2);
+		while (tab[i][size_varname +j])
+		{
+			if (tab[i][size_varname + j] == 27)
+			{
+				write(fds.fd_out, "\\", 1);
+				
+			}
+			write(fds.fd_out, &tab[i][size_varname + j], 1);
+			
+				
+			j++;
+		}
+		write(fds.fd_out, "\'", 1);
+		write(fds.fd_out, "\n", 1);
+		i++;
+	}
+}
+
 void	print_sorted_env(t_env *env, t_io fds)
 {
-	int		i;
 	char	**tab;
 	char	*str_env;
 
-	i = 0;
 	str_env = env_to_str(env);
 	if (!str_env)
 		return ; //gerer erreur
@@ -63,11 +122,6 @@ void	print_sorted_env(t_env *env, t_io fds)
 		return ; //gerer erreur et liberation
 	free(str_env);
 	sort_env(tab, strlen_2d(tab));
-	while (tab[i])
-	{
-		ft_putstr_fd("declare -x ", fds.fd_out);
-		ft_putstr_fd(tab[i++], fds.fd_out);
-		write(fds.fd_out, "\n", 1);
-	}
+	print_export(tab, fds);
 	//liberer tableau 2d;
 }

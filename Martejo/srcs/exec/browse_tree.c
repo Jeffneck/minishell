@@ -1,7 +1,9 @@
 #include "../../include/minishell.h"
 void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-    int fd_pipe[2];
+	ft_printf("traverse_heredoc_node\n");
+    
+	int fd_pipe[2];
     char *line;
 	t_io	io_transmitted;
 	
@@ -34,6 +36,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
+	ft_printf("traverse_redir_input_node\n");
 	t_io	io_transmitted;
 	
 	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
@@ -48,6 +51,7 @@ void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited
 
 void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
+	ft_printf("traverse_redir_output_node\n");
 	t_io	io_transmitted;
 	
 	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
@@ -57,7 +61,7 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 	if(tree_el->type == OUT)
 		io_transmitted.fd_out = open(tree_el->cmds[0], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else
-		io_transmitted.fd_out = open(tree_el->cmds[0], O_APPEND | O_CREAT, 0644);
+		io_transmitted.fd_out = open(tree_el->cmds[0], O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (io_transmitted.fd_out == -1)
 		exit(EXIT_FAILURE);//
 	browse_tree(mini, tree_el->left, io_transmitted);
@@ -65,6 +69,7 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 
 void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
+	ft_printf("traverse_pipe_node\n");
 	int	fd_pipe[2];
 	t_io	io_transmitted;
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
@@ -82,6 +87,7 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
+	ft_printf("traverse_logical_op_node\n");
 	browse_tree(mini, tree_el->left, io_inherited);
 	if ((tree_el->type == AND && g_status == 0) || (tree_el->type == OR && g_status != 0))
 		browse_tree(mini, tree_el->right, io_inherited);
@@ -89,6 +95,7 @@ void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
+	//ft_printf("browse_tree\n");
 	if(!tree_el)
 		return;
 	if (tree_el->type == AND || tree_el->type == OR)
@@ -101,6 +108,6 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		traverse_heredoc_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == OUT || tree_el->type == APPEND)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
-	// else if(tree_el->type == WORD)
-	// 	exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
+	else if(tree_el->type == WORD)
+		exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
 }

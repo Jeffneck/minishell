@@ -85,6 +85,16 @@ size_t	ft_strlen_until(const char *str, int(*f)(char))
 	return (len);
 }
 
+size_t	ft_strlen_until_char(const char *str, char c)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len] && str[len] != c)
+		len++;
+	return (len);
+}
+
 //avance tant que la fonction detecte un char cible
 //libft
 size_t	ft_strlen_until_not(const char *str, int(*f)(char))
@@ -93,6 +103,16 @@ size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 
 	len = 0;
 	while (str[len] && f(str[len]))
+		len++;
+	return (len);
+}
+
+size_t	ft_strlen_until_not_char(const char *str, char c)
+{
+	size_t	len;
+
+	len = 0;
+	while (str[len] && str[len] == c)
 		len++;
 	return (len);
 }

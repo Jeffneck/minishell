@@ -39,7 +39,7 @@ int	echo(char **cmds, t_io fds)
 		}
 		while (cmds[i])
 		{
-			ft_putstr_fd(cmds[i], 1);
+			ft_putstr_fd(cmds[i], fds.fd_out);
 			if (cmds[i + 1] && cmds[i][0] != '\0')
 				write(fds.fd_out, " ", 1);
 			i++;
