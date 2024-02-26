@@ -24,8 +24,8 @@ char	**get_argv_cmd(t_token *curr, size_t argc)
 	i = 0;
 	while (i < argc)
 	{
-		if (i > 0) //condition retirable mais plus clair ainsi ?
-			curr->used_flag = 1;
+		// if (i > 0) //condition retirable mais plus clair ainsi ?
+		curr->used_flag = 1;
 		argv[i] = strdup_gc(curr->content, B_TREE);
 		if (!argv[i])
 			exit (EXIT_FAILURE);//
@@ -35,7 +35,7 @@ char	**get_argv_cmd(t_token *curr, size_t argc)
 	return (argv);
 }
 
-char	**cpy_heredoc_delim_char2(char *delimiter)
+char	**strdup_in_newchar2(char *delimiter)
 {
 	char	**cpy;
 	cpy = (char **) calloc_gc(2, sizeof(char *), B_TREE);
@@ -67,7 +67,9 @@ t_token	*find_prior_token(t_token *curr)
 	target = curr;
 	while (curr && curr->used_flag != 1)
 	{
-		if (curr->priority >= target->priority)
+		// if (curr->priority == 1 && curr->priority == target->priority && curr->index < target->index) /////////////////
+		// 	target = curr;
+		if (curr->priority > 0 && curr->priority >= target->priority)
 			target = curr;
 		curr = curr->next;
 	}

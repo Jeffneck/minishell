@@ -250,14 +250,15 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
 //tree_utils.c
 size_t	count_argc_cmd(t_token *curr);
 char	**get_argv_cmd(t_token *curr, size_t argc);
-char	**cpy_heredoc_delim_char2(char *delimiter);
+char	**strdup_in_newchar2(char *delimiter);
 char	**extract_cmd_argv(t_token *curr);
 t_token	*find_prior_token(t_token *curr);
 int	cmd_is_inside_pipe(t_btree *root, int branch_id);
 
 //display_tree.c
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
-void display_node(t_btree *tree_el, t_io io, int depth);
+void display_node(t_btree *tree_el, int depth);
+void root_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
 
 void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);

@@ -31,8 +31,8 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 		tree_el->type = WORD;
 		tree_el->cmds = extract_cmd_argv(tkn_toconvert);//exit integre si malloc err
 	}
-	if (tkn_toconvert->type == HEREDOC)
-		tree_el->cmds = cpy_heredoc_delim_char2(tkn_toconvert->content);
+	else
+		tree_el->cmds = strdup_in_newchar2(tkn_toconvert->content);
 	return (tree_el);
 }
 
@@ -45,8 +45,11 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
 	btree_root = NULL;
 	while(tknlst->head)
 	{
-		while(tknlst->head->used_flag == 1)
+		if(tknlst->head->used_flag == 1)
+		{
 			pop_token_in_place(tknlst, tknlst->head);
+			continue;
+		}
 		prio_tkn = find_prior_token(tknlst->head);
 		if (!btree_root)
 		 	btree_root = btree_new(prio_tkn);

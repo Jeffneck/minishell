@@ -64,12 +64,12 @@ $(LIBFT_A): libft/libft.h
 	@echo "$(_CLEAR)"
 
 ${NAME}: ${OBJS} $(LIBFT_A)
-	@${CC} ${CFLAGS} -g -I include -I libft/ -o $@ $^ -Llibft -lft -lreadline
+	@${CC} ${CFLAGS} -g3 -I include -I libft/ -o $@ $^ -Llibft -lft -lreadline
 	@echo "$(_OK) $(NAME) compiled"
 
 %.o: %.c  include/fdf.h libft/libft.h
 	@echo "[..] $(NAME_SHORT)... compiling $*.c\r\c"
-	@${CC} ${CFLAGS} -g -Iinclude -Ilibft/ -c $< -o $@
+	@${CC} ${CFLAGS} -g3 -Iinclude -Ilibft/ -c $< -o $@
 	@echo "$(_CLEAR)"
 
 force :
