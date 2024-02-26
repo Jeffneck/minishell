@@ -252,6 +252,7 @@ char	**get_argv_cmd(t_token *curr, size_t argc);
 char	**cpy_heredoc_delim_char2(char *delimiter);
 char	**extract_cmd_argv(t_token *curr);
 t_token	*find_prior_token(t_token *curr);
+int	cmd_is_inside_pipe(t_btree *root, int branch_id);
 
 //display_tree.c
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
@@ -261,5 +262,13 @@ void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
 void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
 void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst);
+
+//browse_tree.c
+void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
+void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
 #endif

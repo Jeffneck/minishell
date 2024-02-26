@@ -26,7 +26,7 @@ int	is_cmd_tkn(t_tkntype tkntype)
 
 int	is_redir_tkn(t_tkntype tkntype)
 {
-	if (tkntype == IN || tkntype == OUT || tkntype == APPEND || tkntype == HEREDOC)
+	if (tkntype == IN || tkntype == OUT || tkntype == APPEND)
 		return(1);
 	return (0);
 }

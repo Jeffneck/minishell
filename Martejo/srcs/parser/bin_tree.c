@@ -26,9 +26,9 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 		exit (EXIT_FAILURE);//
 	tree_el->branch = tkn_toconvert->index;
 	tree_el->type = tkn_toconvert->index;
-	if(is_cmd_related_tkn(tkn_toconvert->type))
+	if(is_cmd_tkn(tkn_toconvert->type))
 	{
-		tree_el->type == WORD;
+		tree_el->type = WORD;
 		tree_el->cmds = extract_cmd_argv(tkn_toconvert);//exit integre si malloc err
 	}
 	if (tkn_toconvert->type == HEREDOC)
