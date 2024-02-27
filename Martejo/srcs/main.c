@@ -14,15 +14,22 @@
 
 int	g_status = 0;
 
+t_mini	*keeper_mini(t_mini *address_mini)
+{
+	static t_mini	*mini_kept;
+	if(address_mini)
+		mini_kept = address_mini;
+	return (mini_kept);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_mini	mini;
 	(void)argc;
 	(void)argv;
 	
-	
-	// ft_putstr_fd("LESS_TERMCAP_mb=$\'\\E[1;31m'", open("test2", O_WRONLY | O_CREAT | O_TRUNC, 0644));
 	mini.env = init_env(envp);
+	keeper_mini(&mini);
 	mini.io_global = (t_io){0, 1};
 	prompt_loop(&mini);
 	return (0);

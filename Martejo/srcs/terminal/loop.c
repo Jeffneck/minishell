@@ -45,10 +45,19 @@ void	sig_handler(int sigcode)
 	// ft_printf("SIGCODE = %d\n", sigcode);
 	if (sigcode == SIGINT)
 	{
-		write(2, "\b\b  \033[2D", 8);
-		ft_printf("SIGINT\n");
+		// Nettoie la ligne courante sur laquelle readline attendait une entrée
+		rl_replace_line("", 0); //
+		// Déplace le curseur à une nouvelle ligne
+		rl_on_new_line();
+		// Redessine le prompt
+		rl_redisplay();
+
+		// Afficher un nouveau prompt (le `\n` garantit que le buffer est vidé si en mode tampon ligne)
+		ft_printf("\n%s", create_prompt(keeper_mini(NULL)));
+		// write(STDOUT_FILENO, "\nNouveau prompt> ", 16);
+		// write(STDOUT_FILENO, "\n", 1);
 		g_status = 130;
-		exit(EXIT_FAILURE); //retirer plus tard
+		// exit(EXIT_FAILURE); //retirer plus tard
 	}
 	if (sigcode == SIGQUIT)
 	{
@@ -76,28 +85,34 @@ void	process_shell(t_mini *mini, char *line_read)
 
 void	prompt_loop(t_mini *mini)
 {
+	// int		stdin_keeper;
 	char	*line_read;
-	
+
+	// stdin_keeper = dup(STDIN_FILENO);
+	// mini->io_global.fd_in = stdin_keeper;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	signal(SIGTSTP, sig_handler);
 	while(1)
 	{
-		g_status = 0;
 		line_read = readline(create_prompt(mini));
 		if (!line_read)
 			exit(EXIT_FAILURE);// ctrl+D
-		if(*line_read && g_status != 130)//g_status pour eviter d' enregistrer une ligne qui contient ^C 
+		if(*line_read)//g_status pour eviter d' enregistrer une ligne qui contient ^C 
+		{
 			add_history(line_read);
-		if (g_status != 130) //ne pas exec un prompt qui contient ^C 
 			process_shell(mini, line_read);
+		}	
 		if (g_status == 130)
 		{
         	ft_printf("\n");
-        	rl_on_new_line();
-        	rl_redisplay();
+        	// rl_on_new_line();
+        	// ft_printf("\naaaa");
+        	// rl_redisplay();
+        	// ft_printf("\naaaa");
+			
+			g_status = 0;
     	}
-		
 	}
 }
 //ctrl d => readline

@@ -297,4 +297,6 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
+t_mini	*keeper_mini(t_mini *address_mini); //placer ailleurs que dans le main
+
 #endif
