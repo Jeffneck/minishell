@@ -34,78 +34,66 @@ void	free_all(char ***buffer, char **prompt)
 // 	return (0);
 // }
 
-// void	sig_void(int sigcode)
-// {
-// 	(void)sigcode;
-// 	if (sigcode == SIGQUIT)
-// 		g_status = 131;
-// }
 void	sig_handler(int sigcode)
 {
-	// ft_printf("SIGCODE = %d\n", sigcode);
+	ft_printf("SIGCODE = %d\n", sigcode);
 	if (sigcode == SIGINT)
 	{
-		write(2, "\b\b  \033[2D", 8);
-		ft_printf("SIGINT\n");
-		g_status = 130;
-		exit(EXIT_FAILURE); //retirer plus tard
+		ft_printf("SIGINT");
+		// close(STDIN_FILENO);
+		// g_status = 130;
 	}
 	if (sigcode == SIGQUIT)
 	{
-		ft_printf("SIGQUIT\n");
+		ft_printf("SIGINT");
 		write(2, "\b\b  \033[2D", 8);
 		exit(EXIT_FAILURE); //
 	}
 	if (sigcode == SIGTSTP)
 	{
-		ft_printf("SIGTSTP\n");
+		ft_printf("SIGTSTP");
 		write(2, "\b\b  \033[2D", 8);
 	}
 }
 
-void	process_shell(t_mini *mini, char *line_read)
+void	sig_void(int sigcode)
 {
-	mini->tkn_lst = lexer(line_read);
-	mini->b_tree = parser(mini->tkn_lst, mini->env);
-	browse_tree(mini, mini->b_tree, mini->io_global);
-	clear_garbage(TMP, free); //retirer qd tout sera proprement retire
-	clear_garbage(TKN_LIST, free);//retirer qd tout sera proprement retire
-	clear_garbage(B_TREE, free);
-
+	(void)sigcode;
+	if (sigcode == SIGQUIT)
+		g_status = 131;
 }
+
 
 void	prompt_loop(t_mini *mini)
 {
 	char	*line_read;
+	//char	**cmds;
+	// char *buffer = "export >test1.txt";
 	
-	signal(SIGINT, sig_handler);
+	// signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	signal(SIGTSTP, sig_handler);
 	while(1)
 	{
-		g_status = 0;
 		line_read = readline(create_prompt(mini));
-		if (!line_read)
-			exit(EXIT_FAILURE);// ctrl+D
-		if(*line_read && g_status != 130)//g_status pour eviter d' enregistrer une ligne qui contient ^C 
+		if(line_read && *line_read) //eviter de stocker une line = NULL ou vide dans l' historique
 			add_history(line_read);
-		if (g_status != 130) //ne pas exec un prompt qui contient ^C 
-			process_shell(mini, line_read);
-		if (g_status == 130)
-		{
-        	ft_printf("\n");
-        	rl_on_new_line();
-        	rl_redisplay();
-    	}
-		
 	}
+	// mini->tkn_lst = lexer(line_read);
+	//reactiver plus tard
+	// mini->b_tree = parser(mini->tkn_lst, mini->env);
+	// ft_printf("BTREE TOKENS IN EXEC ORDER CREATION ///////////////////////////////////\n\n");
+	// root_first_search(mini->b_tree, display_node);
+	// browse_tree(mini, mini->b_tree, mini->io_global);
+	//addhistory => voir quand ajouter dans l'historique
+	//history clear == appeler quand on met fin au prog
+
+	clear_garbage(TKN_LIST, free);
+	clear_garbage(ENV, free);
+	clear_garbage(TMP, free);
+	clear_garbage(B_TREE, free);
 }
-//ctrl d => readline
-	// met fin au minishell si capte par readline
-	// stoppe le mode lecture entree std dans heredoc et cat
-//ctrl + c => stoppe toute la partie exec et le
-// si ecrit au moment de l' ecriture du prompt et que l' on a deja ecrit qq chose => affiche un nouveau prompt et g_status = 130
-// si premier char => affiche juste un nouveau prompt sans toucher a g_status(cas particulier osef)
+
 
 	// display_tknlist(mini->tkn_lst);
 		//cmds = ft_split(read_buffer, ' ');

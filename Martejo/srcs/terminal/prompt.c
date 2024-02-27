@@ -33,10 +33,10 @@ char	*create_prompt(t_mini *mini)
 		prompt[home_len - 1] = '~';
 		prompt = &prompt[home_len - 1];
 	}
-	// Rajouter en fonction du code d'erreur la couleur rouge ou vert
-	//prompt = ft_strjoin("\001\e[31;1m\002> \001\e[35m\002", prompt);
-	prompt = ft_strjoin("\001\e[32m\002>\001\e[37m\002", prompt);
-	//prompt = ft_strjoin("\001\e[31;1m\002> \001\e[35m\002", prompt);
+	if (g_status == 0)
+		prompt = ft_strjoin("\001\e[32;1m\002> \001\e[37m\002", prompt);
+	else
+		prompt = ft_strjoin("\001\e[31;1m\002> \001\e[37m\002", prompt);
 	prompt = ft_strjoin(prompt, "$ ");
 	return (prompt);
 }
