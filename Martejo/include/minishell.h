@@ -178,7 +178,7 @@ int	ft_export(char **args, t_env **envt, t_io fds);
  int	is_valid_env(const char *env);
 
  /**Unset**/
-int	unset(char **value, t_env *env);
+int	unset(char **value, t_env **env);
 
 /**env_handler**/
 t_env	*init_env(char **env_array);

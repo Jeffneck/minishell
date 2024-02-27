@@ -37,7 +37,7 @@ int		exec_builtin(t_env **envt, t_btree *tree_el, t_io fds)
 	if (ft_strcmp(tree_el->cmds[0], "export") == 0)
 		status = ft_export(tree_el->cmds, envt, fds);
 	if (ft_strcmp(tree_el->cmds[0], "unset") == 0)
-		status = unset(tree_el->cmds, *envt); // Modifier unset avec double pointeur
+		status = unset(tree_el->cmds, envt);
 	return (status);
 }
 

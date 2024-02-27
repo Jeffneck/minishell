@@ -23,7 +23,7 @@ void	prompt_loop(t_mini *mini)
 	//char	*prompt;
 	//char	*read_buffer;
 	//char	**cmds;
-	char *buffer = "export >test1.txt";
+	char *buffer = "cat";
 	
 	
 	//prompt = create_prompt(mini);

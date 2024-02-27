@@ -8,7 +8,7 @@ void	set_token_index(t_token	*curr)
 	while(curr)
 	{
 		curr->index = i;
-		if(is_redir_tkn(curr->type))
+		if(is_redir_tkn(curr->type) || curr->type == HEREDOC)
 			curr->priority = 1;
 		if(is_redir_tkn(curr->type) || curr->type == PARENTHESIS)
 			curr->priority = 2;

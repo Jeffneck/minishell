@@ -10,18 +10,18 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
     if (pipe(fd_pipe) == -1)
         exit(EXIT_FAILURE);
-    printf("> ");
+    ft_printf("> ");
     line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)
 	{
 		// Vérifie si le délimiteur a été entré
-        if (ft_strcmp(line, tree_el->cmds[0]) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
+        if (ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
 			free(line);
             break;
 		}
         ft_putstr_fd(line, fd_pipe[FD_WRITE]);
-        printf("> ");
+        ft_printf("> ");
     	free(line);
 	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
     }
@@ -95,7 +95,7 @@ void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	//ft_printf("browse_tree\n");
+	ft_printf("browse_tree\n");
 	if(!tree_el)
 		return;
 	if (tree_el->type == AND || tree_el->type == OR)
@@ -109,5 +109,5 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	else if(tree_el->type == OUT || tree_el->type == APPEND)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == WORD)
-		exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
+		g_status = exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
 }

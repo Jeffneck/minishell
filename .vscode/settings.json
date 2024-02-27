@@ -11,6 +11,8 @@
 		"parser.h": "c",
 		"*.tcc": "c",
 		"string": "c",
-		"cstdlib": "c"
+		"cstdlib": "c",
+		"optional": "c",
+		"system_error": "c"
 	}
 }

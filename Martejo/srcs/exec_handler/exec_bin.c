@@ -39,9 +39,10 @@ char	**env_to_char2(t_env *env)
 	tmp = env;
 	while (i < len)
 	{
-		env_2d[i++] = strdup_gc(tmp->value, TMP);
+		env_2d[i] = strdup_gc(tmp->value, TMP);
 		if (!env_2d[i])
-			//ERROR MALLOC FREE ET EXIT
+			exit(EXIT_FAILURE); // Erreur de malloc
+		i++;
 		tmp = tmp->next;
 	}
 	env_2d[i] = NULL;
@@ -103,27 +104,6 @@ char	**find_path(t_env *env)
 	return (path_split);
 }
 
-char	*get_cmd_path(char *cmd, t_env *env)
-{
-	char	*exec;
-	char	**path_env;
-	int		i;
-
-	i = 0;
-	path_env = find_path(env);
-	if (!path_env)
-		// ERROR PATH 
-	while (path_env[i])
-	{
-		exec = check_command_path(cmd, path_env[i]);
-		if (exec)
-			return (exec);
-		i++;
-	}
-	if (ft_strchr(cmd, '/') && access(cmd, F_OK) == 0)
-		return (strdup_gc(cmd, TMP));
-	return (NULL);
-}
 
 static void	print_path_error(char *arg, int exit_status, int error)
 {
@@ -139,7 +119,30 @@ static void	print_path_error(char *arg, int exit_status, int error)
 		ft_putendl_fd(": Is a directory", 2);
 	// if (error == 5)
 	// 	ft_putendl_fd(DOT_ERR_MSG, 2); // Messageur pour le ' . '
+	ft_printf("exit_status = %d\n", exit_status);
 	free_and_exit(exit_status);
+}
+
+char	*get_cmd_path(char *cmd, t_env *env)
+{
+	char	*exec;
+	char	**path_env;
+	int		i;
+
+	i = 0;
+	path_env = find_path(env);
+	if (!path_env)
+		print_path_error(cmd, 127, 3); // Path inexistant
+	while (path_env[i])
+	{
+		exec = check_command_path(cmd, path_env[i]);
+		if (exec)
+			return (exec);
+		i++;
+	}
+	if (ft_strchr(cmd, '/') && access(cmd, F_OK) == 0)
+		return (strdup_gc(cmd, TMP));
+	return (NULL);
 }
 
 static void	check_path(char  *command, char *path)
@@ -187,17 +190,30 @@ void	exec_process(t_btree *tree_el, t_env *env, t_io fds)
 	char *cmdpath;
 	struct stat	stats;
 
+	ft_printf("exec_process\n");
 	cmdpath = path_handler(tree_el, env);
+	ft_printf("cmdpath exec = %s\n", cmdpath);
 	if (dup2(fds.fd_in, STDIN_FILENO) == -1)
+	{
+		ft_printf("erreur dup2 stdin\n");
 		exit (EXIT_FAILURE); //perror_msg("dup2 STDIN_FILENO");
+	}
 	if (dup2(fds.fd_out, STDOUT_FILENO) == -1)
+	{
+		ft_printf("erreur dup2 stdout\n");
 		exit (EXIT_FAILURE); //perror_msg("dup2 STDIN_FILENO");
-	close(fds.fd_in);
-	close(fds.fd_out);
+	}
+	if (fds.fd_out != 1)
+		close(fds.fd_out);
+	if (fds.fd_in != 0)
+		close(fds.fd_in);
+	ft_printf("avant lstat\n");
 	if (lstat(cmdpath, &stats) != -1)
 	{
+		//ft_printf("premier lstats\n");
 		if ((stats.st_mode & S_IXUSR) && (stats.st_mode & S_IFREG))
 		{
+			//ft_printf("on rentre dans exec\n");
 			execve(cmdpath, tree_el->cmds, env_to_char2(env));
 			perror("minishell: ");
 			free_and_exit(1); // Voir pour la liberatoon
@@ -206,7 +222,10 @@ void	exec_process(t_btree *tree_el, t_env *env, t_io fds)
 			print_path_error(tree_el->cmds[0], 126, 2);
 	}
 	else
+	{
+		ft_printf("pas de lstat\n");
 		print_path_error(tree_el->cmds[0], 127, 3);
+	}
 }
 
 int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
@@ -214,11 +233,26 @@ int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 	pid_t	pid;
 	int		status;
 
+	printf("out = %d \n in = %d\n", fds.fd_out, fds.fd_in);
+
+	status = 0;
+	pid = 0;
+	int exit_status;
 	pid = fork();
 	if (pid == -1) // Voir pour l'erreur de fork quel code retourner
 		exit(EXIT_FAILURE);
 	if(pid == 0)
+	{
+		printf("children\n");
 		exec_process(tree_el, env, fds);
+	}
 	waitpid(pid, &status, 0);
-	return (status);
+	if (WIFEXITED(status))  // Vérifie si le processus s'est terminé normalement
+    	exit_status = WEXITSTATUS(status);
+	else
+	{
+		ft_printf("pas de retour status\n"); // voir si on peut creer ce cas
+		return (1);
+	}
+	return (exit_status);
 }
