@@ -252,7 +252,7 @@ int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 	else
 	{
 		ft_printf("pas de retour status\n"); // voir si on peut creer ce cas
-		return (1);
+		return (130);
 	}
 	return (exit_status);
 }

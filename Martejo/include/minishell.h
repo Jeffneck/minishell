@@ -60,6 +60,7 @@ typedef enum e_tkntype
 # define FD_WRITE 1
 # define FD_IN 0
 # define FD_OUT 1
+# define SIGINT_DETECTED 130
 
 typedef struct s_io
 {
@@ -124,6 +125,7 @@ typedef struct	s_mini
 	t_tknlist		*tkn_lst;
 	t_btree			*b_tree; //tree root
 	t_io			io_global;
+	int				last_gstatus;
 	
 }				t_mini;
 
@@ -231,7 +233,7 @@ int	char_is_in_str(char c, char *str);
 int	ft_strcmp_case_insensitive(char *s1, char *s2);
 int	s1_is_s2_suffix(char *s1, char *s2);
 
-t_btree	*parser(t_tknlist *tknlst, t_env *env);
+t_btree	*parser(t_mini *mini);
 
 void	verify_syntax(t_tknlist *list_tkn);
 
@@ -242,13 +244,13 @@ int is_link_sensitive(t_tkntype type);
 void    linker(t_tknlist *tkn_lst);
 
 int	is_charset_env(char c);
-char	*expand_dollar(t_env *env, char *str, size_t start);
-char	*expander_handler(t_env *env, t_token *tkn, t_tknlist *tkn_lst);
-void	expander(t_tknlist *tkn_lst, t_env *env);
+char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start);
+char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_lst);
+void	expander(t_mini *mini, t_tknlist *tkn_lst, t_env *env);
 
 t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index);
 t_btree	*btree_new(t_token	*tkn_toconvert);
-t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env);
+t_btree	*create_bin_tree(t_tknlist *tknlst);
 
 //tree_utils.c
 size_t	count_argc_cmd(t_token *curr);
@@ -297,6 +299,6 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
-t_mini	*keeper_mini(t_mini *address_mini); //placer ailleurs que dans le main
+t_mini	*singleton_mini(t_mini *address_mini); //placer ailleurs que dans le main
 
 #endif

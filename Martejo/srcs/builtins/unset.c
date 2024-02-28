@@ -54,12 +54,9 @@ int	unset(char **value, t_env **env)
 		{
 			tmp = curr->next->next;
 			node = curr->next;
-			ft_printf("value = %s", curr->next->value);
 			del_one_garbage(node->value, ENV);
 			del_one_garbage(node, ENV);
-
 			curr->next = tmp;
-			ft_printf("value = %s", curr->next->value);
 			return (0);
 		}
 		curr = curr->next;

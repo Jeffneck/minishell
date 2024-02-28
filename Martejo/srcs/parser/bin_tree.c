@@ -36,7 +36,7 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 	return (tree_el);
 }
 
-t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
+t_btree	*create_bin_tree(t_tknlist *tknlst)
 {
 	ft_printf("create_bin_tree\n");
 	t_token	*prio_tkn;
@@ -51,10 +51,12 @@ t_btree	*create_bin_tree(t_tknlist *tknlst, t_env *env)
 			continue;
 		}
 		prio_tkn = find_prior_token(tknlst->head);
+		// if (!btree_root && prio_tkn->type == PARENTHESIS)
+		//  	btree_root = btree_new(prio_tkn);
 		if (!btree_root)
 		 	btree_root = btree_new(prio_tkn);
-		else if (prio_tkn->type == PARENTHESIS)
-			place_in_tree(btree_root, parser(lexer(prio_tkn->content), env), prio_tkn->index);
+		// else if (prio_tkn->type == PARENTHESIS)
+		// 	place_in_tree(btree_root, parser(lexer(prio_tkn->content), env), prio_tkn->index);
 		else
 			place_in_tree(btree_root, btree_new(prio_tkn), prio_tkn->index);
 		prio_tkn->used_flag = 1;

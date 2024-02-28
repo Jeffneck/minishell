@@ -10,11 +10,11 @@ void	set_token_index(t_token	*curr)
 		curr->index = i;
 		if(is_redir_tkn(curr->type) || curr->type == HEREDOC)
 			curr->priority = 1;
-		if(is_redir_tkn(curr->type) || curr->type == PARENTHESIS)
-			curr->priority = 2;
+		// else if(curr->type == PARENTHESIS) // 
+		// 	curr->priority = 2;
 		if(curr->type == PIPE)
 			curr->priority = 3;
-		if(is_logical_op_tkn(curr->type))
+		else if(is_logical_op_tkn(curr->type))
 			curr->priority = 4;
 		i++;
 		curr = curr->next;
@@ -106,18 +106,18 @@ void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 
 }
 
-t_btree	*parser(t_tknlist *tknlst, t_env *env)
+t_btree	*parser(t_mini *mini)
 {
 	ft_printf("parser\n");
 	
 	ft_printf("TOKENS LEXED BEFORE PARSING  ///////////////////////////////////\n\n");
-	display_tknlist(tknlst);//
-	verify_syntax(tknlst);
-	reducer(tknlst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
-	expander(tknlst, env);
-	rearrange_cmd_redir_order(tknlst);
-	set_token_index(tknlst->head);
+	display_tknlist(mini->tkn_lst);//
+	verify_syntax(mini->tkn_lst);
+	reducer(mini->tkn_lst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
+	expander(mini, mini->tkn_lst, mini->env);
+	rearrange_cmd_redir_order(mini->tkn_lst);
+	set_token_index(mini->tkn_lst->head);
 	ft_printf("TOKENS PARSED BEFORE BTREE CREATION ///////////////////////////////////\n\n");
-	display_tknlist(tknlst);//
-	return (create_bin_tree(tknlst, env));
+	display_tknlist(mini->tkn_lst);//
+	return (create_bin_tree(mini->tkn_lst));
 }

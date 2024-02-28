@@ -12,6 +12,11 @@
 
 #include "../../include/minishell.h"
 
+
+int	is_special_char(char c)
+{
+	return (c == ';' || c == '&' || c == '|' || c == '<' || c == '>');
+}
 int	simple_quote_handler(char *buffer, t_tknlist *list)
 {
 	int	i;
@@ -47,7 +52,16 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 	int	i;
 
 	if (type == APPEND || type == HEREDOC)
+	{
 		i = 2;
+		if (is_special_char(buffer[i]))
+		{
+			ft_putstr_fd("syntax error near unexpected token `", 2);
+			write(2, &buffer[i], 1);
+			write(2, "'", 1);
+			error_handler_lexer(1, NULL);
+		}
+	}
 	else
 		i = 1;
 	while (buffer[i] && ft_isspace(buffer[i]))

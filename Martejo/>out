@@ -1,0 +1,18 @@
+browse_tree
+exec_handler
+ cmd = echo
+2
+
+chui sortie
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ ^C[?2004l
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ ^C[?2004l
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ ^C[?2004l
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ c^C[?2004l
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ [?2004l
+browse_tree
+exec_handler
+ cmd = echo
+2
+
+chui sortie
+[?2004h[32;1m> [37m~/Desktop/42/minishell/Martejo$ [?2004l

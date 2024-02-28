@@ -45,19 +45,18 @@ void	sig_handler(int sigcode)
 	// ft_printf("SIGCODE = %d\n", sigcode);
 	if (sigcode == SIGINT)
 	{
+		//fermer stdin pour faire sauter les programmes qui sont en attente GNL et CAT
+		close(STDIN_FILENO);
 		// Nettoie la ligne courante sur laquelle readline attendait une entrée
-		rl_replace_line("", 0); //
+		// rl_replace_line("", 0); //
 		// Déplace le curseur à une nouvelle ligne
-		rl_on_new_line();
+		// rl_on_new_line();
 		// Redessine le prompt
-		rl_redisplay();
-
+		// rl_redisplay();
 		// Afficher un nouveau prompt (le `\n` garantit que le buffer est vidé si en mode tampon ligne)
-		ft_printf("\n%s", create_prompt(keeper_mini(NULL)));
-		// write(STDOUT_FILENO, "\nNouveau prompt> ", 16);
-		// write(STDOUT_FILENO, "\n", 1);
 		g_status = 130;
-		// exit(EXIT_FAILURE); //retirer plus tard
+		// ft_printf("\n%sctrlC", create_prompt(singleton_mini(NULL)));
+
 	}
 	if (sigcode == SIGQUIT)
 	{
@@ -75,7 +74,8 @@ void	sig_handler(int sigcode)
 void	process_shell(t_mini *mini, char *line_read)
 {
 	mini->tkn_lst = lexer(line_read);
-	mini->b_tree = parser(mini->tkn_lst, mini->env);
+	mini->b_tree = parser(mini);
+	root_first_search(mini->b_tree, display_node);//affichage arbre
 	browse_tree(mini, mini->b_tree, mini->io_global);
 	clear_garbage(TMP, free); //retirer qd tout sera proprement retire
 	clear_garbage(TKN_LIST, free);//retirer qd tout sera proprement retire
@@ -85,34 +85,48 @@ void	process_shell(t_mini *mini, char *line_read)
 
 void	prompt_loop(t_mini *mini)
 {
-	// int		stdin_keeper;
+	int		stdin_cpy;
 	char	*line_read;
+	int		first_read;
 
 	// stdin_keeper = dup(STDIN_FILENO);
 	// mini->io_global.fd_in = stdin_keeper;
+	first_read = 1;
 	signal(SIGINT, sig_handler);
 	signal(SIGQUIT, sig_handler);
 	signal(SIGTSTP, sig_handler);
 	while(1)
 	{
+		stdin_cpy = dup(STDIN_FILENO);
+		mini->last_gstatus = g_status;
+		g_status = 0;
+		
 		line_read = readline(create_prompt(mini));
+		if (g_status == 130)
+		{
+        	
+			dup2(stdin_cpy, STDIN_FILENO);
+			close(stdin_cpy);
+			if (first_read == 1)
+			{
+				write(1, "\n", 1);
+				first_read = 0;
+			}
+			// g_status = 0;
+			continue;
+    	}
 		if (!line_read)
 			exit(EXIT_FAILURE);// ctrl+D
-		if(*line_read)//g_status pour eviter d' enregistrer une ligne qui contient ^C 
+		if(line_read && *line_read)//g_status pour eviter d' enregistrer une ligne qui contient ^C 
 		{
 			add_history(line_read);
 			process_shell(mini, line_read);
-		}	
-		if (g_status == 130)
-		{
-        	ft_printf("\n");
-        	// rl_on_new_line();
-        	// ft_printf("\naaaa");
-        	// rl_redisplay();
-        	// ft_printf("\naaaa");
-			
-			g_status = 0;
-    	}
+			//clear stdin pour eviter 
+			dup2(stdin_cpy, STDIN_FILENO);
+			close(stdin_cpy);
+			ft_printf("chui sortie\n");
+		}		
+		free(line_read);
 	}
 }
 //ctrl d => readline

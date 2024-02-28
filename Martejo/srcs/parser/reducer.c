@@ -3,7 +3,7 @@
 int	type_need_reducing(t_tkntype type)
 {
 	if (type == IN || type == OUT || type == APPEND 
-		|| type == HEREDOC || type == TWO_QUOTE || type == ONE_QUOTE)
+		|| type == HEREDOC || type == TWO_QUOTE || type == ONE_QUOTE || type == PARENTHESIS)
 		return (1);
 	return(0);
 

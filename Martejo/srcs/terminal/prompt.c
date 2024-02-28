@@ -17,10 +17,10 @@
 // En cas d'erreur de malloc free et exit le programme
 char	*create_prompt(t_mini *mini)
 {
+	// ft_printf("create_prompt pid = %d\n", (int) getpid());
 	char	*home;
 	char	*prompt;
 	int		home_len;
-
 	home = getenv("HOME");
 	prompt = get_env_path(mini->env, "PWD", 3);
 	if (!prompt)

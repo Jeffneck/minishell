@@ -12,7 +12,7 @@ void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace)
 //token_utils.c
 int	is_logical_op_tkn(t_tkntype tkntype)
 {
-	if (tkntype == AND || tkntype == OR || tkntype == PIPE)
+	if (tkntype == AND || tkntype == OR)
 		return (1);
 	return (0);
 }

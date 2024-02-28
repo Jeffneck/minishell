@@ -14,9 +14,13 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
     line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)
 	{
+		ft_printf("line = %s\n", line);
+		if (g_status == 130)
+			break ;
 		// Vérifie si le délimiteur a été entré
-        if (ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
+        if (ft_strlen(line) > 0 && ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
+			ft_printf("line break\n");
 			free(line);
             break;
 		}
@@ -25,6 +29,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
     	free(line);
 	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
     }
+	ft_printf("fin heredoc\n");
     close(fd_pipe[FD_WRITE]);
     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
     if (io_inherited.fd_in != 0)
@@ -93,10 +98,43 @@ void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		browse_tree(mini, tree_el->right, io_inherited);
 }
 
+int traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
+{
+	pid_t	pid;
+	int		status;
+	int		exit_status;
+
+	pid = fork(); 
+	if (pid == -1)
+		exit(EXIT_FAILURE); //
+	//process child
+	if (pid == 0)
+	{
+		ft_printf("JE SUIS L ENFANT\n");//
+		char	*new_prompt;
+		new_prompt = strdup_gc(tree_el->cmds[0], TMP);
+		clear_garbage(B_TREE, free);
+		mini->b_tree = NULL; //surement inutile
+		mini->tkn_lst = lexer(new_prompt);
+		mini->b_tree = parser(mini);
+		browse_tree(mini, mini->b_tree, io_inherited);
+		free_and_exit(g_status);
+	}
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))  // Vérifie si le processus s'est terminé normalement
+    	exit_status = WEXITSTATUS(status);
+	else
+	{
+		ft_printf("pas de retour status\n"); // voir si on peut creer ce cas
+		return (1);
+	}
+	return (exit_status);
+}
+
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	ft_printf("browse_tree\n");
-	if(!tree_el)
+	if(!tree_el || g_status == 130)
 		return;
 	if (tree_el->type == AND || tree_el->type == OR)
 		traverse_logical_op_node(mini,tree_el, io_inherited);
@@ -108,6 +146,8 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 		traverse_heredoc_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == OUT || tree_el->type == APPEND)
 		traverse_redir_output_node(mini,tree_el, io_inherited);
+	else if(tree_el->type == PARENTHESIS)
+		g_status = traverse_parenthesis_node(mini,tree_el, io_inherited);
 	else if(tree_el->type == WORD)
 		g_status = exec_handler(mini,tree_el, io_inherited); // ajouter quand partie de geoffrey ok
 }
