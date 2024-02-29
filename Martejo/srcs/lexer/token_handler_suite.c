@@ -22,16 +22,10 @@ int	parenthese_handler(char *buffer, t_tknlist *list)
 	while (buffer[i])
 	{
 		if (buffer[i] == '(')
-		{
-			if (buffer[i + 1] && buffer[i + 1] == '|' || buffer[i + 1] == '&')
-				// Gerer erreur
 			depth++;
-		}
 		else if (buffer[i] == ')')
 		{
 			depth--;
-			if (buffer[i - 1] && buffer[i - 1] == '|' || buffer[i - 1] == '&')
-				// Gerer erreur
 			if (depth == 0)
 			{
 				if (!add_node(list,

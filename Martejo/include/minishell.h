@@ -89,12 +89,6 @@ typedef	struct s_btree
 	struct s_btree	*right;
 }	t_btree;
 
-typedef enum {
-    false, // false vaut 0
-    true   // true vaut 1
-} e_bool;
-
-
 typedef enum e_error
 {
 	NOTHING = -1,

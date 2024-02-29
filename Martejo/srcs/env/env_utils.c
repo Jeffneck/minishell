@@ -38,7 +38,7 @@ char	*get_env_value(t_env *env, const char *var, size_t len)
 		{
 			path = ft_strdup(&env->value[len + 1]);
 			if (!path)
-				free_and_exit(1);
+				print_and_exit("Malloc error\n", 1);
 			return (path);
 		}
 		env = env->next;
@@ -71,7 +71,7 @@ char	*env_to_str(t_env *lst)
 
 	env = (char *)malloc((size_all_Value(lst) + 1) * sizeof(char));
 	if (!env)
-		free_and_exit(1);
+		print_and_error("Malloc error\n", 1);
 	i = 0;
 	while (lst)
 	{

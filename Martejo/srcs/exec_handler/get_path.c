@@ -29,9 +29,9 @@ char	*ft_strjoin_pipex(char *s1, char *s2, char *sep)
 	return (dest);
 }
 
-static void	check_path(char  *command, char *path)
+void	check_path(char *command, char *path)
 {
-	DIR		*dir;
+	DIR	*dir;
 
 	dir = NULL;
 	dir = opendir(command);
@@ -44,7 +44,6 @@ static void	check_path(char  *command, char *path)
 		print_path_error(command, 127, 1);
 }
 
-
 char	*check_command_path(char *cmd, char *path)
 {
 	char		*path_cmd;
@@ -54,7 +53,7 @@ char	*check_command_path(char *cmd, char *path)
 		return (NULL);
 	path_cmd = ft_strjoin_pipex(path, cmd, "/");
 	if (!path_cmd)
-		exit (EXIT_FAILURE); // perror_msg("Malloc error");
+		print_and_exit("Malloc error", 1);
 	if (lstat(path_cmd, &stats) == 0)
 	{
 		add_to_garbage(path_cmd, TMP);
@@ -70,18 +69,15 @@ char	**find_path(t_env *env)
 	char	*path;
 	char	**path_split;
 
-	path = get_env_path(env, "PATH", 4);
-	if (!path)
-		exit (EXIT_FAILURE); // perror_msg("Malloc error");
+	path = get_env_value(env, "PATH", 4);
 	if (path && path[0] == 0)
 		return (NULL);
 	path_split = split_gc(path, ':', TMP);
 	if (!path_split)
-		exit (EXIT_FAILURE); // perror_msg("Malloc error");
+		print_and_exit("Malloc error\n", 1);
 	free(path);
 	return (path_split);
 }
-
 
 char	*get_cmd_path(char *cmd, t_env *env)
 {
@@ -92,7 +88,7 @@ char	*get_cmd_path(char *cmd, t_env *env)
 	i = 0;
 	path_env = find_path(env);
 	if (!path_env)
-		print_path_error(cmd, 127, 3); // Path inexistant
+		print_path_error(cmd, 127, 3);
 	while (path_env[i])
 	{
 		exec = check_command_path(cmd, path_env[i]);

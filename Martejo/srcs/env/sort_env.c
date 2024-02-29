@@ -12,6 +12,8 @@
 
 #include "../../include/minishell.h"
 
+/*Refaire le print export*/
+
 int	strlen_2d(char **tab)
 {
 	int		i;
@@ -44,7 +46,7 @@ void	sort_env(char **tab, int len_env)
 			}
 			i++;
 		}
-		len_env--; // a voir si utile
+		len_env--;
 	}
 }
 
@@ -52,8 +54,7 @@ void	print_export(char **tab, t_io fds)
 {
 	size_t	i;
 	size_t	j;
-	size_t size_varname;
-	//char backslash = '\\';
+	size_t	size_varname;
 
 	i = 0;
 	j = 0;
@@ -64,16 +65,11 @@ void	print_export(char **tab, t_io fds)
 		ft_putstr_fd("declare -x ", fds.fd_out);
 		write(fds.fd_out, tab[i], size_varname);
 		write(fds.fd_out, "$\'", 2);
-		while (tab[i][size_varname +j])
+		while (tab[i][size_varname + j])
 		{
 			if (tab[i][size_varname + j] == 27)
-			{
 				write(fds.fd_out, "\\", 1);
-				
-			}
 			write(fds.fd_out, &tab[i][size_varname + j], 1);
-			
-				
 			j++;
 		}
 		write(fds.fd_out, "\'", 1);
@@ -88,13 +84,11 @@ void	print_sorted_env(t_env *env, t_io fds)
 	char	*str_env;
 
 	str_env = env_to_str(env);
-	if (!str_env)
-		return ; //gerer erreur
 	tab = ft_split(str_env, '\n');
-	if (!tab)
-		return ; //gerer erreur et liberation
 	free(str_env);
+	if (!tab)
+		print_and_exit("Malloc error\n", RED, 1);
 	sort_env(tab, strlen_2d(tab));
 	print_export(tab, fds);
-	//liberer tableau 2d;
+	free_char2(tab);
 }

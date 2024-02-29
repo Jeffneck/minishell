@@ -51,8 +51,6 @@ int	search_and_unset(char **value, t_env **env)
 int	unset(char **value, t_env **env)
 {
 	t_env	*tmp;
-	t_env	*curr;
-	t_env	*node;
 
 	if (!(value[1]) || !(*env))
 		return (0);
