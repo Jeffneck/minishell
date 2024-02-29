@@ -11,13 +11,18 @@ void	verify_syntax(t_tknlist *list_tkn)
 
 	curr = list_tkn->head;
 	if (curr->type == AND || curr->type == OR || curr->type == PIPE)
-		exit(EXIT_FAILURE); //err management
+	{
+		ft_printf_fd(2, "bash: syntax error near unexpected token %s", curr->content);
+		free_and_exit(2);
+	}
+//Normalement l'erreur qui suit et geree en amont dans le lexer
+
 	while (curr)
 	{
 		next = curr->next;
 		if (is_operator_tkn(curr->type))
 		{
-			if (!next || is_operator_tkn(next->type))
+			if (!next || is_operator_tkn(next->type)) //bash: syntax error near unexpected token `next->content[0]'  // $? = 2 //err avant exec
 				exit(EXIT_FAILURE); //err management
 		}
 		curr = curr->next;

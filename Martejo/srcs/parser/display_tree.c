@@ -17,7 +17,7 @@ void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int))
 
 void root_first_search(t_btree *tree_el, void (*visit)(t_btree *, int))
 {
-	// ft_printf("depth_first_search\n");
+	// ft_printf("root_first_search\n");
 	static int depth = -1;
 	
 	depth++;
@@ -30,18 +30,7 @@ void root_first_search(t_btree *tree_el, void (*visit)(t_btree *, int))
 	depth--;
 }
 
-// void printNodesDepthOrder(t_btree root, int depth) {
-//     if (root == NULL)
-//         return;
-
-//     printf("Profondeur %d: %d\n", depth, root->data);
-
-//     // Appel récursif pour le sous-arbre gauche et le sous-arbre droit
-//     printNodesDepthOrder(root->left, depth + 1);
-//     printNodesDepthOrder(root->right, depth + 1);
-// }
-
-void display_node(t_btree *tree_el, int depth)
+void display_node(t_btree *tree_el, int depth) //rename display_tree_el
 {
     size_t i;
 

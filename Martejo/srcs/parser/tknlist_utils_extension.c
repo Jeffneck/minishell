@@ -1,45 +1,15 @@
 #include "../../include/minishell.h"
 
-void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace)
+void	add_after_another(t_tknlist	*list, t_token *tkn1, t_token *tkn2) //rename addtkn2_after_tkn1
 {
-	el_toplace->next = el_flag->next;
-	el_flag->next = el_toplace;
-	el_toplace->prev = el_flag;
-	if (el_flag == list->tail)
-		list->tail = el_toplace;
+	tkn2->next = tkn1->next;
+	tkn1->next = tkn2;
+	tkn2->prev = tkn1;
+	if (tkn1 == list->tail)
+		list->tail = tkn2;
 }
 
-//token_utils.c
-int	is_logical_op_tkn(t_tkntype tkntype)
-{
-	if (tkntype == AND || tkntype == OR)
-		return (1);
-	return (0);
-}
-
-int	is_cmd_tkn(t_tkntype tkntype)
-{
-	if (tkntype == WORD || tkntype == ONE_QUOTE || tkntype == TWO_QUOTE)
-		return(1);
-	return (0);
-}
-
-int	is_redir_tkn(t_tkntype tkntype)
-{
-	if (tkntype == IN || tkntype == OUT || tkntype == APPEND)
-		return(1);
-	return (0);
-}
-
-int	is_operator_tkn(t_tkntype tkntype)
-{
-	if (tkntype == PIPE || is_logical_op_tkn(tkntype))
-		return(1);
-	return (0);
-}
-
-
-void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
+void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop) //rename pop_tkn_in_place
 {
 	ft_printf("pop_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
 	if (to_pop == NULL)
@@ -58,17 +28,17 @@ void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop)
     del_one_garbage(to_pop, TKN_LIST);
 }
 
-void	add_tknlst_in_tknlst_after_target(t_tknlist *list, t_token *target_tkn, t_tknlist *list_expnd)
+void	add_tknlst_in_tknlst_after_target(t_tknlist *lst1, t_token *tkn_flag, t_tknlist *lst2) // rename add_tknlst1_inside_tknlst2
 {
-	if (!list || !list->head || !target_tkn || !list_expnd || !list_expnd->head)
+	if (!lst1 || !lst1->head || !tkn_flag || !lst2 || !lst2->head)
 		return ;
-	if (target_tkn == list->tail)
-		list->tail = list_expnd->tail;
-	(list_expnd->tail)->next = target_tkn->next;
-	target_tkn->next = (list_expnd->head);
+	if (tkn_flag == lst1->tail)
+		lst1->tail = lst2->tail;
+	(lst2->tail)->next = tkn_flag->next;
+	tkn_flag->next = (lst2->head);
 }
 
-void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2)
+void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2) //rename swap_tkns_in_tknlist
 {
     t_token *tmp_prev;
 
@@ -102,21 +72,4 @@ size_t	tknlst_size(t_tknlist *tknlst)
 		i++;
 	}
 	return (i);
-}
-
-void	display_tknlist(t_tknlist *list)
-{
-		t_token *curr;
-
-		curr = list->head;
-		while (curr)
-		{
-			printf("\n--NODE--\n");
-			printf("type = %d\n", curr->type);
-			printf("content =%s\n", curr->content);
-			printf("link =%d\n", curr->link);
-			printf("index =%d\n", (unsigned int) curr->index);
-			printf("priority =%d\n\n", curr->priority);
-			curr = curr->next;
-		}
 }
