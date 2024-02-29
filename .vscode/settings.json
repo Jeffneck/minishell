@@ -13,6 +13,7 @@
 		"string": "c",
 		"cstdlib": "c",
 		"optional": "c",
-		"system_error": "c"
+		"system_error": "c",
+		"stdbool.h": "c"
 	}
 }

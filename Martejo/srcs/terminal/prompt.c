@@ -12,20 +12,20 @@
 
 #include "../../include/minishell.h"
 
-
-// Attention faire peux etre en sorte que get_env_path utilise garbage ainsi que le strjoin
-// En cas d'erreur de malloc free et exit le programme
+/*Attention faire peux etre en sorte que get_env_path utilise 
+garbage ainsi que le strjoin
+En cas d'erreur de malloc free et exit le programme*/
 char	*create_prompt(t_mini *mini)
 {
-	// ft_printf("create_prompt pid = %d\n", (int) getpid());
 	char	*home;
 	char	*prompt;
 	int		home_len;
+
 	home = getenv("HOME");
 	prompt = get_env_path(mini->env, "PWD", 3);
 	if (!prompt)
 		prompt = "Minishell";
-	if (home && ft_strnstr(prompt, home, ft_strlen(home)))  //si on est dans le home, on remplace le chemin par ~$
+	if (home && ft_strnstr(prompt, home, ft_strlen(home)))
 	{
 		home_len = ft_strlen(home);
 		if (prompt[0] == '/' && prompt[1] == '/')
@@ -40,5 +40,3 @@ char	*create_prompt(t_mini *mini)
 	prompt = ft_strjoin(prompt, "$ ");
 	return (prompt);
 }
-
-

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/22 13:21:17 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:31:39 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,18 @@
 # include <sys/types.h>
 # include <dirent.h>
 # include <fcntl.h>
+# include <stdbool.h>
+# include <sys/stat.h>
+
+/*Color Definition*/
+# define RED     "\x1b[31;1m"
+# define GREEN   "\x1b[32m"
+# define YELLOW  "\x1b[33m"
+# define BLUE    "\x1b[34m"
+# define MAGENTA "\x1b[35m"
+# define CYAN    "\x1b[36m"
+# define RESET   "\x1b[0m"
+
 
 extern int g_status;
 
@@ -76,12 +88,6 @@ typedef	struct s_btree
 	struct s_btree	*left;
 	struct s_btree	*right;
 }	t_btree;
-
-typedef enum {
-    false, // false vaut 0
-    true   // true vaut 1
-} e_bool;
-
 
 typedef enum e_error
 {
@@ -181,6 +187,9 @@ int	ft_export(char **args, t_env **envt, t_io fds);
 
  /**Unset**/
 int	unset(char **value, t_env **env);
+
+/**Exit**/
+int	builtin_exit(t_mini *mini, char **cmds);
 
 /**env_handler**/
 t_env	*init_env(char **env_array);
@@ -300,5 +309,8 @@ void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
 t_mini	*singleton_mini(t_mini *address_mini); //placer ailleurs que dans le main
+
+/**Utils**/
+void	print_message(char *msg, char *color, int exit_status);
 
 #endif

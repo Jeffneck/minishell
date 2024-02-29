@@ -6,38 +6,11 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:17:17 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 11:00:29 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:36:08 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
-
-
-//errno contient le code d'erreur de chdir en cas d'echec
-//getcwd renvoie le working directory du processus actuel, utile pour le minishell
-
-
-// degager cette fonction et la foutre dans dossier env utils
-int	is_in_env(t_env *env, char *args) //nom bizarre
-{
-	char	var_name[PATH_MAX];
-	char	env_name[PATH_MAX];
-
-	get_env_name_var(var_name, args);
-	while (env)
-	{
-		get_env_name_var(env_name, env->value);
-		if (ft_strcmp(var_name, env_name) == 0)
-		{
-			printf("var name = %s\nenv_name = %s\n", var_name, env_name);
-			del_one_garbage(env->value, ENV);
-			env->value = ft_strndup(args, ft_strlen(args), ENV);
-			return (1);
-		}
-		env = env->next;
-	}
-	return (0);
-}
 
 int	update_oldpwd(t_env **env)
 {
@@ -45,12 +18,18 @@ int	update_oldpwd(t_env **env)
 	char	*oldpwd;
 
 	if (getcwd(cwd, PATH_MAX) == NULL)
-		return (-1);
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return (1);
+	}
 	oldpwd = ft_strjoin("OLDPWD=", cwd);
 	if (!oldpwd)
-		return (-1);
-	if (is_in_env(*env, oldpwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
-		env_add(oldpwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
+	{
+		ft_putstr_fd("Minishell: Malloc error\n", 2);
+		free_and_exit(1);
+	}
+	if (is_in_env(*env, oldpwd) == 0)
+		env_add(oldpwd, env, 0);
 	return (0);
 }
 
@@ -60,12 +39,18 @@ int	update_pwd(t_env **env)
 	char	*pwd;
 
 	if (getcwd(cwd, PATH_MAX) == NULL)
-		return (-1);
+	{
+		ft_putstr_fd(strerror(errno), 2);
+		return (1);
+	}
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
-		return (-1);
-	if (is_in_env(*env, pwd) == 0) // Verifie et remplace par la new var si la variable est deja presente dans l'env
-		env_add(pwd, env, 0); // sinon si var n'est pas present dans env on rajoute 
+	{
+		ft_putstr_fd("Minishell: Malloc error\n", 2);
+		free_and_exit(1);
+	}
+	if (is_in_env(*env, pwd) == 0)
+		env_add(pwd, env, 0);
 	return (0);
 }
 
@@ -76,42 +61,42 @@ int	go_to_path(t_env **env)
 
 	env_path = NULL;
 	update_oldpwd(env);
-	env_path = get_env_path(*env, "HOME=", 5); // remplacer par notre fonction
+	env_path = get_env_path(*env, "HOME=", 4);
 	if (!env_path)
-	{
-		printf("erreur malloc");
-		return (-1);
-	}
+		free_and_exit(1);
 	else if (ft_strcmp(env_path, "") == 0)
 	{
-		printf("bash: cd: HOME not set\n");
+		ft_putstr_fd("Minishell: cd: HOME not set\n", 2);
 		return (1);
 	}
-	//afficher erreur comme quoi HOME n'existe pas et return erreur
-	ret = chdir(env_path); //recuperer erreur de chdir
+	ret = chdir(env_path);
 	if (ret)
 	{
-		ft_printf("%s\n", strerror(errno));
-		exit(EXIT_FAILURE);
+		ft_putstr_fd(strerror(errno), 2);
+		return (free(env_path), 1);
 	}
 	update_pwd(env);
-	free(env_path); //liberer ce buffer;
-	return (ret);
+	return (free(env_path), ret);
 }
+
 int	cd(char **cmds, t_env **env)
 {
 	int	ret_cd;
-
 
 	if (cmds[1] == NULL)
 		return (go_to_path(env));
 	else
 	{
-		update_oldpwd(env);
+		if (update_oldpwd(env) != 0)
+			return (1);
 		ret_cd = chdir(cmds[1]);
-		update_pwd(env);
 		if (ret_cd < 0)
-			return (-1); // gerer erreur retour chdir
+		{
+			ft_putstr_fd(strerror(errno), 2);
+			return (1);
+		}
+		if (update_pwd(env) != 0)
+			return (1);
 	}
 	return (ret_cd);
 }

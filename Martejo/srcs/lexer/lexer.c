@@ -58,7 +58,6 @@ void	handle_token(char *buffer, t_tknlist *list, t_tkntype type, int *i)
 t_tknlist	*lexer(char *buffer)
 {
 	int			i;
-	// int			flag;
 	t_tkntype	type;
 	t_tknlist	*list;
 
@@ -66,7 +65,6 @@ t_tknlist	*lexer(char *buffer)
 		return (NULL);
 	init_list(&list);
 	i = 0;
-	// flag = 0;
 	while (buffer[i])
 	{
 		if (!ft_isspace(buffer[i]))

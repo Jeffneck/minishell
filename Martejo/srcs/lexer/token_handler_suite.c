@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_handler_suite.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:20:40 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 11:19:53 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:08:25 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
