@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:35:30 by hanglade          #+#    #+#             */
-/*   Updated: 2024/01/29 15:14:56 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/29 10:34:59 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,16 @@ void	ft_puthexa_upper(unsigned int nbr, size_t *count_char);
 void	ft_puthexa_lower(unsigned int nbr, size_t *count_char);
 void	ft_putnbr_unsigned(unsigned int nbr, size_t *count_char);
 int		ft_printf(const char *str, ...);
+
+/**ft_Printf_fd**/
+void	ft_putstr_pf_fd(int fd, char *s, size_t *count_char);
+void	ft_putchar_pf_fd(int fd, char c, size_t *count_char);
+void	ft_putnbr_pf_fd(int fd, int nbr, size_t *count_char);
+void	print_ptr_addr_fd(int fd, void *ptr, size_t *count_char);
+void	ft_puthexa_upper_fd(int fd, unsigned int nbr, size_t *count_char);
+void	ft_puthexa_lower_fd(int fd, unsigned int nbr, size_t *count_char);
+void	ft_putnbr_unsigned_fd(int fd, unsigned int nbr, size_t *count_char);
+int		ft_printf_fd(int fd, const char *str, ...);
 
 /**garbage_collector**/
 

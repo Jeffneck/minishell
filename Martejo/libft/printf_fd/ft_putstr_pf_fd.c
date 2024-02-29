@@ -1,19 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putchar_pf.c                                    :+:      :+:    :+:   */
+/*   ft_putstr_pf_fd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/10 10:45:18 by gemartel          #+#    #+#             */
-/*   Updated: 2023/12/07 15:15:39 by gemartel         ###   ########.fr       */
+/*   Created: 2023/11/10 10:47:35 by gemartel          #+#    #+#             */
+/*   Updated: 2024/02/29 10:32:09 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../libft.h"
 
-void	ft_putchar_pf(char c, size_t *count_char)
+void	ft_putstr_pf_fd(int fd, char *s, size_t *count_char)
 {
-	write(1, &c, 1);
-	(*count_char)++;
+	size_t	i;
+
+	if (!s)
+		s = "(null)";
+	i = 0;
+	while (s[i])
+	{
+		ft_putchar_pf_fd(fd, s[i], count_char);
+		i++;
+	}
 }

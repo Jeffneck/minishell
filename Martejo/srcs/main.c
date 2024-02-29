@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:04:25 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 16:23:02 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/29 10:15:23 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,15 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	
+	if (argc > 1)
+		exit(EXIT_FAILURE);//print_message(ARGS_ERR_MSG, RED, EXIT_FAILURE);
+	(void) argv;
+	if (!envp[0])
+		exit(EXIT_FAILURE);//print_message(UNAVAILABLE_ENV, RED, EXIT_FAILURE);
 	mini.env = init_env(envp);
 	mini.io_global = (t_io){0, 1};
 	mini.last_gstatus = 0;
-	singleton_mini(&mini);
+	singleton_mini(&mini);//inutilise maintenant ?
 	prompt_loop(&mini);
 	return (0);
 }

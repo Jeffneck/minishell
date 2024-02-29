@@ -69,6 +69,13 @@ SRCS	=	\
 			printf/ft_putptr_pf.c\
 			printf/ft_putstr_pf.c\
 			\
+			printf_fd/ft_printf_fd.c\
+			printf_fd/ft_putchar_pf_fd.c\
+			printf_fd/ft_puthexa_fd.c\
+			printf_fd/ft_putnbr_pf_fd.c\
+			printf_fd/ft_putptr_pf_fd.c\
+			printf_fd/ft_putstr_pf_fd.c\
+			\
 			gc/add_to_garbage.c \
 			gc/calloc_gc.c \
 			gc/clear_garbage.c \
