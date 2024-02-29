@@ -140,6 +140,14 @@ t_token	*create_node(t_tkntype typed, char *value, int linked);
 int			add_node(t_tknlist *list, t_token *node);
 void		init_list(t_tknlist **list);
 
+
+/**verify input**/
+int		is_unexpected_char(char c);//
+void	display_syntax_err(char *flag);//
+int		is_double_operators(char *str);//
+int		research_syntax_err(char *flag);//
+void	verify_input_syntax(char *input);
+
 /**lexer**/
 t_tknlist	*lexer(char *buffer);
 int			detect_type(const char c, const char c2);

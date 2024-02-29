@@ -20,9 +20,10 @@ int		is_double_operators(char *str)
 {
 	if((str[0] == '&' || str[0] == '|') && str[1] == str[0])
 		return (1);
+	return (0);
 }
 
-void	research_syntax_err(char *flag)
+int	research_syntax_err(char *flag)
 {
 	size_t	i;
 
@@ -32,11 +33,12 @@ void	research_syntax_err(char *flag)
 	if(is_unexpected_char(flag[i]))
 	{
 		display_syntax_err(flag);
-		free_and_exit(2);
+		return (2);
 	}
+	return (0);
 }
 
-void	verify_input_syntax(char *input, char c_curr)
+void	verify_input_syntax(char *input)
 {
 	size_t	i;
 	int		nb_chars;
@@ -55,7 +57,11 @@ void	verify_input_syntax(char *input, char c_curr)
 			flag = &input[i + 1];
 		else if(is_operator_char(input[i]))
 			flag = &input[i];
-		research_syntax_err(flag);
+		if(research_syntax_err(flag) == 2)
+		{
+			g_status = 2;
+			return ;
+		}
 	}
 }
 

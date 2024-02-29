@@ -31,6 +31,7 @@ void	clear_ctrl_c(int *stdin_cpy, int *first_read, char **line_read)
 {
 	if (*line_read)
 		free(*line_read);
+	*line_read = NULL;
 	dup2(*stdin_cpy, STDIN_FILENO);
 	close(*stdin_cpy);
 	if (*first_read == 1)
@@ -62,8 +63,15 @@ void	sig_handler(int sigcode)
 void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 {
 	add_history(line_read);
+	verify_input_syntax(line_read);
+	if (g_status != 0);
+		return;
 	mini->tkn_lst = lexer(line_read);
+	if (g_status != 0);
+		return;
 	mini->b_tree = parser(mini);
+	if (g_status != 0);
+		return;
 	browse_tree(mini, mini->b_tree, mini->io_global);
 	dup2(*stdin_cpy, STDIN_FILENO);
 	close(*stdin_cpy);
