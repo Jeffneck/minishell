@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 15:17:17 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/14 12:15:29 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/29 11:00:29 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 
 // degager cette fonction et la foutre dans dossier env utils
-int	is_in_env(t_env *env, char *args)
+int	is_in_env(t_env *env, char *args) //nom bizarre
 {
 	char	var_name[PATH_MAX];
 	char	env_name[PATH_MAX];
