@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:01:46 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/13 10:47:52 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/29 14:35:50 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,33 +47,6 @@ void	sort_env(char **tab, int len_env)
 		len_env--; // a voir si utile
 	}
 }
-
-// void	print_export(char **tab, t_io fds)
-// {
-// 	size_t	i;
-// 	size_t	j;
-// 	size_t len_varname;
-
-// 	i = 0;
-// 	j = 0;
-// 	len_varname = ft_strlen_until(tab[i], '=');
-// 	while (tab[i])
-// 	{
-// 		j = 0;
-// 		ft_putstr_fd("declare -x ", fds.fd_out);
-// 		write(fds.fd_out, &tab[i], );
-
-// 		while (tab[i][j])
-// 		{
-// 			write(fds.fd_out, &tab[i][j++], 1);
-// 			if (tab[i][j - 1] == '=')
-// 				write(fds.fd_out, "\'", 1);
-// 		}
-// 		write(fds.fd_out, "\'", 1);
-// 		write(fds.fd_out, "\n", 1);
-// 		i++;
-// 	}
-// }
 
 void	print_export(char **tab, t_io fds)
 {

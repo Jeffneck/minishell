@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:40:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 10:28:12 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/02/29 12:36:45 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,12 @@
 int	size_cmds(char **cmds)
 {
 	int	size;
-	
+
 	size = 0;
 	while (cmds[size])
 		size++;
 	return (size);
 }
-
 
 int	echo(char **cmds, t_io fds)
 {
@@ -47,5 +46,5 @@ int	echo(char **cmds, t_io fds)
 	}
 	if (n_option == 0)
 		write(fds.fd_out, "\n", 1);
-	return (0); //status code tout va bien, a voir si echo peu renvoyer 1
+	return (0);
 }

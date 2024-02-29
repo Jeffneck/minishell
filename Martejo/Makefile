@@ -21,6 +21,7 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/builtins/pwd.c \
 		srcs/builtins/unset.c \
 		srcs/builtins/export.c \
+		srcs/builtins/exit.c \
 		\
 		srcs/env/env_handler.c \
 		srcs/env/env_utils.c \

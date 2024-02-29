@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_handler_suite.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:20:40 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 11:19:53 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/02/29 13:08:25 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,16 @@ int	parenthese_handler(char *buffer, t_tknlist *list)
 	while (buffer[i])
 	{
 		if (buffer[i] == '(')
+		{
+			if (buffer[i + 1] && buffer[i + 1] == '|' || buffer[i + 1] == '&')
+				// Gerer erreur
 			depth++;
+		}
 		else if (buffer[i] == ')')
 		{
 			depth--;
+			if (buffer[i - 1] && buffer[i - 1] == '|' || buffer[i - 1] == '&')
+				// Gerer erreur
 			if (depth == 0)
 			{
 				if (!add_node(list,
