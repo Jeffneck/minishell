@@ -24,10 +24,12 @@ void	set_token_index(t_token	*curr)
 t_btree	*parser(t_mini *mini)
 {
 	ft_printf("parser\n");
-	
+	if (g_status != 0);
+		return (NULL);
 	ft_printf("TOKENS LEXED BEFORE PARSING  ///////////////////////////////////\n\n");
 	display_tknlist(mini->tkn_lst);//
-	verify_syntax(mini->tkn_lst);
+	verify_syntax(mini->tkn_lst->tail);
+	if (g_status != 0)
 	reducer(mini->tkn_lst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
 	expander(mini, mini->tkn_lst, mini->env);
 	rearrange_cmd_redir_order(mini->tkn_lst);

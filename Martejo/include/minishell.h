@@ -252,7 +252,7 @@ int	s1_is_s2_suffix(char *s1, char *s2);
 
 t_btree	*parser(t_mini *mini);
 
-void	verify_syntax(t_tknlist *list_tkn);
+void	verify_last_tkn(t_token *tail);
 
 int	type_need_reducing(t_tkntype type);
 void	reducer(t_token	*tkn) ;

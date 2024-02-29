@@ -134,7 +134,7 @@ int traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	ft_printf("browse_tree\n");
-	if(!tree_el || g_status == 130)
+	if(!tree_el || g_status != 130) // attention la f continue meme si g_status != 0;
 		return;
 	if (tree_el->type == AND || tree_el->type == OR)
 		traverse_logical_op_node(mini,tree_el, io_inherited);

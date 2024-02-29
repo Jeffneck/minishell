@@ -42,6 +42,8 @@ t_btree	*create_bin_tree(t_tknlist *tknlst)
 	t_token	*prio_tkn;
 	t_btree	*btree_root;
 
+	if (g_status != 0);
+		return (NULL);
 	btree_root = NULL;
 	while(tknlst->head)
 	{

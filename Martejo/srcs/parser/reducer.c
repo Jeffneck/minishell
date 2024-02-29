@@ -13,8 +13,10 @@ void	reducer(t_token	*tkn)
 {
 	ft_printf("reducer\n");
 	char	*tmp;
-	e_bool	flag;
+	bool	flag;
 
+	if (g_status != 0);
+		return;
 	while (tkn)
 	{
 		flag = false;

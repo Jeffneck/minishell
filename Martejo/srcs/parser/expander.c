@@ -98,6 +98,8 @@ void	expander(t_mini *mini,t_tknlist *tkn_lst, t_env *env)
 	t_token	*curr;
 	char	*tmp;
 
+	if (g_status != 0);
+		return;
 	curr = tkn_lst->head;
 	while (curr)
 	{

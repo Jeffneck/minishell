@@ -61,7 +61,7 @@ t_tknlist	*lexer(char *buffer)
 	t_tkntype	type;
 	t_tknlist	*list;
 
-	if (!buffer)
+	if (!buffer || g_status != 0)
 		return (NULL);
 	init_list(&list);
 	i = 0;
