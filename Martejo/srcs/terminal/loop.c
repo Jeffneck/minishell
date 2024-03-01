@@ -20,6 +20,10 @@ void	free_all(char ***buffer, char **prompt)
 	clear_garbage(ENV, free);
 }*/
 
+
+/*Probleme a regler*/
+// env | sort | grep -v SHLVL | grep -v ^_  | > out2
+//Wildcard bug  echo *.md 
 void	clear_loop(void)
 {
 	clear_garbage(TMP, free);
@@ -63,7 +67,7 @@ void	sig_handler(int sigcode)
 void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 {
 	add_history(line_read);
-	verify_input_syntax(line_read);
+	//verify_input_syntax(line_read);
 	mini->tkn_lst = lexer(line_read);
 	mini->b_tree = parser(mini);
 	browse_tree(mini, mini->b_tree, mini->io_global);

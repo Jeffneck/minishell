@@ -32,7 +32,7 @@ int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 		return (0);
 	if (!str_contains_all_subs_ordered(file, subs_needed))
 		return (0);
-	if (to_expand[ft_strlen(to_expand) - 1] != '*' && !s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
+	if (to_expand[ft_strlen(to_expand) - 1] != '*' && s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
 		return (0);
 	return (1);
 }

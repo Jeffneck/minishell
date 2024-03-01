@@ -183,8 +183,8 @@ int	s1_is_s2_suffix(char *s1, char *s2)
 	size_t	len_s2;
 	size_t	len_s1;
 	size_t	suffix_pos;
-	ft_printf("s1 = %s\t", s1);
-	ft_printf("s2 = %s\n", s2);
+	// ft_printf("s1 = %s\t", s1);
+	// ft_printf("s2 = %s\n", s2);
 	if (!s1 || !s2)
 		return (0);
 	if (!s1[0])

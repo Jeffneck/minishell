@@ -47,7 +47,7 @@ t_btree	*create_bin_tree(t_tknlist *tknlst)
 	btree_root = NULL;
 	while(tknlst->head)
 	{
-		if(tknlst->head->used_flag == 1)
+		if(tknlst->head->used_flag == 1 || tknlst->head->content[0] == 0)
 		{
 			pop_token_in_place(tknlst, tknlst->head);
 			continue;

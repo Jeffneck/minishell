@@ -9,7 +9,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
     if (pipe(fd_pipe) == -1)
-        exit(EXIT_FAILURE);
+		print_and_exit("Minishell: pipe error\n", RED, 1);
     ft_printf("> ");
     line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)

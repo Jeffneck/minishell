@@ -80,7 +80,7 @@ char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_ls
 	i = 0;
 	while(tkn->content[i])
 	{
-		if (tkn->content[i] == '$' && tkn->content[i + 1])
+		if (tkn->content[i] == '$' && tkn->content[i + 1] && ft_isspace(tkn->content[i + 1]) == 0) // add
 		{
 			new = expand_dollar(mini, env, tkn->content, i);
 			break ;

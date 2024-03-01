@@ -79,7 +79,7 @@ int	cd(char **cmds, t_env **env)
 		ret_cd = chdir(cmds[1]);
 		if (ret_cd < 0)
 		{
-			ft_putstr_fd(strerror(errno), 2);
+			ft_printf_fd(2, "Minishell: cd: %s: %s\n", cmds[1], strerror(errno));
 			return (1);
 		}
 		if (update_pwd(env) != 0)

@@ -55,8 +55,8 @@ void	verify_input_syntax(char *input)
 	{
 		if (is_double_operators(&input[i]))
 			flag = &input[i + 1];
-		else if (is_operator_char(input[i]))
-		 	flag = &input[i]; // a gerer 
+		// else if (is_operator_char(input[i]))
+		//  	flag = &input[i]; // a gerer 
 		if (research_syntax_err(flag) == 2)
 		{
 			g_status = 2;

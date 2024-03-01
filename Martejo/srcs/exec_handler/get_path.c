@@ -35,7 +35,8 @@ void	check_path(char *command, char *path)
 
 	dir = NULL;
 	dir = opendir(command);
-	if (dir)
+	
+	if (dir && (command[0] == '.' || command[ft_strlen(command) - 1] == '/'))
 	{
 		closedir(dir);
 		print_path_error(command, 126, 4);
