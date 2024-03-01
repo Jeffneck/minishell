@@ -1,7 +1,7 @@
 #include "../../include/minishell.h"
 void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("traverse_heredoc_node\n");
+	//ft_printf("traverse_heredoc_node\n");
     
 	int fd_pipe[2];
     char *line;
@@ -14,13 +14,13 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
     line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
 	while (line)
 	{
-		ft_printf("line = %s\n", line);
+		//ft_printf("line = %s\n", line);
 		if (g_status == 130)
 			break ;
 		// Vérifie si le délimiteur a été entré
         if (ft_strlen(line) > 0 && ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
-			ft_printf("line break\n");
+			//ft_printf("line break\n");
 			free(line);
             break;
 		}
@@ -29,7 +29,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
     	free(line);
 	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
     }
-	ft_printf("fin heredoc\n");
+	//ft_printf("fin heredoc\n");
     close(fd_pipe[FD_WRITE]);
     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
     if (io_inherited.fd_in != 0)
@@ -41,7 +41,7 @@ void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("traverse_redir_input_node\n");
+//	ft_printf("traverse_redir_input_node\n");
 	t_io	io_transmitted;
 	
 	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
@@ -56,7 +56,7 @@ void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited
 
 void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("traverse_redir_output_node\n");
+	//ft_printf("traverse_redir_output_node\n");
 	t_io	io_transmitted;
 	
 	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
@@ -74,7 +74,7 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 
 void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("traverse_pipe_node\n");
+	//ft_printf("traverse_pipe_node\n");
 	int	fd_pipe[2];
 	t_io	io_transmitted;
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
@@ -92,7 +92,7 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("traverse_logical_op_node\n");
+	//ft_printf("traverse_logical_op_node\n");
 	browse_tree(mini, tree_el->left, io_inherited);
 	if ((tree_el->type == AND && g_status == 0) || (tree_el->type == OR && g_status != 0))
 		browse_tree(mini, tree_el->right, io_inherited);
@@ -110,7 +110,7 @@ int traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	//process child
 	if (pid == 0)
 	{
-		ft_printf("JE SUIS L ENFANT\n");//
+		//ft_printf("JE SUIS L ENFANT\n");//
 		char	*new_prompt;
 		new_prompt = strdup_gc(tree_el->cmds[0], TMP);
 		clear_garbage(B_TREE, free);
@@ -125,7 +125,7 @@ int traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
     	exit_status = WEXITSTATUS(status);
 	else
 	{
-		ft_printf("pas de retour status\n"); // voir si on peut creer ce cas
+		//ft_printf("pas de retour status\n"); // voir si on peut creer ce cas
 		return (1);
 	}
 	return (exit_status);
@@ -133,8 +133,8 @@ int traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 
 void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
-	ft_printf("browse_tree\n");
-	if(!tree_el || g_status != 130) // attention la f continue meme si g_status != 0;
+	//ft_printf("browse_tree\n");
+	if(!tree_el || g_status == 130) // attention la f continue meme si g_status != 0;
 		return;
 	if (tree_el->type == AND || tree_el->type == OR)
 		traverse_logical_op_node(mini,tree_el, io_inherited);

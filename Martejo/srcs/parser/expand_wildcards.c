@@ -39,7 +39,7 @@ int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 
 void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand)
 {
-	ft_printf(" lstadd_compatible_cwd_files\n");
+	//ft_printf(" lstadd_compatible_cwd_files\n");
 	
 	DIR *dir;
     struct dirent *entry;
@@ -68,7 +68,7 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 
 void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst) //recupe la fonction du test
 {
-	ft_printf(" expand_wildcard\n");
+	//ft_printf(" expand_wildcard\n");
 	//splitter la str initiale
 	t_token	*tkn_to_expand;
 	tkn_to_expand = *p_tkn_to_expand;

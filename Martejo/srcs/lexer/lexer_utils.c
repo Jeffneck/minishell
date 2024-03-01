@@ -12,7 +12,6 @@
 
 #include "../../include/minishell.h"
 
-//A rajouter dans libft
 char	*ft_strndup(char *buffer, int len, t_id_gc id)
 {
 	char	*new;
@@ -23,8 +22,7 @@ char	*ft_strndup(char *buffer, int len, t_id_gc id)
 		i++;
 	new = malloc_gc((i + 1) * sizeof(char), id);
 	if (!new)
-		return (NULL);
-		//error_handler_lexer(ENV, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	i = 0;
 	while (buffer[i] && i < len)
 	{
@@ -46,8 +44,9 @@ int	is_operator(const char c, const char c2)
 	return (0);
 }
 
-void	detect_error_type(const char c)
+int	detect_error_type(const char c)
 {
 	if (c == ')' || c == ';' || c == '\\')
-		error_handler_lexer(1, "Error of type.\n");
+		return (error_handler_lexer(TKN_LIST, WRONG_CHAR_ERR_MSG));
+	return (0);
 }

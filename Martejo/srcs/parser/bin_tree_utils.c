@@ -49,7 +49,7 @@ char	**strdup_in_newchar2(char *delimiter)
 
 char	**extract_cmd_argv(t_token *curr)
 {
-	ft_printf("pick_args\n");
+	//ft_printf("pick_args\n");
 	size_t	argc;
 	char	**argv;
 
@@ -73,7 +73,7 @@ t_token	*find_prior_token(t_token *curr)
 			target = curr;
 		curr = curr->next;
 	}
-	ft_printf("find_prior_token, target = %s\n", target->content);
+	//ft_printf("find_prior_token, target = %s\n", target->content);
 	return (target);
 }
 

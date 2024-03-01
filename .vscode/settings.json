@@ -14,6 +14,11 @@
 		"cstdlib": "c",
 		"optional": "c",
 		"system_error": "c",
-		"stdbool.h": "c"
+		"stdbool.h": "c",
+		"deque": "c",
+		"unordered_map": "c",
+		"vector": "c",
+		"string_view": "c",
+		"initializer_list": "c"
 	}
 }

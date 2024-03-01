@@ -3,7 +3,7 @@
 //syntaxic_tree.c
 t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index)
 {
-	ft_printf("place_in_tree\n");
+	//ft_printf("place_in_tree\n");
 	if (tree_el == NULL)
 		return (toplace);
 	// if (tree_el->type == PARENTHESE)//
@@ -17,7 +17,7 @@ t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index)
 
 t_btree	*btree_new(t_token	*tkn_toconvert)
 {
-	ft_printf("btree_new\n");
+	//ft_printf("btree_new\n");
 	t_btree		*tree_el;
 
 	tkn_toconvert->used_flag = 1;
@@ -38,11 +38,11 @@ t_btree	*btree_new(t_token	*tkn_toconvert)
 
 t_btree	*create_bin_tree(t_tknlist *tknlst)
 {
-	ft_printf("create_bin_tree\n");
+	//ft_printf("create_bin_tree\n");
 	t_token	*prio_tkn;
 	t_btree	*btree_root;
 
-	if (g_status != 0);
+	if (g_status != 0)
 		return (NULL);
 	btree_root = NULL;
 	while(tknlst->head)

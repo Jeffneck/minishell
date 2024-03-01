@@ -21,7 +21,7 @@ char	*strcut_gc(char const *str, size_t cut_begin, size_t cut_end, int id_gc)
 
 char	*ft_strcut(char const *str, size_t cut_begin, size_t cut_end)
 {
-	ft_printf("ft_strcut\n");
+	//ft_printf("ft_strcut\n");
 	char	*dest;
 	int		len; //size_t au cas ou super longue chaine"
 

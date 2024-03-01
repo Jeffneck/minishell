@@ -29,15 +29,15 @@ int	parenthese_handler(char *buffer, t_tknlist *list)
 			if (depth == 0)
 			{
 				if (!add_node(list,
-						create_node(PARENTHESIS, ft_strndup(buffer, i + 1, TKN_LIST), 0)))
-					error_handler_lexer(1, "Malloc error\n");
+						create_node(PARENTHESIS,
+							ft_strndup(buffer, i + 1, TKN_LIST), 0)))
+					print_and_exit(MALLOC_ERR_MSG, RED, 1);
 				return (i + 1);
 			}
 		}
 		i++;
 	}
-	error_handler_lexer(1, "Parenthesis must be closed.\n");
-	return (0);
+	return (error_handler_lexer(TKN_LIST, PARENTHESIS_ERR_MSG));
 }
 
 int	double_quote_handler(char *buffer, t_tknlist *list)
@@ -54,18 +54,18 @@ int	double_quote_handler(char *buffer, t_tknlist *list)
 		i++;
 	}
 	if (buffer[i] == '\0')
-		error_handler_lexer(1, "Double quotes must be closed.\n");
+		return (error_handler_lexer(TKN_LIST, QUOTES_ERR_MSG));
 	if (ft_isspace(buffer[i + 1]) == 0)
 		link = 1;
 	if (!add_node(list,
 			create_node(TWO_QUOTE, ft_strndup(buffer, i + 1, TKN_LIST), link)))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (i + 1);
 }
 
 int	operator_handler(char *buffer, t_tknlist *list, t_tkntype type)
 {
 	if (!add_node(list, create_node(type, ft_strndup(buffer, 2, TKN_LIST), 0)))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (2);
 }

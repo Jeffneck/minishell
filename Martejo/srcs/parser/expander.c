@@ -18,7 +18,7 @@ int	is_charset_env(char c)
 
 char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start) //stopper a wildcard et espaces
 {
-	ft_printf(" expand_dollar\n");
+	//ft_printf(" expand_dollar\n");
 	
 	char	*var;
 	char	*expansion;
@@ -44,17 +44,17 @@ char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start) //stopper
 		var = calloc_gc(len_var + 1, sizeof(char), TMP);
 		if (!var)
 			exit(EXIT_FAILURE); //err man
-		ft_printf("start = %c , len_var = %u\n", str[start], (unsigned int)len_var); //
+		//ft_printf("start = %c , len_var = %u\n", str[start], (unsigned int)len_var); //
 		ft_memcpy(var, &str[start + 1], len_var); //valider les + 1 - 1
-		ft_printf("var = %s\n", var);
-		expansion = get_env_path(env, var, len_var );//valider les + 1 - 1 et gestion du signe = (GEOFFREY comprend)
-		ft_printf("expansion = %s\n", expansion);
+		//ft_printf("var = %s\n", var);
+		expansion = get_env_value(env, var, len_var );//valider les + 1 - 1 et gestion du signe = (GEOFFREY comprend)
+		//ft_printf("expansion = %s\n", expansion);
 		if (!expansion)
 			exit(EXIT_FAILURE); //err man
 		// apply_expansion(str, expansion);
 		new = replace_substr(str, expansion, start, len_var + 1); //valider les + 1 - 1
 		
-		ft_printf("new = %s\n", new);
+		//ft_printf("new = %s\n", new);
 		if (!new)
 			exit(EXIT_FAILURE); //err man
 		add_to_garbage(new, TKN_LIST);
@@ -80,7 +80,7 @@ char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_ls
 	i = 0;
 	while(tkn->content[i])
 	{
-		if (tkn->content[i] == '$')
+		if (tkn->content[i] == '$' && tkn->content[i + 1])
 		{
 			new = expand_dollar(mini, env, tkn->content, i);
 			break ;
@@ -94,11 +94,11 @@ char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_ls
 
 void	expander(t_mini *mini,t_tknlist *tkn_lst, t_env *env)
 {
-	ft_printf(" expander\n");
+	//ft_printf(" expander\n");
 	t_token	*curr;
 	char	*tmp;
 
-	if (g_status != 0);
+	if (g_status != 0)
 		return;
 	curr = tkn_lst->head;
 	while (curr)

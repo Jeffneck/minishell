@@ -20,7 +20,7 @@ t_token	*create_node(t_tkntype typed, char *value, int linked)
 		return (NULL);
 	node = malloc_gc(sizeof(t_token), TKN_LIST);
 	if (!node)
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	node->content = value;
 	node->type = typed;
 	node->link = linked;
@@ -54,7 +54,7 @@ void	init_list(t_tknlist **list)
 {
 	(*list) = malloc_gc(sizeof(t_tknlist), TKN_LIST);
 	if (!(*list))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	(*list)->head = NULL;
 	(*list)->tail = NULL;
 }

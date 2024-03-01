@@ -69,9 +69,12 @@ t_tknlist	*lexer(char *buffer)
 	{
 		if (!ft_isspace(buffer[i]))
 		{
-			detect_error_type(buffer[i]);
+			if (detect_error_type(buffer[i]) == -1)
+				break ;
 			type = detect_type(buffer[i], buffer[i + 1]);
 			handle_token(&buffer[i], list, type, &i);
+			if (g_status == 1)
+				break ;
 		}
 		else
 			i++;

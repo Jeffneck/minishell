@@ -12,11 +12,11 @@
 
 #include "../../include/minishell.h"
 
-
 int	is_special_char(char c)
 {
 	return (c == ';' || c == '&' || c == '|' || c == '<' || c == '>');
 }
+
 int	simple_quote_handler(char *buffer, t_tknlist *list)
 {
 	int	i;
@@ -31,19 +31,19 @@ int	simple_quote_handler(char *buffer, t_tknlist *list)
 		i++;
 	}
 	if (buffer[i] == '\0')
-		error_handler_lexer(1, "Simple quotes must be closed.\n");
+		return (error_handler_lexer(TKN_LIST, QUOTES_ERR_MSG));
 	if (ft_isspace(buffer[i + 1]) == 0)
 		link = 1;
 	if (!add_node(list,
 			create_node(ONE_QUOTE, ft_strndup(buffer, i + 1, TKN_LIST), link)))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (i + 1);
 }
 
 int	pipe_handler(char *buffer, t_tknlist *list)
 {
 	if (!add_node(list, create_node(PIPE, ft_strndup(buffer, 1, TKN_LIST), 0)))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (1);
 }
 
@@ -56,20 +56,20 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 		i = 2;
 		if (is_special_char(buffer[i]))
 		{
-			ft_putstr_fd("syntax error near unexpected token `", 2);
-			write(2, &buffer[i], 1);
-			write(2, "'", 1);
-			error_handler_lexer(1, NULL);
+			ft_printf_fd(2,
+				"syntax error near unexpected token `%c'", &buffer[i]);
+			return (error_handler_lexer(TKN_LIST, NULL));
 		}
 	}
 	else
 		i = 1;
 	while (buffer[i] && ft_isspace(buffer[i]))
 		i++;
-	while (buffer[i] && !ft_isspace(buffer[i]) && !is_operator(buffer[i], buffer[i + 1]))
+	while (buffer[i]
+		&& !ft_isspace(buffer[i]) && !is_operator(buffer[i], buffer[i + 1]))
 		i++;
 	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 0)))
-		error_handler_lexer(1, "Malloc error\n");
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (i);
 }
 
@@ -89,7 +89,8 @@ int	cmd_handler(char *buffer, t_tknlist *list)
 	}
 	if (buffer[i] != '\0' && ft_isspace(buffer[i]) == 0)
 		link = 1;
-	if (!add_node(list, create_node(WORD, ft_strndup(buffer, i, TKN_LIST), link)))
-		error_handler_lexer(1, "Malloc error\n");
+	if (!add_node(list,
+			create_node(WORD, ft_strndup(buffer, i, TKN_LIST), link)))
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (i);
 }

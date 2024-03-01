@@ -15,7 +15,7 @@
 int	print_error_export(char *args, int error)
 {
 	if (error == 1)
-		ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier",
+		ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier\n",
 			args);
 	return (1);
 }
@@ -26,11 +26,11 @@ int	is_valid_args(const char *args)
 
 	i = 0;
 	if (ft_isdigit(args[i]) == 1 || args[i] == '=')
-		return (print_error_export(args, 1));
+		return (print_error_export((char *)args, 1));
 	while (args[i] && args[i] != '=')
 	{
 		if (ft_isalnum(args[i]) == 0 && args[i] != '_')
-			return (print_error_export(args, 1));
+			return (print_error_export((char *)args, 1));
 		i++;
 	}
 	if (args[i] != '=')

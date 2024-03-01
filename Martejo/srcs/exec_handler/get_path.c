@@ -21,7 +21,7 @@ char	*ft_strjoin_pipex(char *s1, char *s2, char *sep)
 	dest = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)
 				+ ft_strlen(sep) + 1));
 	if (dest == NULL)
-		return (NULL);
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	dest[0] = '\0';
 	dest = ft_strcat(dest, s1);
 	dest = ft_strcat(dest, sep);
@@ -53,7 +53,7 @@ char	*check_command_path(char *cmd, char *path)
 		return (NULL);
 	path_cmd = ft_strjoin_pipex(path, cmd, "/");
 	if (!path_cmd)
-		print_and_exit("Malloc error", 1);
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	if (lstat(path_cmd, &stats) == 0)
 	{
 		add_to_garbage(path_cmd, TMP);
@@ -74,7 +74,7 @@ char	**find_path(t_env *env)
 		return (NULL);
 	path_split = split_gc(path, ':', TMP);
 	if (!path_split)
-		print_and_exit("Malloc error\n", 1);
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	free(path);
 	return (path_split);
 }
@@ -97,6 +97,11 @@ char	*get_cmd_path(char *cmd, t_env *env)
 		i++;
 	}
 	if (ft_strchr(cmd, '/') && access(cmd, F_OK) == 0)
-		return (strdup_gc(cmd, TMP));
+	{
+		exec = strdup_gc(cmd, TMP);
+		if (!exec)
+			print_and_exit(MALLOC_ERR_MSG, RED, 1);
+		return (exec);
+	}
 	return (NULL);
 }

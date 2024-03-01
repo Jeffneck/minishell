@@ -15,8 +15,8 @@ static size_t	nb_redirs_in_a_row(t_token *curr)
 
 static void	reverse_cmd_redirs(t_tknlist *tknlst, t_token *first, size_t nb_redirs)
 {
-	ft_printf("reverse_cmd_redirs\n");
-	printf(" first debut = %s\n nb redir = %zu\n", first->content, nb_redirs);
+	//ft_printf("reverse_cmd_redirs\n");
+	//printf(" first debut = %s\n nb redir = %zu\n", first->content, nb_redirs);
 	size_t	i;
 	size_t	j;
 	t_token	*curr;
@@ -44,13 +44,13 @@ static void	reverse_cmd_redirs(t_tknlist *tknlst, t_token *first, size_t nb_redi
 	// 	curr = curr->next;
 	// 	nb_redirs--;
 	// }
-	ft_printf("next = %s\n", first->next->content);
+	//ft_printf("next = %s\n", first->next->content);
 	// return (curr);
 }
 
 void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 {
-	ft_printf("rearrange_cmd_redir_order\n");
+	//ft_printf("rearrange_cmd_redir_order\n");
 	
 	t_token *curr; 
 	t_token *next; 

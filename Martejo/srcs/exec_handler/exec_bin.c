@@ -21,17 +21,17 @@ char	**env_to_char2(t_env *env)
 
 	tmp = env;
 	i = 0;
-	len = strlen_lst(env);
+	len = strlen_env(env);
 	env_2d = (char **)malloc((len + 1) * sizeof(char *));
 	if (!env_2d)
-		print_and_exit("Malloc error\n", RED, 1);
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	add_to_garbage(env_2d, TMP);
 	tmp = env;
 	while (i < len)
 	{
 		env_2d[i] = strdup_gc(tmp->value, TMP);
 		if (!env_2d[i])
-			print_and_exit("Malloc error\n", RED, 1);
+			print_and_exit(MALLOC_ERR_MSG, RED, 1);
 		i++;
 		tmp = tmp->next;
 	}
@@ -101,13 +101,20 @@ int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 	status = 0;
 	pid = fork();
 	if (pid == -1)
-		print_message("Minishell: Fork() error.\n", RED, 1);
+		print_and_exit("Minishell: Fork() error.\n", RED, 1);
 	if (pid == 0)
 		exec_process(tree_el, env, fds);
 	waitpid(pid, &status, 0);
+	if (WCOREDUMP(status) && WTERMSIG(status) == 11)
+	{
+		g_status = 139;
+		ft_putendl_fd("Segmentation fault (core dumped)", 2);
+	}
+	if (WCOREDUMP(status) && WTERMSIG(status) == 3)
+		ft_putendl_fd("Quit (core dumped)", 2);
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
-	else
-		return (130);
+	// else
+	// 	return (130);
 	return (exit_status);
 }

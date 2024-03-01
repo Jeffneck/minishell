@@ -42,12 +42,20 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/libft_extension.c \
 		srcs/parser/tknlist_utils_extension.c \
 		srcs/parser/display_tree.c \
+		srcs/parser/tkntype_utils.c \
+		srcs/parser/reorder_tknlist.c \
+		srcs/parser/display_tknlist.c \
 		\
 		srcs/exec/browse_tree.c \
 		\
 		srcs/exec_handler/exec_bin.c \
 		srcs/exec_handler/exec_builtins.c \
 		srcs/exec_handler/exec_handler.c \
+		srcs/exec_handler/get_path.c \
+		\
+		srcs/utils/print_utils.c \
+		srcs/utils/error.c \
+		srcs/lexer/verify_input_syntax.c \
 
 
 OBJS    = ${SRCS:.c=.o}

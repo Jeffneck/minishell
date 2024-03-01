@@ -60,7 +60,7 @@ int	fork_builtin(t_env **envt, t_btree *tree_el, t_io fds)
 
 	pid = fork();
 	if (pid == -1)
-		print_message("Minishell: Fork() error.\n", RED, 1);
+		print_and_exit("Minishell: Fork() error.\n", RED, 1);
 	if (pid == 0)
 	{
 		status = exec_builtin(envt, tree_el, fds);

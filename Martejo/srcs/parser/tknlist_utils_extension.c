@@ -11,7 +11,7 @@ void	add_after_another(t_tknlist	*list, t_token *tkn1, t_token *tkn2) //rename a
 
 void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop) //rename pop_tkn_in_place
 {
-	ft_printf("pop_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
+	//ft_printf("pop_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
 	if (to_pop == NULL)
 		return;
     if (to_pop != list_tkn->head)
@@ -24,7 +24,7 @@ void	pop_token_in_place(t_tknlist *list_tkn, t_token *to_pop) //rename pop_tkn_i
 		list_tkn->tail = to_pop->prev;
 	if (to_pop->content)
 		del_one_garbage(to_pop->content, TKN_LIST);
-	ft_printf("after head %p tail %p\n", list_tkn->head, list_tkn->tail);
+//	ft_printf("after head %p tail %p\n", list_tkn->head, list_tkn->tail);
     del_one_garbage(to_pop, TKN_LIST);
 }
 

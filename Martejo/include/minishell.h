@@ -39,6 +39,25 @@
 # define CYAN    "\x1b[36m"
 # define RESET   "\x1b[0m"
 
+/**MESSAGE DEFINITION**/
+# define ARGS_ERR_MSG "Error : Invalid number of arguments.\n"
+# define UNAVAILABLE_ENV "Minishell: Environment unavailable.\n"
+# define MALLOC_ERR_MSG "Minishell: Allocation error\n"
+# define QUOTES_ERR_MSG "Minishell: open quotes are not interpreted.\n"
+# define PARENTHESIS_ERR_MSG "Minishell: open parenthesis are not interpreted.\n"
+# define OPEN_PIPE_ERR_MSG "Minishell: open pipe are not interpreted.\n"
+# define WRONG_CHAR_ERR_MSG "Minishell: uninterpreted token \
+present outside quotes.\n"
+# define NEAR_TOKEN_ERR_MSG "Minishell: syntax error near unexpected token\n"
+# define UNEXPECTED_EOF "Minishell: syntax error: unexpected end of file.\n"
+# define EOF_HEREDOC "Minishell:\
+ warning: here-document at line 1 delimited by end-of-file"
+# define PWD_ERR_MSG "pwd: error retrieving current directory: getcwd: \
+cannot access parent directories: No such file or directory"
+# define SHLVL_ERR_MSG "minishell: warning: shell level (%d) too high, \
+resetting to 1"
+
+
 
 extern int g_status;
 
@@ -155,8 +174,8 @@ void		handle_token(char *buffer, t_tknlist *list, t_tkntype type, int *i);
 
 /**lexer_utils**/
 char	*ft_strndup(char *buffer, int len, t_id_gc id); // add to libft
-int			is_operator(const char c, const char c2);
-void		detect_error_type(const char c);
+int		is_operator(const char c, const char c2);
+int		detect_error_type(const char c);
 
 /**token_handler**/
 int			simple_quote_handler(char *buffer, t_tknlist *list);
@@ -167,10 +186,10 @@ int			cmd_handler(char *buffer, t_tknlist *list);
 /**token_handler_suite**/
 int			parenthese_handler(char *buffer, t_tknlist *list);
 int			double_quote_handler(char *buffer, t_tknlist *list);
-int	operator_handler(char *buffer, t_tknlist *list, t_tkntype type);
+int			operator_handler(char *buffer, t_tknlist *list, t_tkntype type);
 
 /**error**/
-void		error_handler_lexer(int id_gc, char *msg);
+int			error_handler_lexer(int id_gc, char *msg);
 
 /**cd**/
 int	is_in_env(t_env *env, char *args);
@@ -207,9 +226,10 @@ char	*ft_strndup(char *buffer, int len, t_id_gc id);
  void	*get_env_name_var(char *dest, char *src);
 
  /**env_utils**/
- size_t	size_env(t_env *lst);
+ size_t	size_all_value(t_env *lst);
  char	*env_to_str(t_env *lst);
- char	*get_env_path(t_env *env, const char *var, size_t len); // changer nom fonction ? 
+ char	*get_env_value(t_env *env, const char *var, size_t len);
+
 
  /**sort_env**/
  int	strlen_2d(char **tab); // a voir si utile
@@ -306,7 +326,7 @@ char	**find_path(t_env *env);
 char	*check_command_path(char *cmd, char *path);
 char	*ft_strjoin_pipex(char *s1, char *s2, char *sep);
 char	**env_to_char2(t_env *env);
-void	free_and_exit(int exit_code);
+
 
 //browse_tree.c
 void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
@@ -320,5 +340,26 @@ t_mini	*singleton_mini(t_mini *address_mini); //placer ailleurs que dans le main
 
 /**Utils**/
 void	print_message(char *msg, char *color, int exit_status);
+void	print_and_exit(char *msg, char *color, int exit_status);
+void	free_and_exit(int exit_code);
+
+void	rearrange_cmd_redir_order(t_tknlist *tknlst);
+void	verify_input_syntax(char *input);
+void	verify_last_tkn(t_token *tail);
+char	*path_handler(t_btree *tree_el, t_env *env);
+char	*ft_strjoin_pipex(char *s1, char *s2, char *sep);
+void	check_path(char *command, char *path);
+char	*check_command_path(char *cmd, char *path);
+char	**find_path(t_env *env);
+char	*get_cmd_path(char *cmd, t_env *env);
+size_t	strlen_env(t_env *env);
+void	print_path_error(char *arg, int exit_status, int error);
+int	is_logical_op_tkn(t_tkntype tkntype);
+int	is_cmd_tkn(t_tkntype tkntype);
+int	is_redir_tkn(t_tkntype tkntype);
+int	is_operator_tkn(t_tkntype tkntype);
+void	clear_loop(void);
+
+
 
 #endif

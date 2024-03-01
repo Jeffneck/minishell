@@ -87,8 +87,8 @@ void	print_sorted_env(t_env *env, t_io fds)
 	tab = ft_split(str_env, '\n');
 	free(str_env);
 	if (!tab)
-		print_and_exit("Malloc error\n", RED, 1);
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	sort_env(tab, strlen_2d(tab));
 	print_export(tab, fds);
-	free_char2(tab);
+	free_char2(&tab);
 }

@@ -22,7 +22,7 @@ char	*create_prompt(t_mini *mini)
 	int		home_len;
 
 	home = getenv("HOME");
-	prompt = get_env_path(mini->env, "PWD", 3);
+	prompt = get_env_value(mini->env, "PWD", 3);
 	if (!prompt)
 		prompt = "Minishell";
 	if (home && ft_strnstr(prompt, home, ft_strlen(home)))
@@ -38,5 +38,7 @@ char	*create_prompt(t_mini *mini)
 	else
 		prompt = ft_strjoin("\001\e[31;1m\002> \001\e[37m\002", prompt);
 	prompt = ft_strjoin(prompt, "$ ");
+	if (!prompt)
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (prompt);
 }

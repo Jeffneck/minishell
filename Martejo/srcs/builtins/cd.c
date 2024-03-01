@@ -12,10 +12,7 @@ int	update_oldpwd(t_env **env)
 	}
 	oldpwd = ft_strjoin("OLDPWD=", cwd);
 	if (!oldpwd)
-	{
-		ft_putstr_fd("Minishell: Malloc error\n", 2);
-		free_and_exit(1);
-	}
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	if (is_in_env(*env, oldpwd) == 0)
 		env_add(oldpwd, env, 0);
 	return (0);
@@ -33,10 +30,7 @@ int	update_pwd(t_env **env)
 	}
 	pwd = ft_strjoin("PWD=", cwd);
 	if (!pwd)
-	{
-		ft_putstr_fd("Minishell: Malloc error\n", 2);
-		free_and_exit(1);
-	}
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	if (is_in_env(*env, pwd) == 0)
 		env_add(pwd, env, 0);
 	return (0);
@@ -49,7 +43,7 @@ int	go_to_path(t_env **env)
 
 	env_path = NULL;
 	update_oldpwd(env);
-	env_path = get_env_path(*env, "HOME=", 4);
+	env_path = get_env_value(*env, "HOME=", 4);
 	if (!env_path)
 		free_and_exit(1);
 	else if (ft_strcmp(env_path, "") == 0)
@@ -73,6 +67,11 @@ int	cd(char **cmds, t_env **env)
 
 	if (cmds[1] == NULL)
 		return (go_to_path(env));
+	else if (cmds[2])
+	{
+		ft_printf_fd(2, "Minishell: cd: too many arguments\n");
+		return (1);
+	}
 	else
 	{
 		if (update_oldpwd(env) != 0)
