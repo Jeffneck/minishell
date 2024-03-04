@@ -115,7 +115,7 @@ void	expander(t_mini *mini,t_tknlist *tkn_lst, t_env *env)
 			}
 			// ft_printf("node after expander handler => %s type : %d\n", curr->content, curr->type);
 			if(curr->type != TWO_QUOTE && char_is_in_str('*', curr->content)) // garder apres la boucle
-				expand_wildcard(&curr, tkn_lst);
+				expand_wildcard(curr, tkn_lst);
 		}
 		curr = curr->next;
 	}
