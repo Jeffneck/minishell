@@ -12,6 +12,39 @@
 
 #include "../../include/minishell.h"
 
+int isValidLong(const char *str) 
+{
+	long result = 0;
+	int sign = 1;
+
+	// Vérifier si la chaîne est vide
+	if (*str == '\0') return 0;
+
+	// Gérer le signe
+	if (*str == '-' || *str == '+') {
+		sign = (*str == '-') ? -1 : 1;
+		str++;
+	}
+
+	// Vérifier si la chaîne est maintenant vide après le signe
+	if (*str == '\0') return 0;
+
+	while (*str) {
+		if (*str < '0' || *str > '9') return 0; // Non-numérique trouvé
+
+		long digit = *str - '0';
+
+		if (sign == 1 && (result > LONG_MAX / 10 || (result == LONG_MAX / 10 && digit > LONG_MAX % 10))) return 0;
+		if (sign == -1 && (result > -(LONG_MIN / 10) || (result == -(LONG_MIN / 10) && digit > -(LONG_MIN % 10)))) return 0;
+
+		result = result * 10 + digit;
+		str++;
+	}
+
+	// La chaîne est un nombre valide dans la plage des longs
+	return 1;
+}
+
 int	check_status_code(char *status_code)
 {
 	int	i;
@@ -26,6 +59,7 @@ int	check_status_code(char *status_code)
 		if (!(status_code[i] >= 48 && status_code[i] <= 57) && (status_code[i] != '-' && status_code[i] != '+'))
 			return (1);
 		i++;
+		
 	}
 	if (sign > 1)
 		return (1);
@@ -52,7 +86,7 @@ int	builtin_exit(t_mini *mini, char **cmds)
 			ft_putstr_fd("Minishell: exit: too many arguments", 2);
 			return (1);
 		}
-		else if (check_status_code(cmds[1]) == 1)
+		else if (check_status_code(cmds[1]) == 1 ||  isValidLong(cmds[1]) == 0)
 		{
 			ft_printf_fd(2, "Minishell: exit: %s : numeric argument required\n",
 				cmds[1]);
