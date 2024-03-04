@@ -56,24 +56,43 @@ char	*remove_dup_chars(char *src)
 	return (new);
 }
 
-int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
+int	is_compatible_file_wildcard(char *file, char *to_expand)
 {
-	ft_printf("file = %s\n", file);
 	if (to_expand[0] == '*' && file[0] == '.')
 		return (0);
-	if (to_expand[0] != '*' && !s1_is_s2_prefix(subs_needed[0], file))
-		return (0);
-	ft_printf("prefix ok\n");
-	if (!str_contains_all_subs_ordered(file, subs_needed))
-		return (0);
-	ft_printf("all subs ok\n");
-	if (to_expand[ft_strlen(to_expand) - 1] != '*' && !s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
-		return (0);
-	ft_printf("suffix ok\n");
-	return(1);
+	// if (!str_contains_all_subs_ordered(file, subs_needed))
+	// 	return (0);
+	// if (to_expand[ft_strlen(to_expand) - 1] != '*' && s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
+	// 	return (0);
+
+	size_t	i = 0;
+	size_t	j = 0;
+	char	*last_wildcard;
+
+	
+	if(ft_strncmp(&file[i], &to_expand[j], ft_strlen_until_char(&to_expand[j], '*')) != 0)
+	if(ft_strncmp(file, to_expand, ft_strlen_until_char(to_expand, '*')) != 0)
+		return (0);		
+	while(last_wildcard)
+	{
+		while (last_wildcard + 1 == '*')
+			
+		to_expand = last_wildcard + 1;
+		
+		while(to_expand[j] && to_expand[j] == '*')
+			j++;
+		last_wildcard = to_expand[j];
+		if(to_expand[i] == '*' && )
+		{
+			
+		}
+	}
+	if(*to_expand == '*' && *(to_expand++) == '\0')
+		return (1);
+		
 }
 
-void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand)
+void	lstadd_compatible_cwd_files(t_tknlist *lst, char *to_expand)
 {
 	//ft_printf(" lstadd_compatible_cwd_files\n");
 	
@@ -87,9 +106,9 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 	entry = readdir(dir);
 	while (entry)
 	{
-		if (is_compatible_file_wildcard(entry->d_name, subs_needed, to_expand))
+		if (is_compatible_file_wildcard(entry->d_name, to_expand))
 		{
-			new_tkn = create_node(WORD, strdup_gc(entry->d_name, TKN_LIST), 0); //valider pou la var link (le 0 final), a l' air ok
+			new_tkn = create_node(WORD, strdup_gc(entry->d_name, TKN_LIST), 0); //valider pou la var link
 			if (!new_tkn)
 			{
 				closedir(dir);
@@ -106,12 +125,15 @@ void	expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst) //recupe la fonc
 {
 	//ft_printf(" expand_wildcard\n");
 	t_tknlist *wildcard_lst;
-	char ** splitted;
+	char	*to_expand;
 
-	splitted = split_gc(tkn_toexpand->content, '*', TMP);
+	to_expand = remove_dup_chars(tkn_toexpand->content);
+	if (!to_expand)
+		print_and_exit(MALLOC_ERR_MSG, RED, 1);
+	add_to_garbage(to_expand, TMP);
 	init_list(&wildcard_lst);
-	lstadd_compatible_cwd_files(wildcard_lst, splitted, tkn_toexpand->content);
-	if (!wildcard_lst->head)
+	lstadd_compatible_cwd_files(wildcard_lst, to_expand);;
+	if (!wildcard_lst || !wildcard_lst->head)
 		return ;
 	//trier la liste dans l' ordre attendu
 	tknlst_sort_ascii_case(wildcard_lst);

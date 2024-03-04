@@ -135,6 +135,8 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 	{
 		if (subs[sub][j] == str[i])
 			j++;
+		else
+			j = 0;
 		if (!subs[sub][j])
 		{
 			sub++;
@@ -180,27 +182,45 @@ int	ft_strcmp_case_insensitive(char *s1, char *s2)
 
 int	s1_is_s2_suffix(char *s1, char *s2)
 {
-	size_t	len_s2;
-	size_t	len_s1;
-	size_t	suffix_pos;
-	// ft_printf("s1 = %s\t", s1);
-	// ft_printf("s2 = %s\n", s2);
-	if (!s1 || !s2)
-		return (0);
-	if (!s1[0])
-		return (1);
-	len_s2 = ft_strlen(s2);
-	len_s1 = ft_strlen(s1);
-	if (len_s1 < len_s2)
-		return (0);
-	suffix_pos = len_s2 - len_s1;
-	s2 = s2 + suffix_pos;
-	while(*s2)
+	// ft_printf("s1_is_s2_suffix s1 =%s s2 =%s\n", s1, s2);
+	size_t len_s1 = 0;
+    size_t len_s2 = 0;
+    size_t suffix_pos = 0;
+
+    if (!s1 || !s2)
+        return 0;
+
+    len_s1 = ft_strlen(s1);
+    len_s2 = ft_strlen(s2);
+
+    if (len_s1 > len_s2)
+        return 0;
+
+    suffix_pos = len_s2 - len_s1;
+    s2 = s2 + suffix_pos;
+
+    while (*s1 && *s2) {
+        if (*s1 != *s2)
+            return 0;
+        s1++;
+        s2++;
+    }
+
+    return *s1 == '\0'; // Vérifie si s1 est une chaîne vide
+}
+
+bool s1_is_s2_prefix(char *s1, char *s2)
+{
+    if (!s1 || !s2)
+        return (false);
+    
+    while (*s1 && *s2)
 	{
-		if(*s2 != *s1)
-			return (0);
-		s1++;
-		s2++;
-	}
-	return (1);
+        if (*s1 != *s2)
+            return (false);
+        s1++;
+        s2++;
+    }
+	// ft_printf("prefix end\n");
+    return (*s1 == '\0');
 }

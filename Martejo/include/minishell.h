@@ -268,7 +268,8 @@ size_t	ft_strlen_until_not_char(const char *str, char c);
 int	str_contains_all_subs_ordered(char *str, char **subs);
 int	char_is_in_str(char c, char *str);
 int	ft_strcmp_case_insensitive(char *s1, char *s2);
-int	s1_is_s2_suffix(char *s1, char *s2);
+int	s1_is_s2_suffix(char *s1, char *s2);//bool
+bool s1_is_s2_prefix(char *s1, char *s2);
 
 t_btree	*parser(t_mini *mini);
 
@@ -280,6 +281,13 @@ void	reducer(t_token	*tkn) ;
 int is_link_sensitive(t_tkntype type);
 void    linker(t_tknlist *tkn_lst);
 
+//expand wildcard.c
+void	tknlst_sort_ascii_case(t_tknlist *list_expnd);//replacer dans bon file
+int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
+void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
+void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst);
+
+//expander.c
 int	is_charset_env(char c);
 char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start);
 char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_lst);
@@ -302,10 +310,6 @@ void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
 void display_node(t_btree *tree_el, int depth);
 void root_first_search(t_btree *tree_el, void (*visit)(t_btree *, int));
 
-void	tknlst_sort_ascii_case(t_tknlist *list_expnd);
-int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
-void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
-void	expand_wildcard(t_token **p_tkn_to_expand, t_tknlist *tkn_lst);
 
 //exec_builtins
 int	fork_builtin(t_env **envt, t_btree *tree_el, t_io fds);
