@@ -58,18 +58,18 @@ char	*remove_dup_chars(char *src)
 
 int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 {
-	ft_printf("file = %s\n", file);
+	// ft_printf("file = %s\n", file);
 	if (to_expand[0] == '*' && file[0] == '.')
 		return (0);
 	if (to_expand[0] != '*' && !s1_is_s2_prefix(subs_needed[0], file))
 		return (0);
-	ft_printf("prefix ok\n");
+	// ft_printf("prefix ok\n");
 	if (!str_contains_all_subs_ordered(file, subs_needed))
 		return (0);
-	ft_printf("all subs ok\n");
+	// ft_printf("all subs ok\n");
 	if (to_expand[ft_strlen(to_expand) - 1] != '*' && !s1_is_s2_suffix(subs_needed[char2len(subs_needed) - 1], file))
 		return (0);
-	ft_printf("suffix ok\n");
+	// ft_printf("suffix ok\n");
 	return(1);
 }
 

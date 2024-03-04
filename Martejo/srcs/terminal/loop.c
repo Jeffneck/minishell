@@ -67,7 +67,8 @@ void	sig_handler(int sigcode)
 void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 {
 	add_history(line_read);
-	//verify_input_syntax(line_read);
+	// verify_input_syntax(line_read);
+	// ft_printf("verify_input_syntax terminated\n");
 	mini->tkn_lst = lexer(line_read);
 	mini->b_tree = parser(mini);
 	browse_tree(mini, mini->b_tree, mini->io_global);

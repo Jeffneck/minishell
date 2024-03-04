@@ -37,7 +37,7 @@ char	*create_prompt(t_mini *mini)
 		prompt = ft_strjoin("\001\e[32;1m\002> \001\e[37m\002", prompt);
 	else
 		prompt = ft_strjoin("\001\e[31;1m\002> \001\e[37m\002", prompt);
-	prompt = ft_strjoin(prompt, "$ ");
+	prompt = ft_strjoin(prompt, "$ \x1b[0m");
 	if (!prompt)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (prompt);

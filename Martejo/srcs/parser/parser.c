@@ -31,7 +31,7 @@ t_btree	*parser(t_mini *mini)
 	}
 	//ft_printf("TOKENS LEXED BEFORE PARSING  ///////////////////////////////////\n\n");
 	//display_tknlist(mini->tkn_lst);//
-	verify_last_tkn(mini->tkn_lst->tail);
+	verify_syntax_tknlist(mini->tkn_lst);
 	if (g_status != 0)
 	{
 		clear_loop();

@@ -44,11 +44,13 @@
 # define UNAVAILABLE_ENV "Minishell: Environment unavailable.\n"
 # define MALLOC_ERR_MSG "Minishell: Allocation error\n"
 # define QUOTES_ERR_MSG "Minishell: open quotes are not interpreted.\n"
+# define INFILE_ERR_MSG "Minishell: open quotes are not interpreted.\n"
 # define PARENTHESIS_ERR_MSG "Minishell: open parenthesis are not interpreted.\n"
 # define OPEN_PIPE_ERR_MSG "Minishell: open pipe are not interpreted.\n"
+# define OPEN_LOGICAL_OP_ERR_MSG "Minishell: open logical operators are not interpreted.\n"
 # define WRONG_CHAR_ERR_MSG "Minishell: uninterpreted token \
 present outside quotes.\n"
-# define NEAR_TOKEN_ERR_MSG "Minishell: syntax error near unexpected token\n"
+# define NEAR_TOKEN_ERR_MSG "Minishell: syntax error near unexpected token"
 # define UNEXPECTED_EOF "Minishell: syntax error: unexpected end of file.\n"
 # define EOF_HEREDOC "Minishell:\
  warning: here-document at line 1 delimited by end-of-file"
@@ -273,7 +275,7 @@ bool s1_is_s2_prefix(char *s1, char *s2);
 
 t_btree	*parser(t_mini *mini);
 
-void	verify_last_tkn(t_token *tail);
+void	verify_syntax_tknlist(t_tknlist *lst);
 
 int	type_need_reducing(t_tkntype type);
 void	reducer(t_token	*tkn) ;
@@ -343,8 +345,10 @@ void browse_tree(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 t_mini	*singleton_mini(t_mini *address_mini); //placer ailleurs que dans le main
 
 /**Utils**/
-void	print_message(char *msg, char *color, int exit_status);
+// void	print_message(char *msg, char *color, int exit_status);//retiree
 void	print_and_exit(char *msg, char *color, int exit_status);
+void	print_without_exit(char *msg, char *color, int exit_status);
+void	print_strerror(char *arg, char *color, int new_status);
 void	free_and_exit(int exit_code);
 
 void	rearrange_cmd_redir_order(t_tknlist *tknlst);

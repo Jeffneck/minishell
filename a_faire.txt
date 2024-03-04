@@ -40,3 +40,6 @@ echo $ renvoie $
 
 
 Autoriser une redirection apres un operateur (si ce n' est pas deja fait) car cela est possible
+
+print_error -> ne pas exit ??
+<<here | cat => comportement bizarre

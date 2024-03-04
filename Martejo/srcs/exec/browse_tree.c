@@ -50,8 +50,13 @@ void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
 	io_transmitted.fd_in = open(tree_el->cmds[0], O_RDONLY);
 	if (io_transmitted.fd_in == -1)
-		exit(EXIT_FAILURE);//
+	{
+		ft_printf("5\n");
+		print_strerror(tree_el->cmds[0], RED, 1);
+		return ;
+	}
 	browse_tree(mini, tree_el->left, io_transmitted);
+	close(io_transmitted.fd_in);
 }
 
 void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
@@ -68,8 +73,12 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 	else
 		io_transmitted.fd_out = open(tree_el->cmds[0], O_WRONLY | O_APPEND | O_CREAT, 0644);
 	if (io_transmitted.fd_out == -1)
-		exit(EXIT_FAILURE);//
+	{
+		print_strerror(tree_el->cmds[0], RED, 1);
+		return ;
+	}
 	browse_tree(mini, tree_el->left, io_transmitted);
+	close(io_transmitted.fd_out);
 }
 
 void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
@@ -79,7 +88,10 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	t_io	io_transmitted;
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
 	if(pipe(fd_pipe) == -1)
-		exit(EXIT_FAILURE);//
+	{
+		print_strerror("pipe", RED, 1);
+		return;
+	}
 	io_transmitted.fd_out = fd_pipe[FD_WRITE];
 	browse_tree(mini, tree_el->left, io_transmitted); //cmd 1
 	close(fd_pipe[FD_WRITE]);
@@ -87,7 +99,6 @@ void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 	io_transmitted.fd_out = io_inherited.fd_out;
 	browse_tree(mini, tree_el->right, io_transmitted); //cmd2
 	close(fd_pipe[FD_READ]);
-
 }
 
 void traverse_logical_op_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
