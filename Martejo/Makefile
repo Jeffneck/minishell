@@ -55,7 +55,7 @@ SRCS =  srcs/lexer/lexer.c \
 		\
 		srcs/utils/print_utils.c \
 		srcs/utils/error.c \
-		srcs/lexer/verify_input_syntax.c \
+		srcs/parser/verify_syntax.c \
 
 
 OBJS    = ${SRCS:.c=.o}

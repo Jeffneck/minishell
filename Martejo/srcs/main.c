@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:04:25 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 11:25:14 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:46:42 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	main(int argc, char **argv, char **envp)
 		print_and_exit(ARGS_ERR_MSG, RED, 1);
 	if (!envp[0])
 		print_and_exit(UNAVAILABLE_ENV, RED, 1);
+	//rl_outstream = stderr;
 	mini.env = init_env(envp);
 	mini.io_global = (t_io){0, 1};
 	mini.last_gstatus = 0;

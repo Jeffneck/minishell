@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 14:21:45 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/03/05 10:52:34 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	sig_handler(int sigcode)
 void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 {
 	add_history(line_read);
-	// verify_input_syntax(line_read);
+	//verify_input_syntax(line_read);
 	// ft_printf("verify_input_syntax terminated\n");
 	mini->tkn_lst = lexer(line_read);
 	mini->b_tree = parser(mini);

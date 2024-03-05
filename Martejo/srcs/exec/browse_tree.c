@@ -51,12 +51,12 @@ void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited
 	io_transmitted.fd_in = open(tree_el->cmds[0], O_RDONLY);
 	if (io_transmitted.fd_in == -1)
 	{
-		ft_printf("5\n");
 		print_strerror(tree_el->cmds[0], RED, 1);
 		return ;
 	}
 	browse_tree(mini, tree_el->left, io_transmitted);
-	close(io_transmitted.fd_in);
+	if (io_transmitted.fd_in != 0)
+		close(io_transmitted.fd_in);
 }
 
 void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
@@ -64,8 +64,9 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 	//ft_printf("traverse_redir_output_node\n");
 	t_io	io_transmitted;
 	
+	
 	// Ferme l'ancien fd_in s' il y a une redir_in a overwrite
-	if (io_inherited.fd_out != 0)
+	if (io_inherited.fd_out != 0 && io_inherited.fd_out != 1)
         close(io_inherited.fd_out);
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
 	if(tree_el->type == OUT)
@@ -77,8 +78,10 @@ void traverse_redir_output_node(t_mini *mini, t_btree *tree_el, t_io io_inherite
 		print_strerror(tree_el->cmds[0], RED, 1);
 		return ;
 	}
+	
 	browse_tree(mini, tree_el->left, io_transmitted);
-	close(io_transmitted.fd_out);
+	if (io_transmitted.fd_out != 0 && io_transmitted.fd_out != 1)
+		close(io_transmitted.fd_out);
 }
 
 void traverse_pipe_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
