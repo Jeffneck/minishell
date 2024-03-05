@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:24:02 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:24:18 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:48:08 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	exec_handler(t_mini *mini, t_btree *tree_el, t_io fds)
 	bool	cmd_builtin;
 	bool	is_pipe;
 
+	ret_status = 0;
 	cmd_builtin = is_builtin(tree_el->cmds[0]);
 	is_pipe = cmd_is_inside_pipe(mini->b_tree, tree_el->branch);
 	if (is_pipe == true && cmd_builtin == true)

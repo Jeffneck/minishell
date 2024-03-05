@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:37:22 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 10:40:37 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:44:25 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int	builtin_exit(t_mini *mini, char **cmds)
 		cmds[1] = tmp;
 		cmds[2] = NULL;
 	}
-	write(1, "exit\n", 5);
+	write(2, "exit\n", 5);
 
 	if (cmds[1])
 	{

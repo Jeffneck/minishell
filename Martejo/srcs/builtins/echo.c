@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:40:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 12:36:45 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 15:07:59 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,22 @@ int	size_cmds(char **cmds)
 		size++;
 	return (size);
 }
+static int is_valid_option(char *option)
+{
+	int i;
 
+	i = 1;
+	if (option[1] == '\0')
+		return (1);
+	while (option[i])
+	{
+		if (option[i] != 'n')
+			return (1);
+		i++;
+	}
+	return (0);
+	
+}
 int	echo(char **cmds, t_io fds)
 {
 	int	i;
@@ -31,9 +46,10 @@ int	echo(char **cmds, t_io fds)
 	n_option = 0;
 	if (size_cmds(cmds) > 1)
 	{
-		while (cmds[i] && ft_strcmp(cmds[i], "-n") == 0)
+		while (cmds[i] && is_valid_option(cmds[i]) == 0)
 		{
-			n_option = 1;
+			if (n_option == 0)
+				n_option = 1;
 			i++;
 		}
 		while (cmds[i])

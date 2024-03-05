@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 10:52:34 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:14:01 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ void	prompt_loop(t_mini *mini)
 			continue ;
 		}
 		if (!line_read)
+		{
+			write(1, "\n", 1);
 			free_and_exit(0);
+		}
 		if (line_read && *line_read)
 			process_shell(mini, line_read, &stdin_cpy);
 		free(line_read);

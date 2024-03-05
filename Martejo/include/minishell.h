@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:31:39 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 13:25:23 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@
 # define WRONG_CHAR_ERR_MSG "Minishell: uninterpreted token \
 present outside quotes.\n"
 # define NEAR_TOKEN_ERR_MSG "Minishell: syntax error near unexpected token"
+# define STAR_TOKEN_ERR_MSG "Minishell: *: ambiguous redirect\n"
 # define UNEXPECTED_EOF "Minishell: syntax error: unexpected end of file.\n"
 # define EOF_HEREDOC "Minishell:\
  warning: here-document at line 1 delimited by end-of-file"

@@ -2,7 +2,7 @@
 
 int is_link_sensitive(t_tkntype type)
 {
-    if (type == WORD || type == ONE_QUOTE || type == TWO_QUOTE)
+    if (type == WORD || type == ONE_QUOTE || type == TWO_QUOTE || type == APPEND || type == HEREDOC || type == IN || type == OUT)
         return (1);
     return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:19:28 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/15 14:26:03 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/03/05 12:45:23 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,23 +52,10 @@ int	file_handler(char *buffer, t_tknlist *list, t_tkntype type)
 	int	i;
 
 	if (type == APPEND || type == HEREDOC)
-	{
 		i = 2;
-		if (is_special_char(buffer[i]))
-		{
-			ft_printf_fd(2,
-				"syntax error near unexpected token `%c'", &buffer[i]);
-			return (error_handler_lexer(TKN_LIST, NULL));
-		}
-	}
 	else
 		i = 1;
-	while (buffer[i] && ft_isspace(buffer[i]))
-		i++;
-	while (buffer[i]
-		&& !ft_isspace(buffer[i]) && !is_operator(buffer[i], buffer[i + 1]))
-		i++;
-	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 0)))
+	if (!add_node(list, create_node(type, ft_strndup(buffer, i, TKN_LIST), 1)))
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	return (i);
 }

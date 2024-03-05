@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:47:27 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:21:58 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/05 14:54:13 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,17 @@ int	exec_builtin( t_env **envt, t_btree *tree_el, t_io fds)
 	status = 0;
 	if (ft_strcmp(tree_el->cmds[0], "echo") == 0)
 		status = echo(tree_el->cmds, fds);
-	if (ft_strcmp(tree_el->cmds[0], "cd") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "cd") == 0)
 		status = cd(tree_el->cmds, envt);
-	if (ft_strcmp(tree_el->cmds[0], "pwd") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "pwd") == 0)
 		status = ft_pwd(fds);
-	if (ft_strcmp(tree_el->cmds[0], "env") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "env") == 0)
 		env(*envt, fds);
-	if (ft_strcmp(tree_el->cmds[0], "export") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "export") == 0)
 		status = ft_export(tree_el->cmds, envt, fds);
-	if (ft_strcmp(tree_el->cmds[0], "unset") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "unset") == 0)
 		status = unset(tree_el->cmds, envt);
-	if (ft_strcmp(tree_el->cmds[0], "exit") == 0)
+	else if (ft_strcmp(tree_el->cmds[0], "exit") == 0)
 		status = builtin_exit(singleton_mini(NULL), tree_el->cmds);
 	return (status);
 }
@@ -57,8 +57,10 @@ int	fork_builtin(t_env **envt, t_btree *tree_el, t_io fds)
 {
 	pid_t	pid;
 	int		status;
+	int		exit_status;
 
 	pid = fork();
+	status = 0;
 	if (pid == -1)
 		print_and_exit("Minishell: Fork() error.\n", RED, 1);
 	if (pid == 0)
@@ -67,5 +69,14 @@ int	fork_builtin(t_env **envt, t_btree *tree_el, t_io fds)
 		free_and_exit(status);
 	}
 	waitpid(pid, &status, 0);
-	return (status);
+	if (WCOREDUMP(status) && WTERMSIG(status) == 11)
+	{
+		g_status = 139;
+		ft_putendl_fd("Segmentation fault (core dumped)", 2);
+	}
+	if (WCOREDUMP(status) && WTERMSIG(status) == 3)
+		ft_putendl_fd("Quit (core dumped)", 2);
+	if (WIFEXITED(status))
+		exit_status = WEXITSTATUS(status);
+	return (exit_status);
 }
