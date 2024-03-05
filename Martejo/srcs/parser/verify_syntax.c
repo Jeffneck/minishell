@@ -21,7 +21,7 @@ void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 			g_status = 2;
 			return ;
 		}
-		if ((is_redir_tkn(curr->type) || curr->type == HEREDOC) && curr->next->type == WORD && char_is_in_str('*', curr->next->content))
+		if (is_redir_tkn(curr->type) && curr->next->type == WORD && char_is_in_str('*', curr->next->content)) //type heredoc retire car <<* fonctionne (pas d'expansion)
 		{
 			ft_printf_fd(2,"%s%s%s", RED, STAR_TOKEN_ERR_MSG, RESET);
 			g_status = 1;
@@ -39,6 +39,11 @@ void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 	else if (tail->type == AND || tail->type == OR)
 	{
 		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_LOGICAL_OP_ERR_MSG, RESET);
+		g_status = 2;
+	}
+	else if (is_redir_tkn(tail->type))
+	{
+			ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, "newline", RESET);
 		g_status = 2;
 	}
 }

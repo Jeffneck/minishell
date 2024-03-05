@@ -11,7 +11,7 @@
 
 int	is_charset_env(char c)
 {
-	if (ft_isalnum(c) || c == '_')
+	if (ft_isalnum(c) || c == '_') //ajouter les whitespaces (a priori non)
 		return (1);
 	return(0);
 }
@@ -40,21 +40,36 @@ char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start) //stopper
 
 	else
 	{
-		len_var = ft_strlen_until_not(&str[start + 1], is_charset_env);
-		var = calloc_gc(len_var + 1, sizeof(char), TMP);
-		if (!var)
-			exit(EXIT_FAILURE); //err man
-		//ft_printf("start = %c , len_var = %u\n", str[start], (unsigned int)len_var); //
-		ft_memcpy(var, &str[start + 1], len_var); //valider les + 1 - 1
-		//ft_printf("var = %s\n", var);
-		expansion = get_env_value(env, var, len_var );//valider les + 1 - 1 et gestion du signe = (GEOFFREY comprend)
-		//ft_printf("expansion = %s\n", expansion);
+		if (str[start + 1] >= '0' && str[start + 1] <= '9')
+			len_var = 1;
+		else
+			len_var = ft_strlen_until_not(&str[start + 1], is_charset_env);
+		//si on a $= par ex
+		// {
+		// 	ft_printf("str = %s\n", str);
+		// 	return(str);
+		// }
+		// if (len_var == 0)
+		// {
+		// 	expansion = ft_strdup(str);
+		// 	ft_printf("expansion = %s\n", expansion);
+		// }
+		else
+		{
+
+			var = calloc_gc(len_var + 1, sizeof(char), TMP);
+			if (!var)
+				exit(EXIT_FAILURE); //err man
+			ft_printf("start = %c , len_var = %u\n", str[start], (unsigned int)len_var); //
+			ft_memcpy(var, &str[start + 1], len_var); //valider les + 1 - 1
+			//ft_printf("var = %s\n", var);
+			expansion = get_env_value(env, var, len_var );//valider les + 1 - 1 et gestion du signe = (GEOFFREY comprend)
+			ft_printf("expansion = %s\n", expansion);
+		}
 		if (!expansion)
 			exit(EXIT_FAILURE); //err man
-		// apply_expansion(str, expansion);
 		new = replace_substr(str, expansion, start, len_var + 1); //valider les + 1 - 1
-		
-		//ft_printf("new = %s\n", new);
+		// ft_printf("new = %s\n", new);
 		if (!new)
 			exit(EXIT_FAILURE); //err man
 		add_to_garbage(new, TKN_LIST);

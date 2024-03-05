@@ -30,7 +30,7 @@ t_btree	*parser(t_mini *mini)
 		return NULL;
 	}
 	//ft_printf("TOKENS LEXED BEFORE PARSING  ///////////////////////////////////\n\n");
-	//display_tknlist(mini->tkn_lst);//
+	// display_tknlist(mini->tkn_lst);//
 	verify_syntax_tknlist(mini->tkn_lst);
 	if (g_status != 0)
 	{
@@ -43,6 +43,6 @@ t_btree	*parser(t_mini *mini)
 	rearrange_cmd_redir_order(mini->tkn_lst);
 	set_token_index(mini->tkn_lst->head);
 	//ft_printf("TOKENS PARSED BEFORE BTREE CREATION ///////////////////////////////////\n\n");
-	//display_tknlist(mini->tkn_lst);//
+	display_tknlist(mini->tkn_lst);//
 	return (create_bin_tree(mini->tkn_lst));
 }

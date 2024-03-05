@@ -1,6 +1,6 @@
 #.DEFAULT_GOAL:all
 
-NAME = minishell_bonus
+NAME = minishell
 
 CC = cc
 

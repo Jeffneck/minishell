@@ -1,42 +1,92 @@
 #include "../../include/minishell.h"
+
+void	handle_signals_heredoc(char *input, size_t	nb_lines, char *delim)
+{
+	if (!input)
+	{
+		if (g_status == 130)
+			write(2, "\n", 1);
+		else
+			ft_printf_fd(2, "%sMinishell: warning: here-document at line %d delimited by end-of-file (wanted `%s')%s\n",RED, (int) nb_lines, delim, RESET);
+	}
+}
+
+// void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
+// {
+// 	//ft_printf("traverse_heredoc_node\n");
+// 	int fd_pipe[2];
+//     char *line;
+// 	t_io	io_transmitted;
+// 	size_t	nb_lines;
+	
+// 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
+//     if (pipe(fd_pipe) == -1)
+// 		print_and_exit("Minishell: pipe error\n", RED, 1);
+//     ft_printf("> ");
+//     line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
+// 	nb_lines = 1;
+// 	while (line)
+// 	{
+// 		// Vérifie si le délimiteur a été entré
+//         if (ft_strlen(line) > 0 && ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
+// 		{
+// 			//ft_printf("line break\n");
+// 			free(line); //utile et bien place ?
+//             break;
+// 		}
+//         ft_putstr_fd(line, fd_pipe[FD_WRITE]);
+//         ft_printf("> ");
+//     	free(line);
+// 	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
+// 		// ft_printf("line = '%s'", line);
+// 		nb_lines++;
+//     }
+// 	handle_signals_heredoc(line, nb_lines, tree_el->cmds[0]);
+//     close(fd_pipe[FD_WRITE]);
+//     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
+//     if (io_inherited.fd_in != 0)
+//         close(io_inherited.fd_in); // Ferme l'ancien fd_in si nécessaire
+//     io_transmitted.fd_in = fd_pipe[FD_READ]; // Utilise le côté lecture du pipe comme nouvelle entrée
+//     browse_tree(mini, tree_el->left, io_transmitted);
+//     close(fd_pipe[FD_READ]); // Assurez-vous de fermer le côté lecture du pipe après utilisation
+// }
+
 void traverse_heredoc_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
 {
 	//ft_printf("traverse_heredoc_node\n");
-    
 	int fd_pipe[2];
     char *line;
 	t_io	io_transmitted;
+	size_t	nb_lines;
 	
 	ft_memcpy(&io_transmitted, &io_inherited, sizeof(t_io));
     if (pipe(fd_pipe) == -1)
-		print_and_exit("Minishell: pipe error\n", RED, 1);
-    ft_printf("> ");
-    line = get_next_line(STDIN_FILENO); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
+		print_and_exit("Minishell: pipe error\n", RED, 1);//revoir la gestion d' erreur
+    line = readline("> "); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
+	nb_lines = 1;
 	while (line)
 	{
-		//ft_printf("line = %s\n", line);
-		if (g_status == 130)
-			break ;
 		// Vérifie si le délimiteur a été entré
-        if (ft_strlen(line) > 0 && ft_strncmp(line, tree_el->cmds[0], ft_strlen(line) - 1) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
+        if (ft_strlen(line) > 0 && ft_strcmp(line, tree_el->cmds[0]) == 0) // attention aux sauts de lignes contenus dans get next line qui peuvent faire foirer la cmp
 		{
-			//ft_printf("line break\n");
-			free(line);
+			ft_printf("found\n");
+			free(line); //utile et bien place ?
             break;
 		}
         ft_putstr_fd(line, fd_pipe[FD_WRITE]);
-        ft_printf("> ");
     	free(line);
-	    line = get_next_line(STDIN_FILENO);//gerer les erreurs de malloc semble impossible pour le moment avec cette fonction
+	    line = readline("> "); //gerer les erreurs de malloc semble impossible pour le moment avec cette fonction 
+		// ft_printf("line = '%s'", line);
+		nb_lines++;
     }
-	//ft_printf("fin heredoc\n");
+	handle_signals_heredoc(line, nb_lines, tree_el->cmds[0]);
     close(fd_pipe[FD_WRITE]);
     // Mise à jour de io_inherited pour utiliser le pipe comme nouvelle entrée
     if (io_inherited.fd_in != 0)
         close(io_inherited.fd_in); // Ferme l'ancien fd_in si nécessaire
     io_transmitted.fd_in = fd_pipe[FD_READ]; // Utilise le côté lecture du pipe comme nouvelle entrée
     browse_tree(mini, tree_el->left, io_transmitted);
-    close(fd_pipe[0]); // Assurez-vous de fermer le côté lecture du pipe après utilisation
+    close(fd_pipe[FD_READ]); // Assurez-vous de fermer le côté lecture du pipe après utilisation
 }
 
 void traverse_redir_input_node(t_mini *mini, t_btree *tree_el, t_io io_inherited)
