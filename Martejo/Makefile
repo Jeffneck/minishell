@@ -31,10 +31,11 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/terminal/prompt.c \
 		srcs/terminal/loop.c \
 		\
-		srcs/parser/expand_wildcards.c \
 		srcs/parser/parser.c \
 		srcs/parser/verify_syntax.c \
 		srcs/parser/reducer.c \
+		srcs/parser/expand_dollars.c \
+		srcs/parser/expand_wildcards.c \
 		srcs/parser/expander.c \
 		srcs/parser/linker.c \
 		srcs/parser/bin_tree.c \

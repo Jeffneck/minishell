@@ -38,7 +38,7 @@ t_btree	*parser(t_mini *mini)
 		return (NULL);
 	}
 	reducer(mini->tkn_lst->head); //gerer le cas ou la reduction entraine une chaine vide comme echo "" ...
-	expander(mini, mini->tkn_lst, mini->env);
+	expander(mini, mini->tkn_lst);
 	linker(mini->tkn_lst);
 	rearrange_cmd_redir_order(mini->tkn_lst);
 	set_token_index(mini->tkn_lst->head);
