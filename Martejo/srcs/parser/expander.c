@@ -41,7 +41,7 @@ void	expander(t_mini *mini,t_tknlist *tkn_lst)
 		// sleep(2);
 		curr = curr->next;
 	}
-	ft_printf("curr = %s\n", curr->content);
+	// ft_printf("curr = %s\n", curr->content);
 	curr = tkn_lst->head;
 	while (curr)
 	{

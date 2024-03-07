@@ -34,7 +34,13 @@ void	add_tknlst_in_tknlst_after_target(t_tknlist *lst1, t_token *tkn_flag, t_tkn
 		return ;
 	if (tkn_flag == lst1->tail)
 		lst1->tail = lst2->tail;
-	(lst2->tail)->next = tkn_flag->next;
+	else
+	{
+		(lst2->tail)->next = tkn_flag->next;
+		(tkn_flag->next)->prev= lst2->tail;
+	}
+	
+	(lst2->head)->prev = tkn_flag;
 	tkn_flag->next = (lst2->head);
 }
 

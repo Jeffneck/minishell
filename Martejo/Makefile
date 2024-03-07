@@ -97,5 +97,9 @@ fclean : clean
 
 re : fclean all
 
-.PHONY: all clean fclean re libft force
+test : all
+	./minishell
+	USER
+
+.PHONY: all clean fclean re libft  test
 
