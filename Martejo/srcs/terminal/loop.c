@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/06 12:41:52 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:03:42 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 	// ft_printf("verify_input_syntax terminated\n");
 	mini->tkn_lst = lexer(line_read);
 	mini->b_tree = parser(mini);
+	//root_first_search(mini->b_tree, display_node);
 	browse_tree(mini, mini->b_tree, mini->io_global);
 	dup2(*stdin_cpy, STDIN_FILENO);
 	close(*stdin_cpy);

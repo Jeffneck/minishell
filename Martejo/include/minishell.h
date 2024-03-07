@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 14:24:15 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:21:12 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ cannot access parent directories: No such file or directory"
 resetting to 1"
 # define HEREDOC_MSG "%sMinishell: warning: here-document \
 at line %d delimited by end-of-file (wanted `%s')%s\n"
+# define DOT_MSG_ERR ": filename argument required\n.: usage: . filename [arguments]\n"
 
 
 

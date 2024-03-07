@@ -73,7 +73,7 @@ void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_LOGICAL_OP_ERR_MSG, RESET);
 		g_status = 2;
 	}
-	else if (is_redir_tkn(tail->type))
+	else if (is_redir_tkn(tail->type) || tail->type == HEREDOC)
 	{
 			ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, "newline", RESET);
 		g_status = 2;

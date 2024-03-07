@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:20:13 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:29:17 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:14:50 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	print_path_error(char *arg, int exit_status, int error)
 	if (error == 4)
 		ft_printf_fd(2, ": Is a directory\n");
 	if (error == 5)
-		ft_printf_fd(2, ": filename argument required\n.: usage: . filename [arguments]\n");
+		ft_printf_fd(2, DOT_MSG_ERR);
 	free_and_exit(exit_status);
 }
 

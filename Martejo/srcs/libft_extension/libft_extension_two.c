@@ -1,7 +1,5 @@
 #include "../../include/minishell.h"
 
-//avance tant que la fonction ne detecte pas un char cible
-//libft
 size_t	ft_strlen_until(const char *str, int(*f)(char))
 {
 	size_t	len;
@@ -22,8 +20,6 @@ size_t	ft_strlen_until_char(const char *str, char c)
 	return (len);
 }
 
-//avance tant que la fonction detecte un char cible
-//libft
 size_t	ft_strlen_until_not(const char *str, int(*f)(char))
 {
 	size_t	len;
@@ -49,7 +45,7 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 	size_t	i;
 	size_t	sub;
 	size_t	j;
-	
+
 	if (!str || !subs)
 		return (0);
 	if (!subs[0])
@@ -57,7 +53,7 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 	i = 0;
 	sub = 0;
 	j = 0;
-	while(str[i])
+	while (str[i])
 	{
 		if (subs[sub][j] == str[i])
 			j++;
@@ -69,7 +65,6 @@ int	str_contains_all_subs_ordered(char *str, char **subs)
 			j = 0;
 			if (!subs[sub])
 				return (1);
-			// continue;
 		}
 		i++;
 	}

@@ -13,7 +13,7 @@
 // }
 static void	unbound_token_in_place(t_tknlist *list_tkn, t_token *to_pop) //rename pop_tkn_in_place
 {
-	ft_printf("unbound_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
+	//ft_printf("unbound_token_in_place head %p tail %p\n", list_tkn->head, list_tkn->tail);
 	if (to_pop == NULL)
 		return;
     if (to_pop != list_tkn->head)
@@ -28,7 +28,7 @@ static void	unbound_token_in_place(t_tknlist *list_tkn, t_token *to_pop) //renam
 
 static void	tknlst_addfront(t_token *curr, t_tknlist *tknlst)
 {
-	ft_printf("tknlst_addfront\n");
+	//ft_printf("tknlst_addfront\n");
 	if (!curr || !tknlst)
 		return ;
 	curr->prev = NULL;
@@ -42,7 +42,7 @@ static void	tknlst_addfront(t_token *curr, t_tknlist *tknlst)
 
 static void	tknlst_addback(t_token *curr, t_tknlist *tknlst)
 {
-	ft_printf("tknlst_addback\n");
+	//ft_printf("tknlst_addback\n");
 	if (!curr || !tknlst)
 		return ;
 	curr->next = NULL;
@@ -61,7 +61,7 @@ static void	tknlst_addback(t_token *curr, t_tknlist *tknlst)
 
 static t_token	*return_end_sequence(t_token *begin_seq)
 {
-	ft_printf("return_end_sequence\n");
+	//ft_printf("return_end_sequence\n");
 	t_token *curr;
 
 	curr = begin_seq;
@@ -74,7 +74,7 @@ static t_token	*return_end_sequence(t_token *begin_seq)
 
 static size_t	size_sequence(t_token *begin_seq)
 {
-	ft_printf("size_sequence\n");
+	//ft_printf("size_sequence\n");
 	t_token *curr;
 	size_t	i;
 
@@ -90,7 +90,7 @@ static size_t	size_sequence(t_token *begin_seq)
 
 static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 {
-	ft_printf("reorder_sequence curr->content = %s\n", curr->content);
+	//ft_printf("reorder_sequence curr->content = %s\n", curr->content);
 	t_tknlist	*reordered_lst;
 	t_token		*before_seq;
 	t_token		*after_seq;
@@ -99,7 +99,7 @@ static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 	init_list(&reordered_lst);
 	before_seq = curr->prev;
 	after_seq = return_end_sequence(curr);
-	ft_printf("before_seq = %p after_seq = %p\n", before_seq, after_seq);
+	//ft_printf("before_seq = %p after_seq = %p\n", before_seq, after_seq);
 	// ft_printf("before_seq = %p after_seq = %p\n", before_seq, after_seq);
 	while (curr->next != after_seq)
 		curr = curr->next;
@@ -111,12 +111,12 @@ static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 			tknlst_addfront(curr, reordered_lst);
 		if(is_redir_tkn(curr->type))
 			tknlst_addback(curr, reordered_lst);
-		ft_printf("curr = %p\n", curr);
+		//ft_printf("curr = %p\n", curr);
 		curr = prev;
 		// ft_printf("reorder_sequence curr->content = %s\n", curr->content);
 
 	}
-	ft_printf("reordered_lst->head = %p reordered_lst->tail = %p\n", reordered_lst->head, reordered_lst->tail);
+	//ft_printf("reordered_lst->head = %p reordered_lst->tail = %p\n", reordered_lst->head, reordered_lst->tail);
 	// display_tknlist(reordered_lst);
 	if (before_seq == NULL)
 	{
@@ -124,12 +124,12 @@ static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 		reordered_lst->tail->next = after_seq;
 		if (after_seq == NULL)
 			tknlst->tail = reordered_lst->tail;
-		ft_printf("2\n");
+		//ft_printf("2\n");
 	}
 	else
 	{
 		add_tknlst_in_tknlst_after_target(tknlst, before_seq, reordered_lst);
-		ft_printf("3\n");
+		//ft_printf("3\n");
 
 	}
 	return (after_seq);
@@ -137,7 +137,7 @@ static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 
 void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 {
-	ft_printf("rearrange_cmd_redir_order\n");
+	//ft_printf("rearrange_cmd_redir_order\n");
 	t_token *curr; 
 
 	curr = tknlst->head;

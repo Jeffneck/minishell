@@ -8,7 +8,11 @@ CFLAGS = -Werror -Wall -Wextra
 
 RM = rm -rf
 
-SRCS =  srcs/lexer/lexer.c \
+SRCS =  srcs/main.c \
+		srcs/terminal/prompt.c \
+		srcs/terminal/loop.c \
+		\
+		srcs/lexer/lexer.c \
 		srcs/lexer/lexer_utils.c \
 		srcs/lexer/list.c \
 		srcs/lexer/token_handler.c \
@@ -27,22 +31,21 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/env/env_utils.c \
 		srcs/env/sort_env.c \
 		\
-		srcs/main.c \
-		srcs/terminal/prompt.c \
-		srcs/terminal/loop.c \
-		\
 		srcs/parser/parser.c \
+		\
+		srcs/parser/expander/expand_dollars.c \
+		srcs/parser/expander/expand_wildcards.c \
+		srcs/parser/expander/expander.c \
+		\
+		srcs/parser/binary_tree/bin_tree.c \
+		srcs/parser/binary_tree/bin_tree_utils.c \
+		\
+		srcs/parser/linker/linker.c \
+		srcs/parser/reducer/reducer.c \
 		srcs/parser/verify_syntax.c \
-		srcs/parser/reducer.c \
-		srcs/parser/expand_dollars.c \
-		srcs/parser/expand_wildcards.c \
-		srcs/parser/expander.c \
-		srcs/parser/linker.c \
-		srcs/parser/bin_tree.c \
-		srcs/parser/bin_tree_utils.c \
-		srcs/parser/tknlist_utils_extension.c \
+		srcs/parser/tknlist_handler/tknlist_utils_extension.c \
+		srcs/parser/tknlist_handler/tkntype_utils.c \
 		srcs/parser/display_tree.c \
-		srcs/parser/tkntype_utils.c \
 		srcs/parser/reorder_tknlist.c \
 		srcs/parser/display_tknlist.c \
 		\

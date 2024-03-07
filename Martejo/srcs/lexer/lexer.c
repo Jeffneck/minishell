@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:12:00 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 11:16:00 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 17:22:13 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@ int	detect_type(const char c, const char c2)
 		return (AND);
 	else if (c == '|' && c2 == '|')
 		return (OR);
+	else if (c == '&' && c2 != '&')
+		print_without_exit(\
+			"Minishell: syntax error near unexpected token `&'\n", RED, 2);
 	return (WORD);
 }
 
