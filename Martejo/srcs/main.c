@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:04:25 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:44:58 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:08:49 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	handle_shlvl(t_env *env, int nb)
 	shlvl = itoa_gc(lvl, ENV);
 	if (!shlvl)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
-	shlvl = ft_strjoin("SHLVL=", shlvl);
+	shlvl = strjoin_gc("SHLVL=", shlvl, TMP);
 	if (!shlvl)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	is_in_env(env, shlvl);
@@ -61,7 +61,7 @@ int	main(int argc, char **argv, char **envp)
 	mini.io_global = (t_io){0, 1};
 	mini.last_gstatus = 0;
 	singleton_mini(&mini);
-	handle_shlvl(mini.env, 1);
+	handle_shlvl(mini.env, 0);
 	prompt_loop(&mini);
 	return (0);
 }

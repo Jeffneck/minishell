@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:14:01 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:41:52 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	clear_ctrl_c(int *stdin_cpy, int *first_read, char **line_read)
 	close(*stdin_cpy);
 	if (*first_read == 1)
 	{
-		write(1, "\n", 1);
+		write(1, "\n", 1); // A retirer
 		*first_read = 0;
 	}
 	clear_loop();
@@ -75,6 +75,7 @@ void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
 	dup2(*stdin_cpy, STDIN_FILENO);
 	close(*stdin_cpy);
 	clear_loop();
+	//write(1, "\n", 1);
 }
 
 void	prompt_loop(t_mini *mini)

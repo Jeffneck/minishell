@@ -81,6 +81,4 @@ void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 		curr = curr->next;
 	}
 	
-
-
 }

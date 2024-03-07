@@ -10,7 +10,7 @@ int	update_oldpwd(t_env **env)
 		ft_putstr_fd(strerror(errno), 2);
 		return (1);
 	}
-	oldpwd = ft_strjoin("OLDPWD=", cwd);
+	oldpwd = strjoin_gc("OLDPWD=", cwd, TMP);
 	if (!oldpwd)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	if (is_in_env(*env, oldpwd) == 0)
@@ -18,7 +18,7 @@ int	update_oldpwd(t_env **env)
 	return (0);
 }
 
-int	update_pwd(t_env **env)
+int	update_pwd(t_env **env, int slash)
 {
 	char	cwd[PATH_MAX];
 	char	*pwd;
@@ -28,7 +28,10 @@ int	update_pwd(t_env **env)
 		ft_putstr_fd(strerror(errno), 2);
 		return (1);
 	}
-	pwd = ft_strjoin("PWD=", cwd);
+	if (!slash)
+		pwd = strjoin_gc("PWD=", cwd, TMP);
+	else
+		pwd = strjoin_gc("PWD=", "//", TMP);
 	if (!pwd)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	if (is_in_env(*env, pwd) == 0)
@@ -55,10 +58,10 @@ int	go_to_path(t_env **env)
 	if (ret)
 	{
 		ft_putstr_fd(strerror(errno), 2);
-		return (free(env_path), 1);
+		return (1);
 	}
-	update_pwd(env);
-	return (free(env_path), ret);
+	update_pwd(env, 0);
+	return (ret);
 }
 
 int	cd(char **cmds, t_env **env)
@@ -82,7 +85,12 @@ int	cd(char **cmds, t_env **env)
 			ft_printf_fd(2, "Minishell: cd: %s: %s\n", cmds[1], strerror(errno));
 			return (1);
 		}
-		if (update_pwd(env) != 0)
+		if (ft_strcmp(cmds[1], "//") == 0)
+		{
+			if (update_pwd(env, 1) != 0)
+				return (1);
+		}
+		else if (update_pwd(env, 0) != 0)
 			return (1);
 	}
 	return (ret_cd);

@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:31:50 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 10:40:43 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:38:52 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char	*path_handler(t_btree *tree_el, t_env *env)
 	cmdpath = NULL;
 	if (!cmd)
 		free_and_exit(1);
-	else if (cmd && (cmd[0] == '.' || cmd[0] == '\\'))
+	else if (cmd && (cmd[0] == '.' || cmd[0] == '\\' || cmd[0] == '/'))
 	{
 		if (ft_strcmp(cmd, ".") == 0 && !tree_el->cmds[1])
 			print_path_error(cmd, 2, 5);

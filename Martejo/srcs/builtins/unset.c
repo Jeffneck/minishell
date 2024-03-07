@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:32:40 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 12:47:10 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:47:00 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ size_t	env_size(char *env)
 	return (i);
 }
 
-int	search_and_unset(char **value, t_env **env)
+int	search_and_unset(char **value, t_env **env, int index)
 {
 	t_env	*tmp;
 	t_env	*curr;
@@ -33,7 +33,7 @@ int	search_and_unset(char **value, t_env **env)
 	curr = *env;
 	while (curr && curr->next)
 	{
-		if (ft_strncmp(value[1], curr->next->value,
+		if (ft_strncmp(value[index], curr->next->value,
 				env_size(curr->next->value)) == 0)
 		{
 			tmp = curr->next->next;
@@ -51,18 +51,25 @@ int	search_and_unset(char **value, t_env **env)
 int	unset(char **value, t_env **env)
 {
 	t_env	*tmp;
+	size_t	i;
 
 	if (!(value[1]) || !(*env))
 		return (0);
-	if (ft_strncmp(value[1], (*env)->value, (int)env_size((*env)->value)) == 0)
+	i = 1;
+	while (value[i])
 	{
-		tmp = *env;
-		if ((*env)->next)
-			*env = (*env)->next;
+		if (ft_strncmp(value[i], (*env)->value, (int)env_size((*env)->value)) == 0)
+		{
+			tmp = *env;
+			if ((*env)->next)
+				*env = (*env)->next;
+			else
+				*env = NULL;
+			del_one_garbage(tmp, ENV);
+		}
 		else
-			*env = NULL;
-		del_one_garbage(tmp, ENV);
-		return (0);
+			search_and_unset(value, env, i);
+		i++;
 	}
-	return (search_and_unset(value, env));
+	return (0);
 }

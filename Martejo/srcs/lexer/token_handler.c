@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:19:28 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 12:45:23 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 13:49:30 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,13 @@ int	cmd_handler(char *buffer, t_tknlist *list)
 	i = 0;
 	link = 0;
 	while (buffer[i] != '\0' && ft_isspace(buffer[i]) == 0
-		&& is_operator(buffer[i], buffer[i + 1]) == 0)
+		&& is_operator(buffer[i], buffer[i + 1]) == 0 )
 	{
-		if (buffer[i] == '\'' || buffer[i] == '\"')
+		if (buffer[i] == '\'' || buffer[i] == '\"' ||  buffer[i] == '<' || buffer[i] == '>')
 			break ;
 		i++;
 	}
-	if (buffer[i] != '\0' && ft_isspace(buffer[i]) == 0)
+	if ( !(buffer[i] == '<' || buffer[i] == '>') && buffer[i] != '\0' && ft_isspace(buffer[i]) == 0)
 		link = 1;
 	if (!add_node(list,
 			create_node(WORD, ft_strndup(buffer, i, TKN_LIST), link)))

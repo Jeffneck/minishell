@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:25:23 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:52:49 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ int			error_handler_lexer(int id_gc, char *msg);
 /**cd**/
 int	is_in_env(t_env *env, char *args);
 int	update_oldpwd(t_env **env);
-int	update_pwd(t_env **env);
+int	update_pwd(t_env **env, int slash);
 int	go_to_path(t_env **env);
 int	cd(char **cmds, t_env **env);
 

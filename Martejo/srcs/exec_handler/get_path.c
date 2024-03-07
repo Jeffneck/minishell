@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:24:59 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:33:03 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:17:51 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ char	**find_path(t_env *env)
 	path_split = split_gc(path, ':', TMP);
 	if (!path_split)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
-	free(path);
 	return (path_split);
 }
 

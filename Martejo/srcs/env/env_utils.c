@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 11:06:36 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 14:37:25 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 11:08:01 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*get_env_value(t_env *env, const char *var, size_t len)
 	{
 		if (ft_strncmp(env->value, var, len) == 0)
 		{
-			path = ft_strdup(&env->value[len + 1]);
+			path = strdup_gc(&env->value[len + 1], TMP);
 			if (!path)
 				print_and_exit(MALLOC_ERR_MSG, RED, 1);
 			return (path);

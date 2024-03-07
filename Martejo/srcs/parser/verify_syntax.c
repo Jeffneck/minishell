@@ -1,5 +1,19 @@
 #include "../../include/minishell.h"
 
+static int	is_empty_parenthis(char *content)
+{
+	size_t	i;
+
+	i = 1;
+	while (content[i] && content[i] != ')')
+	{
+		if (ft_isspace(content[i]) == 0)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 {
 	//ft_printf("verify_last_tkn\n");
@@ -10,6 +24,12 @@ void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 	if (is_operator_tkn(curr->type))
 	{
 		ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, curr->content, RESET);
+		g_status = 2;
+		return ;
+	}
+	if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
+	{
+		ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, ')', RESET);
 		g_status = 2;
 		return ;
 	}
@@ -27,7 +47,19 @@ void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
 			g_status = 1;
 			return ;
 		}
+		if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
+		{
+			ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, '(', RESET);
+			g_status = 2;
+			return ;
+		}
 		curr = curr->next;
+	}
+	if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
+	{
+		ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, '(', RESET);
+		g_status = 2;
+		return ;
 	}
 	tail = lst->tail;
 	if (tail->type == PIPE)

@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:37:22 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 13:44:25 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/06 12:55:31 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,18 +82,18 @@ int	builtin_exit(t_mini *mini, char **cmds)
 
 	if (cmds[1])
 	{
-		if (cmds[2])
-		{
-			ft_putstr_fd("Minishell: exit: too many arguments", 2);
-			return (1);
-		}
-		else if (check_status_code(cmds[1]) == 1 ||  isValidLong(cmds[1]) == 0)
+		
+		if (check_status_code(cmds[1]) == 1 ||  isValidLong(cmds[1]) == 0)
 		{
 			ft_printf_fd(2, "Minishell: exit: %s : numeric argument required\n",
 				cmds[1]);
 			exit_status = 2;
 		}
-		
+		else if (cmds[2])
+		{
+			ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
+			return (1);
+		}
 		else
 		{
 			exit_status = ft_atoi(cmds[1]);
