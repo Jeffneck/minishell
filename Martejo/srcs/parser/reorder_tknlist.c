@@ -1,84 +1,114 @@
 #include "../../include/minishell.h"
 
-static size_t	nb_redirs_in_a_row(t_token *curr)
-{
-	size_t	i;
+// static bool	is_cmd_redir_sequence(t_token *curr)
+// {
+// 	if (!is)
+// }
 
-	i = 0;
-	while(curr && is_redir_tkn(curr->type))
+// static bool	is_cmd_redir_sequence(t_token *curr)
+// {
+// 	if((!is_operator_tkn(curr->type)) && (!is_operator_tkn(curr->next->type)))
+// 		return (1);
+// 	return (0);
+// }
+
+static void	tknlst_addfront(t_token *curr, t_tknlist *tknlst)
+{
+	if (!curr || !tknlst)
+		return ;
+	curr->next = tknlst->head;
+	if (tknlst->head)
+		tknlst->head->prev = curr;
+	if (!tknlst->tail)
+		tknlst->tail = curr;
+}
+
+static void	tknlst_addback(t_token *curr, t_tknlist *tknlst)
+{
+	if (!curr || !tknlst)
+		return ;
+	if (!tknlst->head)
+	{
+		tknlst->head = curr;
+		tknlst->tail = curr;
+	}
+	else
+	{
+		curr->prev = tknlst->tail;
+		tknlst->tail->next = curr;
+		tknlst->tail = curr;
+	}
+}
+
+static t_token	*return_end_sequence(t_token *begin_seq)
+{
+	t_token *curr;
+
+	curr = begin_seq;
+	while (curr && !is_operator_tkn(curr->type))
 	{
 		curr = curr->next;
+	}
+	return (curr);
+}
+
+static size_t	size_sequence(t_token *begin_seq)
+{
+	t_token *curr;
+	size_t	i;
+
+	curr = begin_seq;
+	i = 0;
+	while (curr && !is_operator_tkn(curr->type))
+	{
 		i++;
+		curr = curr->next;
 	}
 	return (i);
 }
 
-static void	reverse_cmd_redirs(t_tknlist *tknlst, t_token *first, size_t nb_redirs)
+static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 {
-	//ft_printf("reverse_cmd_redirs\n");
-	//printf(" first debut = %s\n nb redir = %zu\n", first->content, nb_redirs);
-	size_t	i;
-	size_t	j;
-	t_token	*curr;
-	t_token	*next;
-	t_token *tmp;
+	t_tknlist	*reordered_lst;
+	t_token		*before_seq;
+	t_token		*after_seq;
 
-	i = 0;
-	tmp = first;
-	while (i < nb_redirs - 1)
+	
+	init_list(&reordered_lst);
+	before_seq = curr->prev;
+	after_seq = return_end_sequence(curr);
+	while(curr->next && !is_operator_tkn(curr->type))
 	{
-		curr = tmp;
-		tmp = curr->next;
-		j = i;
-		while(j < nb_redirs - 1)
-		{
-			next = curr->next;
-			swap_tokens(tknlst, curr, next);
-			j++;
-		}
-		i++;
+		if(is_cmd_tkn(curr->type) || curr->type == PARENTHESIS)
+			tknlst_addfront(curr, reordered_lst);
+		if(is_redir_tkn(curr->type))
+			tknlst_addback(curr, reordered_lst);
+		curr = curr->next;
 	}
-	// curr = first;
-	// while (nb_redirs > 0)
-	// {
-	// 	curr = curr->next;
-	// 	nb_redirs--;
-	// }
-	//ft_printf("next = %s\n", first->next->content);
-	// return (curr);
+	
+	if (before_seq == NULL)
+	{
+		tknlst->head = reordered_lst->head;
+		reordered_lst->tail->next = after_seq;
+		if (after_seq == NULL)
+			tknlst->tail = reordered_lst->tail;
+	}
+	else
+		add_tknlst_in_tknlst_after_target(tknlst, before_seq, reordered_lst);
+	return (after_seq);
 }
 
 void	rearrange_cmd_redir_order(t_tknlist *tknlst)
 {
 	//ft_printf("rearrange_cmd_redir_order\n");
-	
 	t_token *curr; 
-	t_token *next; 
 
 	curr = tknlst->head;
 	while(curr && curr->next)
 	{
-		next = curr->next;
-		if((is_redir_tkn(curr->type) || curr->type == HEREDOC) && is_cmd_tkn(next->type))
-		{
-			swap_tokens(tknlst, curr, next);
-			continue;
-		}
-		// if((is_redir_tkn(curr->type) || curr->type == HEREDOC) && (is_redir_tkn(next->type) || next->type == HEREDOC) )
-		// {
-		// 	swap_tokens(tknlst, curr, next);
-		// 	continue;
-		// }
-		curr = curr->next;
+		if(size_sequence(curr) > 2)
+			curr = reorder_sequence(tknlst, curr);
+		if(curr)
+			curr = curr->next;
 	}
-	curr = tknlst->head;
-	while(curr && curr->next)
-	{
-		next = curr->next;
-		if((is_redir_tkn(curr->type) || curr->type == HEREDOC)
-			&& (is_redir_tkn(next->type) || next->type == HEREDOC))
-			reverse_cmd_redirs(tknlst, curr, nb_redirs_in_a_row(curr));
-		curr = curr->next;
-	}
-	
 }
