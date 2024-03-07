@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:47:33 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 13:17:04 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:02:37 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	print_error_export(char *args, int error)
 			args);
 	return (1);
 }
-
-
 
 int	is_valid_args(const char *args)
 {

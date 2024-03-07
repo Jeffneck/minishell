@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 13:47:27 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 14:54:13 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:51:49 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	exec_builtin( t_env **envt, t_btree *tree_el, t_io fds)
 	else if (ft_strcmp(tree_el->cmds[0], "cd") == 0)
 		status = cd(tree_el->cmds, envt);
 	else if (ft_strcmp(tree_el->cmds[0], "pwd") == 0)
-		status = ft_pwd(fds);
+		status = ft_pwd(fds, *envt);
 	else if (ft_strcmp(tree_el->cmds[0], "env") == 0)
 		env(*envt, fds);
 	else if (ft_strcmp(tree_el->cmds[0], "export") == 0)

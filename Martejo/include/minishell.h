@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 10:36:41 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:24:15 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ present outside quotes.\n"
 cannot access parent directories: No such file or directory"
 # define SHLVL_ERR_MSG "minishell: warning: shell level (%d) too high, \
 resetting to 1"
+# define HEREDOC_MSG "%sMinishell: warning: here-document \
+at line %d delimited by end-of-file (wanted `%s')%s\n"
 
 
 
@@ -88,8 +90,6 @@ typedef enum e_tkntype
 	PARENTHESIS,
 }	t_tkntype;
 
-
-//ne pas mettre ifndef pour ne pas rendre les valeurs suivantes modifiables
 # define FD_READ 0
 # define FD_WRITE 1
 # define FD_IN 0
@@ -209,7 +209,7 @@ int	size_cmds(char **cmds); //attention fonction en double
 int	env(t_env *env, t_io fds); // A voir pour changer nom
 
 /**pwd**/
-int	ft_pwd(t_io fds);
+int	ft_pwd(t_io fds, t_env *env);
 
  /**export**/
 int	ft_export(char **args, t_env **envt, t_io fds);
@@ -224,27 +224,24 @@ int	builtin_exit(t_mini *mini, char **cmds);
 /**env_handler**/
 t_env	*init_env(char **env_array);
 char	*ft_strndup(char *buffer, int len, t_id_gc id);
- void	env_add_back(t_env **env, t_env *new);
- int	env_add(char *value, t_env **env, int mod);
- void	*get_env_name_var(char *dest, char *src);
+void	env_add_back(t_env **env, t_env *new);
+int		env_add(char *value, t_env **env, int mod);
+void	*get_env_name_var(char *dest, char *src);
 
- /**env_utils**/
- size_t	size_all_value(t_env *lst);
- char	*env_to_str(t_env *lst);
- char	*get_env_value(t_env *env, const char *var, size_t len);
+/**env_utils**/
+size_t	size_all_value(t_env *lst);
+char	*env_to_str(t_env *lst);
+char	*get_env_value(t_env *env, const char *var, size_t len);
 
-
- /**sort_env**/
- int	strlen_2d(char **tab); // a voir si utile
- void	sort_env(char **tab, int len_env);
+/**sort_env**/
+int	strlen_2d(char **tab); // a voir si utile
+void	sort_env(char **tab, int len_env);
 void	print_sorted_env(t_env *env, t_io fds);
 
 /****/
 char	*create_prompt(t_mini *mini);
 void	prompt_loop(t_mini *mini);
 
-
-//TEST PARSER
 
 //tknlist_utils
 void	add_after_another(t_tknlist	*list, t_token *el_flag, t_token *el_toplace);
@@ -365,6 +362,8 @@ int	is_cmd_tkn(t_tkntype tkntype);
 int	is_redir_tkn(t_tkntype tkntype);
 int	is_operator_tkn(t_tkntype tkntype);
 void	clear_loop(void);
+int	wait_child(pid_t pid);
+int	traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
 
 

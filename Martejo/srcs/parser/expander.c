@@ -34,7 +34,7 @@ void	expander(t_mini *mini,t_tknlist *tkn_lst)
 	{
 		if(is_dollar_expansible(curr))
 			curr = expand_dollar(mini, curr, tkn_lst);
-		display_tknlist(tkn_lst);
+		//display_tknlist(tkn_lst);
 		// ft_printf("curr = %s\n", curr->content);
 		// if(curr->next)
 		// 	ft_printf("next = %s\n", curr->next->content);

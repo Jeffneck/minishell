@@ -93,7 +93,7 @@ static void	lstadd_wildcard_expansions(t_tknlist *wildcard_lst, char **subs_need
 			if (!new_tkn)
 			{
 				closedir(dir); //probleme, en cas d' erreur de malloc, create node free et exit.
-				exit(EXIT_FAILURE);//error mnagement
+				print_and_exit(MALLOC_ERR_MSG, RED, 1);
 			}
 			add_node(wildcard_lst, new_tkn);
 		}

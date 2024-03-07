@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:32:40 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/06 12:47:00 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:02:53 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ int	unset(char **value, t_env **env)
 	i = 1;
 	while (value[i])
 	{
-		if (ft_strncmp(value[i], (*env)->value, (int)env_size((*env)->value)) == 0)
+		if (ft_strncmp(value[i], (*env)->value
+				, (int)env_size((*env)->value)) == 0)
 		{
 			tmp = *env;
 			if ((*env)->next)

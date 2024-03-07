@@ -35,12 +35,14 @@ static void	lstadd_dollar_expansions (t_mini *mini, t_tkntype init_type, char *t
 		}
 		else
 		{
-			len_sub = ft_strlen_until_char(&to_expand[i], '$');
-			ft_printf("len_sub = %d", (int)len_sub);
-			new_tkn = create_node(init_type, strndup_gc(&to_expand[i], len_sub, TKN_LIST), 1);
+			len_sub = ft_strlen_until_char(&to_expand[i], '$') - 1;
+			//ft_printf("len_sub = %d", (int)len_sub);
+			new_tkn = create_node(init_type, strndup_gc(&to_expand[i], len_sub + 1, TKN_LIST), 1);
 		}
 		//qd on aura modif create node il faudra surement tester si new node est NULL
 		add_node(dollar_lst, new_tkn);
+		//ft_printf("len sub = %d i = %d letter = %c\n",(int) len_sub, (int) i,  to_expand[i]);
+		
 		i += len_sub + 1;
 	}
 }

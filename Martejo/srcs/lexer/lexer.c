@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:12:00 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/06 12:36:50 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:16:00 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_tknlist	*lexer(char *buffer)
 				break ;
 			type = detect_type(buffer[i], buffer[i + 1]);
 			handle_token(&buffer[i], list, type, &i);
-			if (g_status == 1)
+			if (g_status != 0)
 				break ;
 		}
 		else

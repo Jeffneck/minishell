@@ -6,18 +6,20 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:52:45 by gemartel          #+#    #+#             */
-/*   Updated: 2024/02/29 12:42:56 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:51:03 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_pwd(t_io fds)
+int	ft_pwd(t_io fds, t_env *env)
 {
 	char	*cwd;
 	char	buffer[PATH_MAX];
 
-	cwd = getcwd(buffer, sizeof(buffer));
+	cwd = get_env_value(env, "PWD", 3);
+	if (cwd[0] == 0)
+		cwd = getcwd(buffer, sizeof(buffer));
 	if (cwd == NULL)
 	{
 		ft_putstr_fd(strerror(errno), 2);

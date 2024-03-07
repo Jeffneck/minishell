@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:40:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/05 15:07:59 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 11:51:16 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,10 @@ int	size_cmds(char **cmds)
 		size++;
 	return (size);
 }
-static int is_valid_option(char *option)
+
+static int	is_valid_option(char *option)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	if (option[1] == '\0')
@@ -35,8 +36,8 @@ static int is_valid_option(char *option)
 		i++;
 	}
 	return (0);
-	
 }
+
 int	echo(char **cmds, t_io fds)
 {
 	int	i;

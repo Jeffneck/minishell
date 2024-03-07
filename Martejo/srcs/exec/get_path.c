@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:24:59 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/06 11:17:51 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 13:04:08 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	check_path(char *command, char *path)
 
 	dir = NULL;
 	dir = opendir(command);
-	
 	if (dir && (command[0] == '.' || command[ft_strlen(command) - 1] == '/'))
 	{
 		closedir(dir);

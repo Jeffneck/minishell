@@ -47,12 +47,13 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/reorder_tknlist.c \
 		srcs/parser/display_tknlist.c \
 		\
+		srcs/exec/browse_node.c \
 		srcs/exec/browse_tree.c \
-		\
-		srcs/exec_handler/exec_bin.c \
-		srcs/exec_handler/exec_builtins.c \
-		srcs/exec_handler/exec_handler.c \
-		srcs/exec_handler/get_path.c \
+		srcs/exec/browse_node_heredoc.c \
+		srcs/exec/exec_bin.c \
+		srcs/exec/exec_builtins.c \
+		srcs/exec/exec_handler.c \
+		srcs/exec/get_path.c \
 		\
 		srcs/utils/print_utils.c \
 		srcs/utils/error.c \

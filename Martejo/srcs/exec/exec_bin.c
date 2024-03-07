@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:31:50 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/06 12:38:52 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 14:02:31 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ char	*path_handler(t_btree *tree_el, t_env *env)
 	return (cmdpath);
 }
 
-/*Voir si autre code d'erreur pour le else apres wifexited*/
+/*remplacer lexit par waitchild*/
 int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 {
 	pid_t	pid;
@@ -114,7 +114,5 @@ int	exec_bin(t_env *env, t_btree *tree_el, t_io fds)
 		ft_putendl_fd("Quit (core dumped)", 2);
 	if (WIFEXITED(status))
 		exit_status = WEXITSTATUS(status);
-	// else
-	// 	return (130);
 	return (exit_status);
 }
