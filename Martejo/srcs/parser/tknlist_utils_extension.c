@@ -34,9 +34,43 @@ void	add_tknlst_in_tknlst_after_target(t_tknlist *lst1, t_token *tkn_flag, t_tkn
 		return ;
 	if (tkn_flag == lst1->tail)
 		lst1->tail = lst2->tail;
-	(lst2->tail)->next = tkn_flag->next;
+	else
+	{
+		(lst2->tail)->next = tkn_flag->next;
+		(tkn_flag->next)->prev= lst2->tail;
+	}
+	
+	(lst2->head)->prev = tkn_flag;
 	tkn_flag->next = (lst2->head);
 }
+
+// void add_tknlst_in_tknlst_after_target(t_tknlist *lst1, t_token *tkn_flag, t_tknlist *lst2) {
+//     // Vérification préalable des arguments pour s'assurer qu'ils ne sont pas NULL
+//     // et que les listes ne sont pas vides.
+//     if (!lst1 || !lst1->head || !tkn_flag || !lst2 || !lst2->head)
+//         return;
+
+//     // Vérification pour s'assurer que tkn_flag est dans lst1.
+//     t_token *current = lst1->head;
+//     int flagFound = 0;
+//     while (current) {
+//         if (current == tkn_flag) {
+//             flagFound = 1;
+//             break;
+//         }
+//         current = current->next;
+//     }
+//     if (!flagFound) // Si tkn_flag n'est pas trouvé dans lst1, on sort de la fonction.
+//         return;
+
+//     // Insertion de lst2 après tkn_flag
+//     if (tkn_flag->next) { // Si tkn_flag n'est pas le dernier élément de lst1
+//         (lst2->tail)->next = tkn_flag->next;
+//     } else { // Si tkn_flag est le dernier élément, on met à jour lst1->tail
+//         lst1->tail = lst2->tail;
+//     }
+//     tkn_flag->next = lst2->head;
+// }
 
 void	swap_tokens(t_tknlist	*lst, t_token *tkn1, t_token *tkn2) //rename swap_tkns_in_tknlist
 {

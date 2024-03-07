@@ -1,0 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   strndup_gc.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/03/06 10:19:35 by hanglade          #+#    #+#             */
+/*   Updated: 2024/03/06 10:45:05 by hanglade         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+#include "../libft.h"
+
+char	*strndup_gc(char *buffer, int len, int id_gc)
+{
+	char	*new;
+	int		i;
+
+	i = 0;
+	while (buffer[i] && i < len)
+		i++;
+	new = malloc_gc((i + 1) * sizeof(char), id_gc);
+	if (!new)
+		NULL;
+	i = 0;
+	while (buffer[i] && i < len)
+	{
+		new[i] = buffer[i];
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
+}

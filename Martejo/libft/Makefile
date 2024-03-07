@@ -92,6 +92,7 @@ SRCS	=	\
 			gc/strtrim_gc.c \
 			gc/substr_gc.c \
 			gc/itoa_gc.c \
+			gc/strndup_gc.c \
 
 OBJS	= ${SRCS:.c=.o}
 

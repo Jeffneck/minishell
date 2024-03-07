@@ -6,7 +6,7 @@
 /*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 14:35:30 by hanglade          #+#    #+#             */
-/*   Updated: 2024/02/29 10:55:28 by hanglade         ###   ########.fr       */
+/*   Updated: 2024/03/06 10:45:37 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,5 +153,6 @@ char	*strtrim_gc(char const *s1, char const *set, int id_gc);
 char	*substr_gc(char const *s, unsigned int start, size_t len, int id_gc);
 char	*strmapi_gc(char const *s, char (*f)(unsigned int, char), int id_gc);
 char	*itoa_gc(int n, int id_gc);
+char	*strndup_gc(char *buffer, int len, int id_gc);
 
 #endif

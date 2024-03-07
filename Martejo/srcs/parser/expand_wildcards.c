@@ -1,6 +1,6 @@
 #include "../../include/minishell.h"
 
-void	tknlst_sort_ascii_case(t_tknlist *list_expnd)
+static void	sort_tknlst_like_wildcard(t_tknlist *list_expnd)
 {
 	t_token		*curr;
 	t_token		*next;
@@ -25,38 +25,38 @@ void	tknlst_sort_ascii_case(t_tknlist *list_expnd)
 		i++;
 	}
 }
-char	*remove_dup_chars(char *src)
-{
-	char	*new;
-	size_t	size_new;
-	size_t	i;
-	size_t	j;
+// char	*remove_dup_chars(char *src)
+// {
+// 	char	*new;
+// 	size_t	size_new;
+// 	size_t	i;
+// 	size_t	j;
 
-	if(!src)
-		return(NULL); // utile ou contre productif
-	size_new = ft_strlen(src) + 1;
-	i = 0;
-	while (src[i])
-	{
-		if(src[i + 1] && src[i + 1] == src[i])
-			size_new--;
-		i++;
-	}
-	new = (char *) calloc_gc(size_new, sizeof(char), TMP);
-	if (!new)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while(src[i])
-	{
-		if (!src[i + 1] || src[i + 1] != src[i])
-			new[j++] = src[i];
-		i++;
-	}
-	return (new);
-}
+// 	if(!src)
+// 		return(NULL); // utile ou contre productif
+// 	size_new = ft_strlen(src) + 1;
+// 	i = 0;
+// 	while (src[i])
+// 	{
+// 		if(src[i + 1] && src[i + 1] == src[i])
+// 			size_new--;
+// 		i++;
+// 	}
+// 	new = (char *) calloc_gc(size_new, sizeof(char), TMP);
+// 	if (!new)
+// 		return (NULL);
+// 	i = 0;
+// 	j = 0;
+// 	while(src[i])
+// 	{
+// 		if (!src[i + 1] || src[i + 1] != src[i])
+// 			new[j++] = src[i];
+// 		i++;
+// 	}
+// 	return (new);
+// }
 
-int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
+static int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 {
 	// ft_printf("file = %s\n", file);
 	if (to_expand[0] == '*' && file[0] == '.')
@@ -73,9 +73,9 @@ int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand)
 	return(1);
 }
 
-void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand)
+static void	lstadd_wildcard_expansions(t_tknlist *wildcard_lst, char **subs_needed, char *to_expand)
 {
-	//ft_printf(" lstadd_compatible_cwd_files\n");
+	//ft_printf(" lstadd_wildcard_expansions\n");
 	
 	DIR *dir;
     struct dirent *entry;
@@ -92,17 +92,17 @@ void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_ex
 			new_tkn = create_node(WORD, strdup_gc(entry->d_name, TKN_LIST), 0); //valider pou la var link (le 0 final), a l' air ok
 			if (!new_tkn)
 			{
-				closedir(dir);
+				closedir(dir); //probleme, en cas d' erreur de malloc, create node free et exit.
 				exit(EXIT_FAILURE);//error mnagement
 			}
-			add_node(lst, new_tkn);
+			add_node(wildcard_lst, new_tkn);
 		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
 }
 
-void	expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst) //recupe la fonction du test
+t_token	*expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst) //recupe la fonction du test
 {
 	//ft_printf(" expand_wildcard\n");
 	t_tknlist *wildcard_lst;
@@ -110,17 +110,17 @@ void	expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst) //recupe la fonc
 
 	splitted = split_gc(tkn_toexpand->content, '*', TMP);
 	init_list(&wildcard_lst);
-	lstadd_compatible_cwd_files(wildcard_lst, splitted, tkn_toexpand->content);
+	lstadd_wildcard_expansions(wildcard_lst, splitted, tkn_toexpand->content);
 	if (!wildcard_lst->head)
-		return ;
+		return (tkn_toexpand);
 	//trier la liste dans l' ordre attendu
-	tknlst_sort_ascii_case(wildcard_lst);
+	sort_tknlst_like_wildcard(wildcard_lst);
 	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_toexpand, wildcard_lst);
 	pop_token_in_place(tkn_lst, tkn_toexpand);
 	tkn_toexpand = wildcard_lst->head;
 	// display_tknlist(tkn_lst);//
 	clear_garbage(TMP, free); // on peut supprimer a chaque grande etape plutot
-	return ;
+	return (wildcard_lst->tail);
 }
 
 

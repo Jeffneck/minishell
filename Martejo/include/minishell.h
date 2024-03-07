@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/06 10:52:49 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:36:41 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -284,17 +284,14 @@ void	reducer(t_token	*tkn) ;
 int is_link_sensitive(t_tkntype type);
 void    linker(t_tknlist *tkn_lst);
 
-//expand wildcard.c
-void	tknlst_sort_ascii_case(t_tknlist *list_expnd);//replacer dans bon file
-int	is_compatible_file_wildcard(char *file, char **subs_needed, char *to_expand);
-void	lstadd_compatible_cwd_files(t_tknlist *lst, char **subs_needed, char *to_expand);
-void	expand_wildcard(t_token *tkn_to_expand, t_tknlist *tkn_lst);
 
-//expander.c
-int	is_charset_env(char c);
-char	*expand_dollar(t_mini *mini, t_env *env, char *str, size_t start);
-char	*expander_handler(t_mini *mini, t_env *env, t_token *tkn, t_tknlist *tkn_lst);
-void	expander(t_mini *mini, t_tknlist *tkn_lst, t_env *env);
+
+void	expander(t_mini *mini,t_tknlist *tkn_lst);
+t_token	*expand_dollar(t_mini *mini, t_token *tkn_toexpand, t_tknlist *tkn_lst);
+t_token	*expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst); //recupe la fonction du test
+
+
+
 
 t_btree	*place_in_tree(t_btree *tree_el, t_btree *toplace, int index);
 t_btree	*btree_new(t_token	*tkn_toconvert);
