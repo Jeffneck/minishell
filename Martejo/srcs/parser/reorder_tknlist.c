@@ -85,7 +85,6 @@ static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
 			tknlst_addback(curr, reordered_lst);
 		curr = curr->next;
 	}
-	
 	if (before_seq == NULL)
 	{
 		tknlst->head = reordered_lst->head;

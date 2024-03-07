@@ -40,7 +40,6 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/parser/linker.c \
 		srcs/parser/bin_tree.c \
 		srcs/parser/bin_tree_utils.c \
-		srcs/parser/libft_extension.c \
 		srcs/parser/tknlist_utils_extension.c \
 		srcs/parser/display_tree.c \
 		srcs/parser/tkntype_utils.c \
@@ -54,6 +53,10 @@ SRCS =  srcs/lexer/lexer.c \
 		srcs/exec/exec_builtins.c \
 		srcs/exec/exec_handler.c \
 		srcs/exec/get_path.c \
+		\
+		srcs/libft_extension/libft_extension_one.c \
+		srcs/libft_extension/libft_extension_two.c \
+		srcs/libft_extension/libft_extension_three.c \
 		\
 		srcs/utils/print_utils.c \
 		srcs/utils/error.c \
