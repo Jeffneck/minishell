@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/08 14:43:21 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:43:32 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@
 # define MAGENTA "\x1b[35m"
 # define CYAN    "\x1b[36m"
 # define RESET   "\x1b[0m"
+
+/*Fds*/
+# define FD_READ 0
+# define FD_WRITE 1
+# define FD_IN 0
+# define FD_OUT 1
 
 /**MESSAGE DEFINITION**/
 # define ARGS_ERR_MSG "Error : Invalid number of arguments.\n"
@@ -92,12 +98,6 @@ typedef enum e_tkntype
 	PARENTHESIS,
 }	t_tkntype;
 
-# define FD_READ 0
-# define FD_WRITE 1
-# define FD_IN 0
-# define FD_OUT 1
-# define SIGINT_DETECTED 130
-
 typedef struct s_io
 {
 	int	fd_in;
@@ -121,7 +121,6 @@ typedef enum e_error
 	TYPE_E
 }	t_error;
 
-/**list_token**/
 typedef struct s_token
 {
 	t_tkntype		type;
@@ -140,7 +139,6 @@ typedef struct s__tknlist
 	struct s_token	*tail;
 }	t_tknlist;
 
-/**list_env**/
 typedef struct s_env
 {
 	char			*value;
@@ -225,7 +223,7 @@ size_t		ft_strlen_until_not_char(const char *str, char c);
 int			str_contains_all_subs_ordered(char *str, char **subs);
 int			char_is_in_str(char c, char *str);
 int			ft_strcmp_case_insensitive(char *s1, char *s2);
-int			s1_is_s2_suffix(char *s1, char *s2);//bool
+int			s1_is_s2_suffix(char *s1, char *s2);
 bool		s1_is_s2_prefix(char *s1, char *s2);
 t_btree		*parser(t_mini *mini);
 void		verify_syntax_tknlist(t_tknlist *lst);
