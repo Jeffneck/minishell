@@ -1,4 +1,4 @@
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
 void	add_after_another(t_tknlist	*list, t_token *tkn1, t_token *tkn2)
 {

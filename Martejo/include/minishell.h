@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hanglade <hanglade@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:07:26 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 17:21:12 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 11:13:20 by hanglade         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,6 +366,10 @@ void	clear_loop(void);
 int	wait_child(pid_t pid);
 int	traverse_parenthesis_node(t_mini *mini, t_btree *tree_el, t_io io_inherited);
 
+//tknlst utils 3
+void	unbound_token_in_place(t_tknlist *list_tkn, t_token *to_pop);
+void	tknlst_addfront(t_token *curr, t_tknlist *tknlst);
+void	tknlst_addback(t_token *curr, t_tknlist *tknlst);
 
 
 #endif
