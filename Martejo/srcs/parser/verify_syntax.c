@@ -14,68 +14,85 @@ static int	is_empty_parenthis(char *content)
 	return (1);
 }
 
-void	verify_syntax_tknlist(t_tknlist *lst) //verify syntax
+static int	verify_syntax_head(t_token *head)
 {
-	//ft_printf("verify_last_tkn\n");
-	t_token	*curr;
-	t_token	*tail;
-
-	curr = lst->head;
-	if (is_operator_tkn(curr->type))
+	if (is_operator_tkn(head->type))
 	{
-		ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, curr->content, RESET);
-		g_status = 2;
-		return ;
+		ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, head->content, RESET);
+		return (2);
 	}
-	if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
+	if (head->type == PARENTHESIS && is_empty_parenthis(head->content))
 	{
 		ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, ')', RESET);
-		g_status = 2;
-		return ;
+		return (2);
 	}
+	return (0);
+}
+
+static int	verify_syntax_tail(t_token *tail)
+{
+	if (tail->type == PIPE)
+	{
+		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_PIPE_ERR_MSG, RESET);
+		return (2);
+	}
+	if (tail->type == AND || tail->type == OR)
+	{
+		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_LOGICAL_OP_ERR_MSG, RESET);
+		return (2);
+	}
+	if (is_redir_tkn(tail->type) || tail->type == HEREDOC)
+	{
+		ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, "newline", RESET);
+		return (2);
+	}
+	if (tail->type == PARENTHESIS && is_empty_parenthis(tail->content))
+	{
+		ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, '(', RESET);
+		return (2);
+	}
+	return (0);
+}
+
+static int	verify_syntax_body(t_token *curr)
+{
 	while (curr && curr->next && g_status == 0)
 	{
 		if ((is_operator_tkn(curr->type) || is_redir_tkn(curr->type)) && is_operator_tkn(curr->next->type))
 		{
 			ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, curr->next->content, RESET);
-			g_status = 2;
-			return ;
+			return (2);
 		}
 		if (is_redir_tkn(curr->type) && curr->next->type == WORD && char_is_in_str('*', curr->next->content)) //type heredoc retire car <<* fonctionne (pas d'expansion)
 		{
 			ft_printf_fd(2,"%s%s%s", RED, STAR_TOKEN_ERR_MSG, RESET);
-			g_status = 1;
-			return ;
+			return (1);
 		}
 		if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
 		{
 			ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, '(', RESET);
-			g_status = 2;
-			return ;
+			return (2);
 		}
 		curr = curr->next;
 	}
-	if (curr->type == PARENTHESIS && is_empty_parenthis(curr->content) == 1)
+	return (0);
+}
+
+void	verify_syntax_tknlist(t_tknlist *lst)
+{
+	int	exit_status;
+
+	exit_status = verify_syntax_head(lst->head);
+	if (exit_status != 0)
 	{
-		ft_printf_fd(2,"%s%s `%c'%s\n", RED, NEAR_TOKEN_ERR_MSG, '(', RESET);
-		g_status = 2;
-		return ;
+		g_status = exit_status;
+		return;
 	}
-	tail = lst->tail;
-	if (tail->type == PIPE)
+	exit_status = verify_syntax_body(lst->head);
+	if (exit_status != 0)
 	{
-		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_PIPE_ERR_MSG, RESET);
-		g_status = 2;
-		return ;
+		g_status = exit_status;
+		return;
 	}
-	else if (tail->type == AND || tail->type == OR)
-	{
-		ft_printf_fd(2,"%s%s%s\n", RED, OPEN_LOGICAL_OP_ERR_MSG, RESET);
-		g_status = 2;
-	}
-	else if (is_redir_tkn(tail->type) || tail->type == HEREDOC)
-	{
-			ft_printf_fd(2,"%s%s `%s'%s\n", RED, NEAR_TOKEN_ERR_MSG, "newline", RESET);
-		g_status = 2;
-	}
+	g_status = verify_syntax_tail(lst->tail);
 }
