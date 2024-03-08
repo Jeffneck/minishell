@@ -1,4 +1,4 @@
-#include "../../../include/minishell.h"
+#include "../../include/minishell.h"
 
 int	is_logical_op_tkn(t_tkntype tkntype)
 {

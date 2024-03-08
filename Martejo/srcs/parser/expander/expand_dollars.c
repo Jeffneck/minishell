@@ -25,19 +25,19 @@ static	t_token	*dollar_detected(t_mini *mini, char *to_expand, \
 	{
 		*var_len = 1;
 		return (create_node(type, \
-				strndup_gc(to_expand[0], *var_len + 1, TKN_LIST), 1));
+				strndup_gc(to_expand, *var_len + 1, TKN_LIST), 1));
 	}
-	*var_len = ft_strlen_until_not(to_expand[1], is_charset_env);
+	*var_len = ft_strlen_until_not(&to_expand[1], is_charset_env);
 	return (create_node(type, \
-			get_env_value(mini->env, to_expand[1], *var_len), 1));
+			get_env_value(mini->env, &to_expand[1], *var_len), 1));
 }
 
-static	t_token	*dollar_undetected(t_mini *mini, char *to_expand, \
+static	t_token	*dollar_undetected(char *to_expand, \
 	size_t *var_len, t_tkntype type)
 {
-	*var_len = ft_strlen_until_char(to_expand[0], '$') - 1;
+	*var_len = ft_strlen_until_char(&to_expand[0], '$') - 1;
 	return (create_node(type,
-			strndup_gc(to_expand[0], *var_len + 1, TKN_LIST), 1));
+			strndup_gc(to_expand, *var_len + 1, TKN_LIST), 1));
 }
 
 static void	lstadd_dollar_expansions(t_mini *mini, \
@@ -55,7 +55,7 @@ static void	lstadd_dollar_expansions(t_mini *mini, \
 		if (to_expand[i] == '$')
 			new_tkn = dollar_detected(mini, &to_expand[i], &len_sub, tkntype);
 		else
-			new_tkn = dollar_undetected(mini, &to_expand[i], &len_sub, tkntype);
+			new_tkn = dollar_undetected(&to_expand[i], &len_sub, tkntype);
 		if (!new_tkn)
 			print_and_exit(MALLOC_ERR_MSG, RED, MALLOC_E);
 		add_node(dollar_lst, new_tkn);

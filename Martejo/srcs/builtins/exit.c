@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:37:22 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/08 10:57:12 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:59:38 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,22 +101,21 @@ int	builtin_exit(t_mini *mini, char **cmds)
 	char	*tmp;
 
 	exit_status = mini->last_gstatus;
-	if (cmds[0])
-	{
-		
-	}
-	if (cmds[1] && (cmds[1][0] == '-'
-		|| cmds[1][0] == '+') && cmds[1][1] == 0 && cmds[2])
-	{
-		tmp = strjoin_gc(cmds[1], cmds[2], TMP);
-		cmds[1] = tmp;
-		cmds[2] = NULL;
-	}
 	write(2, "exit\n", 5);
-	if (cmds[1])
+	if (cmds)
 	{
-		if (process_exit(cmds, &exit_status) == 1)
-			return (1);
+		if (cmds[1] && (cmds[1][0] == '-'
+		|| cmds[1][0] == '+') && cmds[1][1] == 0 && cmds[2])
+		{
+			tmp = strjoin_gc(cmds[1], cmds[2], TMP);
+			cmds[1] = tmp;
+			cmds[2] = NULL;
+		}
+		if (cmds[1])
+		{
+			if (process_exit(cmds, &exit_status) == 1)
+				return (1);
+		}
 	}
 	free_and_exit(exit_status);
 	return (exit_status);

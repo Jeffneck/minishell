@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 13:12:00 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 17:22:13 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 13:26:39 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,14 +57,29 @@ void	handle_token(char *buffer, t_tknlist *list, t_tkntype type, int *i)
 	else if (type == WORD)
 		*i += cmd_handler(buffer, list);
 }
+int is_only_space(char *buffer)
+{
+	size_t	i;
 
+	i = 0;
+	if (!buffer)
+		return (1);
+	while (buffer[i])
+	{
+		if (!ft_isspace(buffer[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+	
+}
 t_tknlist	*lexer(char *buffer)
 {
 	int			i;
 	t_tkntype	type;
 	t_tknlist	*list;
 
-	if (!buffer || g_status != 0)
+	if (!buffer || g_status != 0 || is_only_space(buffer) == 1)
 		return (NULL);
 	init_list(&list);
 	i = 0;

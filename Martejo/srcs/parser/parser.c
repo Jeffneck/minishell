@@ -21,7 +21,7 @@ void	set_token_index(t_token	*curr)
 
 t_btree	*parser(t_mini *mini)
 {
-	if (g_status != 0)
+	if (g_status != 0 || !mini->tkn_lst)
 	{
 		clear_loop();
 		return (NULL);
