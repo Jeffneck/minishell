@@ -6,7 +6,6 @@ static int	is_charset_env(char c)
 		return (1);
 	return (0);
 }
-/*Gerer retour create node*/
 
 static void	lstadd_dollar_expansions(t_mini *mini \
 	, t_tkntype init_type, char *to_expand, t_tknlist *dollar_lst)
@@ -49,7 +48,8 @@ t_token	*expand_dollar(t_mini *mini, t_token *tkn_toexpand, t_tknlist *tkn_lst)
 	t_tknlist	*dollar_lst;
 
 	init_list(&dollar_lst);
-	lstadd_dollar_expansions(mini, tkn_toexpand->type, tkn_toexpand->content, dollar_lst);
+	lstadd_dollar_expansions(mini, tkn_toexpand->type, \
+		tkn_toexpand->content, dollar_lst);
 	dollar_lst->tail->link = tkn_toexpand->link;
 	add_tknlst_in_tknlst_after_target(tkn_lst, tkn_toexpand, dollar_lst);
 	pop_token_in_place(tkn_lst, tkn_toexpand);

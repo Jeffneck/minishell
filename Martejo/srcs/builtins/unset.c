@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 13:32:40 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 13:02:53 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:33:12 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,12 @@ int	unset(char **value, t_env **env)
 
 	if (!(value[1]) || !(*env))
 		return (0);
-	i = 1;
-	while (value[i])
+	i = 0;
+	while (value[++i])
 	{
+		if (value[i][0] == 0)
+			return (print_without_exit \
+				("Minishell: unset: `': not a valid identifier\n", RED, 1), 1);
 		if (ft_strncmp(value[i], (*env)->value
 				, (int)env_size((*env)->value)) == 0)
 		{
@@ -70,7 +73,6 @@ int	unset(char **value, t_env **env)
 		}
 		else
 			search_and_unset(value, env, i);
-		i++;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:47:33 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 13:02:37 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:10:22 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int	print_error_export(char *args, int error)
 {
 	if (error == 1)
-		ft_printf_fd(2, "Minishell: export: `%s': not a valid identifier\n",
-			args);
+		ft_printf_fd(2, "%sMinishell: export: `%s': not a valid identifier\n%s",
+			RED, args, RESET);
 	return (1);
 }
 
@@ -88,6 +88,11 @@ int	ft_export(char **args, t_env **envt, t_io fds)
 	{
 		while (args[i] != NULL)
 		{
+			if (args[i][0] == 0)
+			{
+				print_error_export("", 1);
+				return (1);
+			}
 			if (export_handler(args[i], envt) != 0)
 				return (1);
 			i++;

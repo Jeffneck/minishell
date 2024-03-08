@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/05 14:40:47 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 11:51:16 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 09:55:24 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	echo(char **cmds, t_io fds)
 		while (cmds[i])
 		{
 			ft_putstr_fd(cmds[i], fds.fd_out);
-			if (cmds[i + 1] && cmds[i][0] != '\0')
+			if (cmds[i + 1])
 				write(fds.fd_out, " ", 1);
 			i++;
 		}

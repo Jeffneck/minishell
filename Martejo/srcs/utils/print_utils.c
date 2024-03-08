@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 14:20:13 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/07 16:14:50 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 10:14:50 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	print_path_error(char *arg, int exit_status, int error)
 	if (error == 1)
 		ft_printf_fd(2, ": command not found\n");
 	if (error == 2)
-		ft_printf_fd(2, ": permission denied\n");
+		ft_printf_fd(2, ": Permission denied\n");
 	if (error == 3)
 		ft_printf_fd(2, ": No such file or directory\n");
 	if (error == 4)

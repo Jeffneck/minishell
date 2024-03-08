@@ -9,6 +9,8 @@ CFLAGS = -Werror -Wall -Wextra
 RM = rm -rf
 
 SRCS =  srcs/main.c \
+		srcs/display_tknlist.c \
+		srcs/display_tree.c \
 		srcs/terminal/prompt.c \
 		srcs/terminal/loop.c \
 		\
@@ -45,9 +47,7 @@ SRCS =  srcs/main.c \
 		srcs/parser/verify_syntax.c \
 		srcs/parser/tknlist_handler/tknlist_utils_extension.c \
 		srcs/parser/tknlist_handler/tkntype_utils.c \
-		srcs/parser/display_tree.c \
-		srcs/parser/reorder_tknlist.c \
-		srcs/parser/display_tknlist.c \
+		srcs/parser/tknlist_handler/reorder_tknlist.c \
 		\
 		srcs/exec/browse_node.c \
 		srcs/exec/browse_tree.c \

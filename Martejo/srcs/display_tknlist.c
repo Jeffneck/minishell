@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
 void	display_tknlist(t_tknlist *list)
 {
@@ -15,5 +15,5 @@ void	display_tknlist(t_tknlist *list)
 			printf("priority =%d\n\n", curr->priority);
 			curr = curr->next;
 		}
-		sleep(5);
+		//sleep(5);
 }

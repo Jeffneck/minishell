@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "../include/minishell.h"
 
 void depth_first_search(t_btree *tree_el, void (*visit)(t_btree *, int))
 {
