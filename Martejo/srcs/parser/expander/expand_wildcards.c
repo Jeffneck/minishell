@@ -27,8 +27,8 @@ static void	sort_tknlst_like_wildcard(t_tknlist *list_expnd)
 	}
 }
 
-static int	is_compatible_file_wildcard(char *file \
-	, char **subs_needed, char *to_expand)
+static int	is_compatible_file_wildcard(char *file, \
+	char **subs_needed, char *to_expand)
 {
 	if (to_expand[0] == '*' && file[0] == '.')
 		return (0);
@@ -42,16 +42,14 @@ static int	is_compatible_file_wildcard(char *file \
 	return (1);
 }
 
-static void	lstadd_wildcard_expansions(t_tknlist *wildcard_lst \
-	, char **subs_needed, char *to_expand)
+static void	lstadd_wildcard_expansions(t_tknlist *wildcard_lst, \
+	char **subs_needed, char *to_expand)
 {
 	DIR				*dir;
 	struct dirent	*entry;
 	t_token			*new_tkn;
 
 	dir = opendir(".");
-	if (dir == NULL)
-		exit(EXIT_FAILURE); //retour d'erreur specifique
 	entry = readdir(dir);
 	while (entry)
 	{
@@ -67,7 +65,8 @@ static void	lstadd_wildcard_expansions(t_tknlist *wildcard_lst \
 		}
 		entry = readdir(dir);
 	}
-	closedir(dir);
+	if (dir)
+		closedir(dir);
 }
 
 t_token	*expand_wildcard(t_token *tkn_toexpand, t_tknlist *tkn_lst)

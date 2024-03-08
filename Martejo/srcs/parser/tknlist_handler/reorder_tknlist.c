@@ -1,16 +1,16 @@
 #include "../../../include/minishell.h"
 
-static t_token	*return_end_sequence(t_token *begin_seq)
-{
-	t_token	*curr;
+// static t_token	*return_end_sequence(t_token *begin_seq)
+// {
+// 	t_token	*curr;
 
-	curr = begin_seq;
-	while (curr && !is_operator_tkn(curr->type))
-	{
-		curr = curr->next;
-	}
-	return (curr);
-}
+// 	curr = begin_seq;
+// 	while (curr && !is_operator_tkn(curr->type))
+// 	{
+// 		curr = curr->next;
+// 	}
+// 	return (curr);
+// }
 
 static size_t	size_sequence(t_token *begin_seq)
 {
@@ -27,38 +27,50 @@ static size_t	size_sequence(t_token *begin_seq)
 	return (i);
 }
 
-static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
+static	void	extract_tkn_in_another_tknlist(t_token *tkn, \
+		t_tknlist *tknlst_src, t_tknlist *tknlst_dest)
 {
-	t_tknlist	*reordered_lst;
-	t_token		*before_seq;
-	t_token		*after_seq;
-	t_token		*prev;
+	unbound_token_in_place(tknlst_src, tkn);
+	if (is_cmd_tkn(tkn->type) || tkn->type == PARENTHESIS)
+		tknlst_addfront(tkn, tknlst_dest);
+	if (is_redir_tkn(tkn->type) || tkn->type == HEREDOC)
+		tknlst_addback(tkn, tknlst_dest);
+}
 
-	init_list(&reordered_lst);
-	before_seq = curr->prev;
-	after_seq = return_end_sequence(curr);
-	while (curr->next != after_seq)
-		curr = curr->next;
-	while (curr != before_seq && !is_operator_tkn(curr->type))
-	{
-		prev = curr->prev;
-		unbound_token_in_place(tknlst, curr);
-		if (is_cmd_tkn(curr->type) || curr->type == PARENTHESIS)
-			tknlst_addfront(curr, reordered_lst);
-		if (is_redir_tkn(curr->type) || curr->type == HEREDOC)
-			tknlst_addback(curr, reordered_lst);
-		curr = prev;
-	}
-	if (before_seq == NULL)
+static void	reinsert_ordered_sequence(t_tknlist *tknlst, \
+		t_token *tkn_before, t_token *tkn_after, t_tknlist *reordered_lst)
+{
+	if (tkn_before == NULL)
 	{
 		tknlst->head = reordered_lst->head;
-		reordered_lst->tail->next = after_seq;
-		if (after_seq == NULL)
+		reordered_lst->tail->next = tkn_after;
+		if (tkn_after == NULL)
 			tknlst->tail = reordered_lst->tail;
 	}
 	else
-		add_tknlst_in_tknlst_after_target(tknlst, before_seq, reordered_lst);
-	return (after_seq);
+		add_tknlst_in_tknlst_after_target(tknlst, tkn_before, reordered_lst);
+}
+
+static t_token	*reorder_sequence(t_tknlist *tknlst, t_token *curr)
+{
+	t_tknlist	*reordered_lst;
+	t_token		*tkn_before_seq;
+	t_token		*tkn_after_seq;
+
+	init_list(&reordered_lst);
+	tkn_before_seq = curr->prev;
+	while (curr && !is_operator_tkn(curr->type))
+		curr = curr->next;
+	tkn_after_seq = curr;
+	curr = curr->prev;
+	while (curr != tkn_before_seq && !is_operator_tkn(curr->type))
+	{
+		extract_tkn_in_another_tknlist(curr, tknlst, reordered_lst);
+		curr = curr->prev;
+	}
+	reinsert_ordered_sequence(tknlst, tkn_before_seq, \
+		tkn_after_seq, reordered_lst);
+	return (tkn_after_seq);
 }
 
 void	rearrange_cmd_redir_order(t_tknlist *tknlst)
