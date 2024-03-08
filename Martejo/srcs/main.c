@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/06 09:04:25 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/08 10:52:33 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:16:26 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	handle_shlvl(t_env *env, int nb)
 	if (!shlvl)
 		print_and_exit(MALLOC_ERR_MSG, RED, 1);
 	is_in_env(env, shlvl);
+	rl_outstream = stderr;
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -56,12 +57,11 @@ int	main(int argc, char **argv, char **envp)
 		print_and_exit(ARGS_ERR_MSG, RED, 1);
 	if (!envp[0])
 		print_and_exit(UNAVAILABLE_ENV, RED, 1);
-	//rl_outstream = stderr;
 	mini.env = init_env(envp);
 	mini.io_global = (t_io){0, 1};
 	mini.last_gstatus = 0;
 	singleton_mini(&mini);
-	handle_shlvl(mini.env, 0);
+	handle_shlvl(mini.env, 1);
 	prompt_loop(&mini);
 	return (0);
 }

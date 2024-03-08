@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/29 12:37:22 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/08 10:59:38 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:03:50 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	builtin_exit(t_mini *mini, char **cmds)
 	if (cmds)
 	{
 		if (cmds[1] && (cmds[1][0] == '-'
-		|| cmds[1][0] == '+') && cmds[1][1] == 0 && cmds[2])
+			|| cmds[1][0] == '+') && cmds[1][1] == 0 && cmds[2])
 		{
 			tmp = strjoin_gc(cmds[1], cmds[2], TMP);
 			cmds[1] = tmp;

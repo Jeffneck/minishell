@@ -6,7 +6,7 @@
 /*   By: gemartel <gemartel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/13 16:04:48 by gemartel          #+#    #+#             */
-/*   Updated: 2024/03/08 13:31:06 by gemartel         ###   ########.fr       */
+/*   Updated: 2024/03/08 15:04:57 by gemartel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,14 +38,9 @@ void	sig_handler(int sigcode)
 		g_status = 130;
 	}
 	if (sigcode == SIGQUIT)
-	{
 		write(2, "\b\b  \033[2D", 8);
-		
-	}
 	if (sigcode == SIGTSTP)
-	{
 		write(2, "\b\b  \033[2D", 8);
-	}
 }
 
 void	process_shell(t_mini *mini, char *line_read, int *stdin_cpy)
